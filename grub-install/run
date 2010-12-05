@@ -1,4 +1,4 @@
-#!/bin/bash
+																																#!/bin/bash
 # Rescapp Grub-install run script
 # Copyright Adrian Gibanel Lopez
 # Licensed under the GNU PUBLIC LICENSE 3.0
@@ -94,7 +94,7 @@ for n_partition in ${SBIN_GRUB_PARTITIONS}; do
   issue_value=$(echo $issue_value | sed 's/ /\-/')
   
   if [[ n -eq 0 ]] ; then
-    LIST_VALUES="TRUE ${n_partition} ${issue_value}"
+    LIST_VALUES="TRUE ${n_partiton} ${issue_value}"
   else
     LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value}"
   fi
@@ -120,16 +120,16 @@ HD_LIST_VALUES=""
 for n_hard_disk in ${DETECTED_HARD_DISKS}; do
   
   if [[ ${n} -eq 0 ]] ; then
-    HD_LIST_VALUES="TRUE ${n_hard_disk}"
+    HD_LIST_VALUES="TRUE ${n_hard_disk} `/sbin/fdisk -l | egrep 'sda' | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
   else
-    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk}"
+    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `/sbin/fdisk -l | egrep 'sda' | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
   fi
 let n=n+1
 done
 
 TOTAL_HD_NUMBER="${n}"
 
-ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which hard disk to install Linux on?" --radiolist  --column "Select" --column "Hard Disk" ${HD_LIST_VALUES}); 
+ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which hard disk to install Linux on?" --radiolist  --column "Select" --column "Hard Disk" --column "Size" ${HD_LIST_VALUES}); 
 echo $ans
 
 SELECTED_HARD_DISK=$ans
