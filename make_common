@@ -1,0 +1,70 @@
+#!/bin/bash
+# This script assumes apt-get install live-helper has been done
+# This script assumes that the user has sudo permissions on lh build
+
+
+set -x
+set -v
+
+# Fetch version from folder directory name
+VERSION=`basename  $PWD`
+
+RESCATUX_FILES="rescapp.sh chat web grub-install grub.lis grub rescatux.lis log show_log support support.lis"
+
+# This was for lenny
+#MIRROR_BOOTSTRAP="http://192.168.0.50/debian/"
+#MIRROR_CHROOT="http://192.168.0.50/debian"
+
+#This is for squeeze
+MIRROR_BOOTSTRAP="http://127.0.0.1/squeeze_debian/"
+MIRROR_CHROOT="http://127.0.0.1/squeeze_debian"
+ARCH="i386"
+DISTRIBUTION="squeeze" # Todo: Select with a switch
+DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
+
+ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
+RESCATUX_STR="rescatux"
+
+RESCATUX_MEDIA_STR="${RESCATUX_STR}_${MEDIA_STR}"
+BASE_FILENAME="${RESCATUX_MEDIA_STR}_${ARCH}_`echo ${LINUX_FLAVOURS} | sed s/' '/'-'/g`_`date +%Y_%m_%d`"
+CURRENT_FOLDER=$PWD
+
+TEMP_FOLDER="/tmp/${RESCATUX_STR}-tmp-build-$$"
+SKEL_FOLDER="config/chroot_local-includes/etc/skel"
+#LIVE_HELPER_LISTS_FOLDER="/usr/share/live-helper/lists"
+LIVE_HELPER_LISTS_FOLDER="/usr/share/live/build/lists"
+RLE_FOLDER="config/binary_syslinux"
+RLE_FILE="${RLE_FOLDER}/${RESCATUX_STR}.rle"
+
+mkdir --parents $TEMP_FOLDER/${RLE_FOLDER}
+# Generate logo - Begin
+cd logo
+./generate_logo.sh "${RESCATUX_STR}" "${VERSION}" "${TEMP_FOLDER}/${RLE_FILE}"
+cd ..
+# Generate logo - End
+
+mkdir --parents $TEMP_FOLDER
+mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
+mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
+cp -r ${RESCATUX_FILES} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
+cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
+cd $TEMP_FOLDER
+sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
+sudo bash -c "echo \"${PACKAGES}\" >> ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}"
+
+lh config \
+  --syslinux-menu true \
+  --linux-flavours "${LINUX_FLAVOURS}" \
+  ${DISTRIBUTION_OPTION} \
+  ${ARCH_OPTION} \
+  ${BOOT_OPTION} \
+  --packages-lists ${RESCATUX_MEDIA_STR} \
+  --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \
+  --mirror-chroot "${MIRROR_CHROOT}" \
+  --syslinux-splash "${TEMP_FOLDER}/${RLE_FILE}"
+
+sudo bash -c "lh build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
+mv binary${IS_HYBRID}.${FILE_EXTENSION} ${CURRENT_FOLDER}/${BASE_FILENAME}.${FILE_EXTENSION}
+cd ${CURRENT_FOLDER}
+md5sum ${BASE_FILENAME}.${FILE_EXTENSION} > ${BASE_FILENAME}.${FILE_EXTENSION}.md5
+echo "${BASE_FILENAME}.${FILE_EXTENSION} (and md5sum) DONE!"

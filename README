@@ -1,0 +1,6 @@
+In order to build Rescatux in a Squeeze system or Squeeze chroot you need these packages:
+
+live-helper
+imagemagick # Needed for logo generation
+syslinux # Needed for logo generation
+
