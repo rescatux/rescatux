@@ -94,7 +94,7 @@ for n_partition in ${SBIN_GRUB_PARTITIONS}; do
   issue_value=$(echo $issue_value | sed 's/ /\-/')
   
   if [[ n -eq 0 ]] ; then
-    LIST_VALUES="TRUE ${n_partiton} ${issue_value}"
+    LIST_VALUES="TRUE ${n_partition} ${issue_value}"
   else
     LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value}"
   fi
