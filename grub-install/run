@@ -158,7 +158,7 @@ TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
 			# Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - BEGIN
 			    # (Fetch hard disks detected and show to the user. - TODO - BEGIN
 			    # Tell them that they are going to be asked to choose which it is #1, #2,...)
-			    ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "These are detected hard disks. Prepare to order them according to boot order. Press OK to continue." --radiolist  --column "Select" --column "Hard Disk" ${HD_LIST_VALUES});			      
+			    ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "These are detected hard disks. Prepare to order them according to boot order. Press OK to continue." --radiolist  --column "Select" --column "Hard Disk" --column "Size" ${HD_LIST_VALUES});			      
 			    # (Fetch hard disks detected and show to the user. - TODO - END
 			    # Tell them that they are going to be asked to choose which it is #1, #2,...)
 			    # LOOP - Show hard disk and ask position - TODO - BEGIN
