@@ -3,8 +3,8 @@
 # Copyright Adrian Gibanel Lopez
 # Licensed under the GNU PUBLIC LICENSE 3.0
 
-#set -x
-#set -v
+set -x
+set -v
 
 
 
