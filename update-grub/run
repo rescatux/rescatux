@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rescapp Grub-install run script
+# Rescapp Update-grub run script
 # Copyright Adrian Gibanel Lopez
 # Licensed under the GNU PUBLIC LICENSE 3.0
 
@@ -8,16 +8,53 @@ set -v
 
 
 
-# TODO: Choose hard disks from partitions and let the user decide
+# First of all let decide the user to rename their hard disks to meet their possible different mapping at hard disk installation  - BEGIN
 
-# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
-
-
-#PROC_PARTITIONS_FILE=/tmp/partitions
 PROC_PARTITIONS_FILE=/proc/partitions
 
 
 TARGET_PARTITIONS=$(awk '{print $4}' ${PROC_PARTITIONS_FILE} | sed -e '/name/d' -e '/^$/d' -e '/[1-9]/!d')
+
+DETECTED_HARD_DISKS=""
+ans=$(echo ${TARGET_PARTITIONS} | sed 's/[0-9][0-9]*//g' | tr ' ' '\n' | uniq | tr '\n' ' ')
+DETECTED_HARD_DISKS="$ans"
+echo -e -n "DEBUG: detected hard disks: ${DETECTED_HARD_DISKS}\n"
+
+mkdir /dev/actual
+for n_hard_disk in ${DETECTED_HARD_DISKS} ; do
+  mv /dev/${n_hard_disk} /dev/actual/${n_hard_disk}
+done
+
+for n_partition in ${TARGET_PARTITIONS} ; do
+  mv /dev/${n_partition} /dev/actual/${n_partition}
+done
+
+# Let's loop on detected hard disks so that user can rename them
+for n_hard_disk in ${DETECTED_HARD_DISKS} ; do
+
+  new_hard_disk_name=$(zenity ${ZENITY_COMMON_OPTIONS}  --entry --title="Rename hard disk if needed" --text="Detected: ${n_hard_disk}" --entry-text="${n_hard_disk}");
+
+  ln -s /dev/actual/${n_hard_disk} /dev/${new_hard_disk_name}
+  for n_partition in /dev/actual/* ; do
+    actual_partition=$(echo "${n_partition}" | sed 's%/dev/actual/%%g')
+    test_partition=$(echo ${actual_partition} | grep ${n_hard_disk})
+    partition_number=$(echo ${test_partition} | sed "s%${n_hard_disk}%%g")
+    if [[ ! "${test_partition}x" -eq "x" ]] ; then
+	ln -s /dev/actual/${n_hard_disk}${partition_number} /dev/${new_hard_disk_name}${partition_number}
+    fi
+  done
+done
+
+# First of all let decide the user to rename their hard disks to meet their possible different mapping at hard disk installation  - END
+
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+  TARGET_PARTITIONS=""
+  for n_partition in /dev/actual/* ; do
+    actual_partition=$(echo "${n_partition}" | sed 's%/dev/actual/%%g')
+    TARGET_PARTITIONS="${TARGET_PARTITIONS} "
+  end
+
 
 echo $TARGET_PARTITIONS
 
@@ -26,10 +63,11 @@ RESCATUX_ROOT_MNT=/mnt/rescatux
 LINUX_OS_DETECTOR="/etc/issue"
 #GRUB_INSTALL_BINARY=/etc/issue
 GRUB_INSTALL_BINARY=grub-install
+UPDATE_GRUB_BINARY=update-grub
 
 for n_partition in ${TARGET_PARTITIONS}; do
 	TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
-	TMP_DEV_PARTITION=/dev/${n_partition}
+	TMP_DEV_PARTITION=/dev/actual/${n_partition}
 	mkdir --parents ${TMP_MNT_PARTITION}
 	if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
 		#echo -e -n "Detectada particion: ${n_partition}\n";
@@ -51,7 +89,7 @@ function etc_issue() {
   local n_partition=${PARTITION_TO_MOUNT}
 
         TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
-        TMP_DEV_PARTITION=/dev/${n_partition}
+        TMP_DEV_PARTITION=/dev/actual/${n_partition}
         mkdir --parents ${TMP_MNT_PARTITION}
         if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
                 #echo -e -n "Detectada particion: ${n_partition}\n";
@@ -114,31 +152,23 @@ ans=$(echo ${TARGET_PARTITIONS} | sed 's/[0-9][0-9]*//g' | tr ' ' '\n' | uniq | 
 DETECTED_HARD_DISKS="$ans"
 echo -e -n "DEBUG: detected hard disks: ${DETECTED_HARD_DISKS}\n"
 
-# Select one of the hard disks - BEGIN
+# Parse hard disks - BEGIN
 n=0
 HD_LIST_VALUES=""
 for n_hard_disk in ${DETECTED_HARD_DISKS}; do
   
   if [[ ${n} -eq 0 ]] ; then
-    HD_LIST_VALUES="TRUE ${n_hard_disk} `/sbin/fdisk -l | egrep 'sda' | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+    HD_LIST_VALUES="TRUE ${n_hard_disk} `/sbin/fdisk -l | egrep ${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
   else
-    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `/sbin/fdisk -l | egrep 'sda' | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `/sbin/fdisk -l | egrep ${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
   fi
 let n=n+1
 done
 
 TOTAL_HD_NUMBER="${n}"
 
-ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which hard disk to install Linux on?" --radiolist  --column "Select" --column "Hard Disk" --column "Size" ${HD_LIST_VALUES}); 
-echo $ans
+# Parse hard disks - END
 
-SELECTED_HARD_DISK=$ans
-
-
-# Select one of the hard disks - END
-
-# TODO: TO BE IMPROVED WITH A FUNCTION
-SELECTED_HARD_DISK_DEV="/dev/${SELECTED_HARD_DISK}"
 n_partition=${SELECTED_PARTITION}
 
 TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
@@ -207,9 +237,9 @@ TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
 			echo -e -n "cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 			# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
-			echo -e -n "${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+			echo -e -n "${UPDATE_GRUB_BINARY}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "GRUB_INSTALL_OUTPUT=\$?" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+			echo -e -n "UPDATE_GRUB_OUTPUT=\$?" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
  			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 
 			# Restore current device.map file - TODO - BEGIN
@@ -226,15 +256,15 @@ TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
 
 			echo -e -n "umount -a" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "exit \${GRUB_INSTALL_OUTPUT}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+			echo -e -n "exit \${UPDATE_GRUB_OUTPUT}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 			chmod +x ${TMP_MNT_PARTITION}/tmp/$$.sh
 
 			# TODO: Let the user use other than now hard-coded /bin/bash
 			if chroot ${TMP_MNT_PARTITION} /bin/bash /tmp/$$.sh ; then
-				zenity ${ZENITY_COMMON_OPTIONS} --info --title="Success!" --text="Grub was installed OK! :)";
+				zenity ${ZENITY_COMMON_OPTIONS} --info --title="Success!" --text="Grub configuration was updated OK! :)";
 			else
-				zenity ${ZENITY_COMMON_OPTIONS} --info --title="Failure!" --text="Grub was not installed. Something went wrong! :(";
+				zenity ${ZENITY_COMMON_OPTIONS} --info --title="Failure!" --text="Grub configuration update went wrong! :(";
 			fi
 			mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
 			rm ${TMP_MNT_PARTITION}/tmp/$$.sh

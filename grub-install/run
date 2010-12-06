@@ -120,9 +120,9 @@ HD_LIST_VALUES=""
 for n_hard_disk in ${DETECTED_HARD_DISKS}; do
   
   if [[ ${n} -eq 0 ]] ; then
-    HD_LIST_VALUES="TRUE ${n_hard_disk} `/sbin/fdisk -l | egrep 'sda' | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+    HD_LIST_VALUES="TRUE ${n_hard_disk} `/sbin/fdisk -l | egrep ${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
   else
-    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `/sbin/fdisk -l | egrep 'sda' | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `/sbin/fdisk -l | egrep ${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
   fi
 let n=n+1
 done
