@@ -7,7 +7,7 @@ set -x
 set -v
 
 # Fetch version from folder directory name
-VERSION=`basename  $PWD`
+VERSION=`head -1 VERSION`
 
 RESCATUX_FILES="rescapp.sh chat web grub-install update-grub grub.lis grub rescatux.lis log show_log support support.lis"
 
