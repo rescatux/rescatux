@@ -26,7 +26,7 @@ ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
 RESCATUX_STR="rescatux"
 
 RESCATUX_MEDIA_STR="${RESCATUX_STR}_${MEDIA_STR}"
-BASE_FILENAME="${RESCATUX_MEDIA_STR}_${ARCH}_`echo ${LINUX_FLAVOURS} | sed s/' '/'-'/g`_`date +%Y_%m_%d`"
+BASE_FILENAME="${RESCATUX_MEDIA_STR}_${ARCH}_`echo ${LINUX_FLAVOURS} | sed s/' '/'-'/g`_`head -n 1 VERSION`"
 CURRENT_FOLDER=$PWD
 
 TEMP_FOLDER="/tmp/${RESCATUX_STR}-tmp-build-$$"
