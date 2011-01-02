@@ -24,6 +24,8 @@ function etc_issue() {
 		  echo "Not detected"
                 fi
                 umount ${TMP_MNT_PARTITION};
+	else
+		echo "Can't mount!"
         fi
 
 
@@ -146,7 +148,7 @@ done
 
 echo -e -n "a: $LIST_VALUES\n"
 
-ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which partition do you want to Filesystem check with automatic fix?" --radiolist  --column "Select" --column "Partition" --column "Desc" ${LIST_VALUES}); echo $ans
+ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which partition do you want to Filesystem check with automatic fix?\n Please be patient. \nWhenever filesystem is finished a window will appear." --radiolist  --column "Select" --column "Partition" --column "Desc" ${LIST_VALUES}); echo $ans
 # Lets suppose that selected partition is: sda3
 SELECTED_PARTITION="$ans"
 # Select one of the partitions - END
@@ -154,7 +156,7 @@ SELECTED_PARTITION="$ans"
 
 n_partition=${SELECTED_PARTITION}
 
-if ( fsck -yf /dev/${SELECTED_PARTITION} ) ; then
+if ( fsck /dev/stdout -fy /dev/${SELECTED_PARTITION} | tee >(zenity ${ZENITY_COMMON_OPTIONS} --text "Running forced filesystem check and fix" --progress --pulsate) >> /dev/stdout ) ; then
 	zenity ${ZENITY_COMMON_OPTIONS} --info --title="Success!" --text="Filesystem check with automatic fix was OK! :)";
 else 
 	zenity ${ZENITY_COMMON_OPTIONS} --info --title="Failure!" --text="Filesystem check with automatic fix went wrong! :(";
