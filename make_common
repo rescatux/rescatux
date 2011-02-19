@@ -31,6 +31,9 @@ CURRENT_FOLDER=$PWD
 
 TEMP_FOLDER="/tmp/${RESCATUX_STR}-tmp-build-$$"
 SKEL_FOLDER="config/chroot_local-includes/etc/skel"
+
+CUSTOM_PACKAGES_LISTS_FOLDER="config/chroot_local-packageslists"
+
 #LIVE_HELPER_LISTS_FOLDER="/usr/share/live-helper/lists"
 LIVE_HELPER_LISTS_FOLDER="/usr/share/live/build/lists"
 RLE_FOLDER="config/binary_syslinux"
@@ -46,11 +49,12 @@ cd ..
 mkdir --parents $TEMP_FOLDER
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
+mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 cp -r ${RESCATUX_FILES} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cd $TEMP_FOLDER
 #sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
-sudo bash -c "echo \"${PACKAGES}\" > ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}"
+sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list"
 
 lh config \
   --apt-recommends false \
@@ -59,7 +63,7 @@ lh config \
   ${DISTRIBUTION_OPTION} \
   ${ARCH_OPTION} \
   ${BOOT_OPTION} \
-  --packages-lists ${RESCATUX_MEDIA_STR} \
+  --packages-lists standard-x11 \
   --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \
   --mirror-chroot "${MIRROR_CHROOT}" \
   --syslinux-splash "${TEMP_FOLDER}/${RLE_FILE}"
