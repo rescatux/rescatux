@@ -1,6 +1,5 @@
 #!/bin/bash 
 
-
 # TODO: Put background colour in a single variable
 # TODO: Put development font colour in a variable
 # TODO: Put version string colour in a variable
@@ -23,10 +22,10 @@ SUPPORT_MSG="Rescatux development is supported by BTACTIC."
 SUPPORT_MSG_FILENAME_STR="rescatux_development_message.png"
 SUPPORT_LOGO_FILENAME="btactic.png"
 SUPPORT_MSG_PLUS_LOGO_FILENAME="rescatux_dev_plus_log_message.png"
-TMP_RIGHT_LATERAL_FILENAME="temporal_right_lateral.png"
+TMP_BOTTOM_LATERAL_FILENAME="temporal_bottom_lateral.png"
 
-COMMON_LOGO_WIDTH="140" # TODO: Extract value from png itself
-COMMON_LOGO_HEIGHT="230" # Not used
+COMMON_LOGO_WIDTH="298" # TODO: Extract value from png itself
+COMMON_LOGO_HEIGHT="422" # Not used
 
 SYSLINUX_WIDTH="640"
 SYSLINUX_HEIGHT="400"
@@ -34,51 +33,67 @@ SYSLINUX_HEIGHT="400"
 SUPPORT_LOGO_WIDTH="60"
 SUPPORT_LOGO_HEIGHT="35"
 
+HEADER_IMAGE_FILENAME="rescatux_header.png"
+HEADER_HEIGHT="168" # Extracted manually from header file.
+
 SUPPORT_MSG_HEIGHT="100" # This is kind of font size
 
 RESCATUX_VERSION_STRING_WIDTH="$(( ${SYSLINUX_WIDTH} - ${COMMON_LOGO_WIDTH} ))"
-RESCATUX_VERSION_STRING_HEIGHT="$(( ${SYSLINUX_HEIGHT} - ${SUPPORT_MSG_HEIGHT} ))"
+RESCATUX_VERSION_STRING_HEIGHT="$(( ${SYSLINUX_HEIGHT} - ${HEADER_HEIGHT} ))"
 
 SUPPORT_MSG_WIDTH="$(( ${RESCATUX_VERSION_STRING_WIDTH} - ${SUPPORT_LOGO_WIDTH} ))"
 
 
 
+LOGO_HEIGHT="$(( ${SYSLINUX_HEIGHT} - ${HEADER_HEIGHT} ))"
+
+# HEADER should be 640 witdth
+
 # This algorithm supposes that you want the common logo at the left side
 
-# Expand Rescatux's tux so that it is as big as syslinux height
-convert -background yellow2 -gravity center -extent ${COMMON_LOGO_WIDTH}x${SYSLINUX_HEIGHT}! ${COMMON_LOGO_FILENAME} ${COMMON_LOGO_EXPANDED_FILENAME}
+# Expand Rescatux's tux so that it is as big as syslinux height (minus header)
+convert -background yellow2 -background white -undercolor white -gravity center -extent ${COMMON_LOGO_WIDTH}x${LOGO_HEIGHT}! ${COMMON_LOGO_FILENAME} ${COMMON_LOGO_EXPANDED_FILENAME}
 
 # Generate "Rescatux X.XX" string
 convert \
-    -background yellow2 \
-    -fill red \
+    -background white \
+    -fill Orange \
     -strokewidth 2  \
-    -stroke OrangeRed   \
-    -undercolor yellow \
+    -stroke Orange   \
+    -undercolor white \
     -size ${RESCATUX_VERSION_STRING_WIDTH}x${RESCATUX_VERSION_STRING_HEIGHT} \
-    -gravity south \
+    -gravity center \
     label:"${RESCATUX_STR} ${VERSION}" \
     ${RESCATUX_VERSION_STRING}.png
 
 # Generate development message string without logo
-convert \
-    -background yellow2 \
-    -fill black \
-    -strokewidth 1  \
-    -stroke black   \
-    -undercolor yellow \
-    -size ${SUPPORT_MSG_WIDTH}x${SUPPORT_MSG_HEIGHT} \
-    -gravity north \
-    label:"${SUPPORT_MSG}" \
-    ${SUPPORT_MSG_FILENAME_STR}
+#convert \
+#    -background yellow2 \
+#    -fill black \
+#    -strokewidth 1  \
+#    -stroke black   \
+#    -undercolor yellow \
+#    -size ${SUPPORT_MSG_WIDTH}x${SUPPORT_MSG_HEIGHT} \
+#    -gravity north \
+#    label:"${SUPPORT_MSG}" \
+#    ${SUPPORT_MSG_FILENAME_STR}
+
+
+
 # Add logo to development message
-convert +append ${SUPPORT_MSG_FILENAME_STR} ${SUPPORT_LOGO_FILENAME} ${SUPPORT_MSG_PLUS_LOGO_FILENAME}
+#convert +append ${SUPPORT_MSG_FILENAME_STR} ${SUPPORT_LOGO_FILENAME} ${SUPPORT_MSG_PLUS_LOGO_FILENAME}
 
 # Generate right lateral part of the image
-convert -append ${SUPPORT_MSG_PLUS_LOGO_FILENAME} ${RESCATUX_VERSION_STRING}.png ${TMP_RIGHT_LATERAL_FILENAME}
+#convert -append ${SUPPORT_MSG_PLUS_LOGO_FILENAME} ${RESCATUX_VERSION_STRING}.png ${TMP_RIGHT_LATERAL_FILENAME}
 
 # Merge left expanded distro logo with the rest of the image's right lateral
-convert +append ${COMMON_LOGO_EXPANDED_FILENAME} ${TMP_RIGHT_LATERAL_FILENAME} ${LOGO_FILENAME_STR}.png
+#convert +append ${COMMON_LOGO_EXPANDED_FILENAME} ${TMP_RIGHT_LATERAL_FILENAME} ${LOGO_FILENAME_STR}.png
+
+convert +append ${COMMON_LOGO_EXPANDED_FILENAME} ${RESCATUX_VERSION_STRING}.png ${TMP_BOTTOM_LATERAL_FILENAME}
+
+convert -append ${HEADER_IMAGE_FILENAME} ${TMP_BOTTOM_LATERAL_FILENAME} ${LOGO_FILENAME_STR}.png
+
+
 
 convert -colors 14 ${LOGO_FILENAME_STR}.png ${LOGO_FILENAME_STR}.ppm
 
@@ -90,7 +105,7 @@ rm ${COMMON_LOGO_EXPANDED_FILENAME} \
 ${RESCATUX_VERSION_STRING}.png \
 ${SUPPORT_MSG_FILENAME_STR} \
 ${SUPPORT_MSG_PLUS_LOGO_FILENAME} \
-${TMP_RIGHT_LATERAL_FILENAME} \
+${TMP_BOTTOM_LATERAL_FILENAME} \
 ${LOGO_FILENAME_STR}.png \
 ${LOGO_FILENAME_STR}.ppm
 
