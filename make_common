@@ -9,7 +9,7 @@ set -v
 # Fetch version from folder directory name
 VERSION=`head -1 VERSION`
 
-RESCATUX_FILES="rescapp.sh chat web grub-install update-grub grub.lis grub rescatux.lis log show_log support support.lis fsck fs fs.lis"
+RESCATUX_FILES="rescapp.sh setbackground.sh chat web grub-install update-grub grub.lis grub rescatux.lis log show_log support support.lis fsck fs fs.lis logos"
 
 # This was for lenny
 #MIRROR_BOOTSTRAP="http://192.168.0.50/debian/"
@@ -52,6 +52,7 @@ mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 cp -r ${RESCATUX_FILES} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
+cp setbackground.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cd $TEMP_FOLDER
 #sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list"

@@ -8,7 +8,7 @@
 # TODO: Ask help on imagemagick channel on how to do all the converts in a single command with kind of internal convert variables
 
 
-
+LOGOS_FOLDER="../logos"
 
 RESCATUX_STR=$1
 VERSION=$2
@@ -99,6 +99,7 @@ convert -colors 14 ${LOGO_FILENAME_STR}.png ${LOGO_FILENAME_STR}.ppm
 
 ppmtolss16 '#d0d0d0=7' < "${LOGO_FILENAME_STR}".ppm > "${FINAL_RLE_FILE}"
 
+cp ${LOGO_FILENAME_STR}.png ${LOGOS_FOLDER}/background.png
 
 # Delete temporal image files
 rm ${COMMON_LOGO_EXPANDED_FILENAME} \
