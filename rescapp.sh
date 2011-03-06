@@ -47,10 +47,10 @@ case $result in
 	exec ${SUDO} ${DIRECTORY}/run > ${LOG_DIRECTORY}/${DIRECTORY}_log.txt 2>&1 &
 	;;
 	${LOCAL_DOC_CODE})
-	${FIREFOX_COMMAND} --new-window ${DIRECTORY}/local_doc &
+	${FIREFOX_COMMAND} --new-window ${DIRECTORY}/local_doc.html &
 	;;
 	${ONLINE_DOC_CODE})
-	${FIREFOX_COMMAND} --new-window `cat ${DIRECTORY}/online_doc` &
+	${FIREFOX_COMMAND} --new-window `cat ${DIRECTORY}/online_doc.html` &
 	;;
 	esac
 
