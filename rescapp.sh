@@ -30,9 +30,13 @@ if [ -e ${DIRECTORY}.${LIST_FILE_SUFFIX} ] ; then
   show_menu ${DIRECTORY}
 else
 
-choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}" "${RUN_CODE}" "${RUN_STR}" "${LOCAL_DOC_CODE}" "${LOCAL_DOC_STR}" "${ONLINE_DOC_CODE}" "${ONLINE_DOC_STR}")"
-
-result=$?
+  if [ -e ${DIRECTORY}/run ] ; then
+     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}" "${RUN_CODE}" "${RUN_STR}" "${LOCAL_DOC_CODE}" "${LOCAL_DOC_STR}" "${ONLINE_DOC_CODE}" "${ONLINE_DOC_STR}")"
+     result=$?
+  else
+     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}"  "${LOCAL_DOC_CODE}" "${LOCAL_DOC_STR}" "${ONLINE_DOC_CODE}" "${ONLINE_DOC_STR}")"
+     result=$?
+  fi
 
 SUDO="sudo"
 [ -e ${DIRECTORY}/sudo ] || SUDO=""
@@ -87,6 +91,7 @@ LOCAL_DOC_STR="Local Documentation"
 ONLINE_DOC_STR="Online Documentation"
 
 FIREFOX_COMMAND="iceweasel"
+GEDIT_COMMAND="gedit"
 
 cd ${DEFAULT_PATH}
 
