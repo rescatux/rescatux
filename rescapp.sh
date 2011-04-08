@@ -5,7 +5,7 @@ function show_menu() {
 OPTIONS_FILE=${1}.${LIST_FILE_SUFFIX}
 MENU_TITLE=$1
 
-choice="$(find `cat ${OPTIONS_FILE}` -maxdepth 1 -type d -exec cat {}/directory {}/name {}/description \; | zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "${CODE_STR}" --column "${NAME_STR}" --column "${DESCRIPTION_STR}" --title="${MENU_TITLE}" \
+choice="$(find `cat ${OPTIONS_FILE}` -maxdepth 1 -type d -exec cat {}/$DIRECTORY_FILE_STR {}/$NAME_FILE_STR {}/$DESCRIPTION_FILE_STR \; | zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "${CODE_STR}" --column "${NAME_STR}" --column "${DESCRIPTION_STR}" --title="${MENU_TITLE}" \
 )";
 
 result=$?
@@ -121,6 +121,10 @@ GEDIT_COMMAND="gedit"
 RUN_FILE_STR="run"
 LOCAL_FILE_STR="local_doc.html"
 ONLINE_FILE_STR="online_doc.html"
+DIRECTORY_FILE_STR="directory"
+NAME_FILE_STR="name"
+DESCRIPTION_FILE_STR="description"
+
 
 CODE_STR="Code"
 NAME_STR="Name"
