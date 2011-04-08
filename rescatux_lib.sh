@@ -1,6 +1,35 @@
 #!/bin/bash
 
 
+# Return partitions detected on the system
+function rtux_Get_System_Partitions () {
+  awk '{print $4}' ${PROC_PARTITIONS_FILE} \
+  | sed -e '/name/d' -e '/^$/d' -e '/[1-9]/!d'
+}
+
+# Return partitions which have Linux os detector on them
+function rtux_Get_Linux_Os_Partitions() {
+local TARGET_PARTITIONS=$(rtux_Get_System_Partitions())
+local SBIN_GRUB_PARTITIONS=""
+
+for n_partition in ${TARGET_PARTITIONS}; do
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
+    if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
+      SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
+    fi
+    umount ${TMP_MNT_PARTITION};
+  fi
+done
+
+echo "${SBIN_GRUB_PARTITIONS}"
+
+}
+
+
 # Returns Desktop width
 function rtux_Get_Desktop_Width () {
   wmctrl -d \
