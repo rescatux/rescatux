@@ -20,34 +20,9 @@ DEVICE_MAP_NUMBERED_FILE="${TMP_FOLDER}/device.map.numbered"
 DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
 DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
 
-n=0
-LIST_VALUES=""
-DESC_VALUES=""
-for n_partition in ${SBIN_GRUB_PARTITIONS}; do
-  issue_value=`etc_issue ${n_partition}`
-  issue_value=$(echo $issue_value | sed 's/\ /\-/')
-  issue_value=$(echo $issue_value | sed 's/ /\-/')
-  
-  if [[ n -eq 0 ]] ; then
-    LIST_VALUES="TRUE ${n_partition} ${issue_value}"
-  else
-    LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value}"
-  fi
-let n=n+1
-done
+SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
-echo -e -n "a: $LIST_VALUES\n"
-
-ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which partition is your main GNU/Linux?" --radiolist  --column "Select" --column "Partition" --column "Desc" ${LIST_VALUES}); echo $ans
-# Lets suppose that selected partition is: sda3
-SELECTED_PARTITION="$ans"
-# Select one of the partitions - END
-
-
-DETECTED_HARD_DISKS=""
-ans=$(echo ${TARGET_PARTITIONS} | sed 's/[0-9][0-9]*//g' | tr ' ' '\n' | uniq | tr '\n' ' ')
-DETECTED_HARD_DISKS="$ans"
-echo -e -n "DEBUG: detected hard disks: ${DETECTED_HARD_DISKS}\n"
+DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
 
 # Parse hard disks - BEGIN
 n=0
