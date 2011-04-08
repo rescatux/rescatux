@@ -9,7 +9,7 @@ choice="$(find `cat ${OPTIONS_FILE}` -maxdepth 1 -type d -exec cat {}/directory 
 )";
 
 result=$?
-echo -e -n "result is: $result\n"
+
 case $result in
 0)
   show_item $choice
