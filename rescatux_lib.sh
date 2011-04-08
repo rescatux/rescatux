@@ -25,8 +25,10 @@ RUN_STR="Run"
 
 FIREFOX_COMMAND="iceweasel"
 GEDIT_COMMAND="gedit"
+XCHAT_COMMAND="iceweasel"
 
 FIREFOX_WINDOW_STR="Iceweasel"
+XCHAT_WINDOW_STR="Xchat"
 
 CODE_STR="Code"
 NAME_STR="Name"

@@ -1,5 +1,6 @@
 #!/bin/bash
 source ${RESCATUX_LIB_FILE}
+
 # Top right corner
 WIDTH=600
 HEIGHT=460
@@ -20,7 +21,7 @@ irc_nick2 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER_2}
 irc_nick3 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER_3}
 EOF
 
-xchat --url=${RESCATUX_IRC_URL} & 
+${XCHAT_COMMAND} --url=${RESCATUX_IRC_URL} & 
 sleep 2s;
 
-wmctrl -r XChat -e ${GRAVITY},${X_POSITION},${Y_POSITION},${WIDTH},${HEIGHT}
+wmctrl -r ${XCHAT_WINDOW_STR} -e ${GRAVITY},${X_POSITION},${Y_POSITION},${WIDTH},${HEIGHT}
