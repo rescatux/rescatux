@@ -96,7 +96,7 @@ fi
 
 
 # Main program
-DEFAULT_PATH="/home/user/Desktop/"
+DEFAULT_PATH="${HOME}/Desktop/"
 LOG_DIRECTORY="log"
 LIST_FILE_SUFFIX="lis"
 RESCAPP_WIDTH="600"
