@@ -76,7 +76,7 @@ function show_item() {
 
     result=$?
 
-    SUDO="sudo"
+    SUDO="sudo -E"
     [ -e ${DIRECTORY}/sudo ] || SUDO=""
 
     case $result in

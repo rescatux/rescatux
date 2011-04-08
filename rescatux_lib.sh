@@ -28,7 +28,7 @@ function rtux_Get_System_Partitions () {
 
 # Return partitions which have Linux os detector on them
 function rtux_Get_Linux_Os_Partitions() {
-  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions())
+  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
   local SBIN_GRUB_PARTITIONS=""
 
   for n_partition in ${TARGET_PARTITIONS}; do
@@ -51,7 +51,7 @@ function rtux_Get_Linux_Os_Partitions() {
 
 # Return hard disks detected on the system
 function rtux_Get_System_HardDisks () {
-  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions())
+  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
   echo $(echo ${TARGET_PARTITIONS} \
 	  | sed 's/[0-9][0-9]*//g' \
 	  | tr ' ' '\n' \
@@ -85,7 +85,7 @@ function rtux_Choose_Hard_Disk () {
   local text_to_ask="$@"
   local n=0
   local HD_LIST_VALUES=""
-  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks());
+  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
   for n_hard_disk in ${DETECTED_HARD_DISKS}; do
     if [[ ${n} -eq 0 ]] ; then
       local HD_LIST_VALUES="TRUE ${n_hard_disk} `${FDISK_COMMAND} -l \
@@ -158,8 +158,8 @@ RESC_USER_IRC_PREFIX="resc_user_"
 
 RESCAPP_WIDTH="600"
 RESCAPP_HEIGHT="400"
-ZENITY_COMMON_OPTIONS="--width=${GRUB_INSTALL_MBR_WIDTH} \
-		       --height=${GRUB_INSTALL_MBR_HEIGHT}"
+ZENITY_COMMON_OPTIONS="--width=${RESCAPP_WIDTH} \
+		       --height=${RESCAPP_HEIGHT}"
 
 EXIT_STR="Exit"
 
