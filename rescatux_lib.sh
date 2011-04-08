@@ -18,7 +18,7 @@ function rtux_Get_Etc_Issue_Content() {
     fi
     umount ${TMP_MNT_PARTITION};
   fi
-} # rtux_Get_Etc_Issue_Content() end
+} # rtux_Get_Etc_Issue_Content()
 
 # Return partitions detected on the system
 function rtux_Get_System_Partitions () {
@@ -48,6 +48,35 @@ function rtux_Get_Linux_Os_Partitions() {
   echo "${SBIN_GRUB_PARTITIONS}"
 
 } # function rtux_Get_System_Partitions ()
+
+# Let the user choose his main GNU/Linux partition
+# It outputs choosen partition
+function rtux_Choose_Linux_partition () {
+  local n=0
+  local LIST_VALUES=""
+  local DESC_VALUES=""
+  for n_partition in ${SBIN_GRUB_PARTITIONS}; do
+    local issue_value=`rtux_Get_Etc_Issue_Content ${n_partition}`
+    issue_value=$(echo $issue_value | sed 's/\ /\-/')
+    issue_value=$(echo $issue_value | sed 's/ /\-/')
+    
+    if [[ n -eq 0 ]] ; then
+      LIST_VALUES="TRUE ${n_partition} ${issue_value}"
+    else
+      LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value}"
+    fi
+  let n=n+1
+  done
+
+  echo "$(zenity ${ZENITY_COMMON_OPTIONS}  \
+	--list  \
+	--text "${WHICH_PARTITION_STR}" \
+	--radiolist  \
+	--column "${SELECT_STR}" \
+	--column "${PARTITION_STR}" \
+	--column "${DESCRIPTION_STR}" ${LIST_VALUES})";
+
+} # rtux_Choose_Linux_partition ()
 
 
 # Returns Desktop width

@@ -14,9 +14,6 @@ TARGET_PARTITIONS=$(rtux_Get_System_Partitions())
 
 SBIN_GRUB_PARTITIONS="$(rtux_Get_Linux_Os_Partitions())"
 
-
-
-
 # MAIN PROGRAM
 
 # TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
@@ -33,36 +30,9 @@ GRUB_INSTALLED_OK_STR="Grub was installed OK! :)"
 GRUB_NOT_INSTALLED_STR="Grub was not installed. Something went wrong! :("
 WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
 
-# Select one of the partitions - BEGIN
+SELECTED_PARTITION=$(rtux_Choose_Linux_partition())
 
-n=0
-LIST_VALUES=""
-DESC_VALUES=""
-for n_partition in ${SBIN_GRUB_PARTITIONS}; do
-  issue_value=`rtux_Get_Etc_Issue_Content ${n_partition}`
-  issue_value=$(echo $issue_value | sed 's/\ /\-/')
-  issue_value=$(echo $issue_value | sed 's/ /\-/')
-  
-  if [[ n -eq 0 ]] ; then
-    LIST_VALUES="TRUE ${n_partition} ${issue_value}"
-  else
-    LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value}"
-  fi
-let n=n+1
-done
 
-echo -e -n "a: $LIST_VALUES\n"
-
-ans=$(zenity ${ZENITY_COMMON_OPTIONS}  \
-      --list  \
-      --text "${WHICH_PARTITION_STR}" \
-      --radiolist  \
-      --column "${SELECT_STR}" \
-      --column "${PARTITION_STR}" \
-      --column "${DESCRIPTION_STR}" ${LIST_VALUES});
-
-SELECTED_PARTITION="$ans"
-# Select one of the partitions - END
 
 
 DETECTED_HARD_DISKS=""
