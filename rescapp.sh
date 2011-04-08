@@ -5,7 +5,7 @@ function show_menu() {
 OPTIONS_FILE=${1}.${LIST_FILE_SUFFIX}
 MENU_TITLE=$1
 
-choice="$(find `cat ${OPTIONS_FILE}` -maxdepth 1 -type d -exec cat {}/directory {}/name {}/description \; | zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Name" --column "Description" --title="${MENU_TITLE}" \
+choice="$(find `cat ${OPTIONS_FILE}` -maxdepth 1 -type d -exec cat {}/directory {}/name {}/description \; | zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "${CODE_STR}" --column "${NAME_STR}" --column "${DESCRIPTION_STR}" --title="${MENU_TITLE}" \
 )";
 
 result=$?
@@ -60,7 +60,7 @@ else
   fi
 
 
-     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}" "${zenity_option_line[@]}")"
+     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "${CODE_STR}" --column "${DESCRIPTION_STR}" --title="${DIRECTORY}" "${zenity_option_line[@]}")"
      result=$?
 
 SUDO="sudo"
@@ -122,14 +122,21 @@ RUN_FILE_STR="run"
 LOCAL_FILE_STR="local_doc.html"
 ONLINE_FILE_STR="online_doc.html"
 
+CODE_STR="Code"
+NAME_STR="Name"
+DESCRIPTION_STR="Description"
+
+RESCAPP_TITLE_STR="RESCATUX's RESCAPP"
+
+
 cd ${DEFAULT_PATH}
 
 while true; do
-choice="$(find `cat rescatux.lis` -maxdepth 1 -type d -exec cat {}/directory {}/name {}/description \; | zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Name" --column "Description" --title="RESCATUX's RESCAPP" \
+choice="$(find `cat rescatux.lis` -maxdepth 1 -type d -exec cat {}/directory {}/name {}/description \; | zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "${CODE_STR}" --column "${NAME_STR}" --column "${DESCRIPTION_STR}" --title="${RESCAPP_TITLE_STR}" \
 )";
 
 result=$?
-echo -e -n "result is: $result\n"
+
 case $result in
 0)
   show_item $choice
