@@ -52,14 +52,7 @@ if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; the
     # Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - BEGIN
     # (Fetch hard disks detected and show to the user. - TODO - BEGIN
     # Tell them that they are going to be asked to choose which it is #1, #2,...)
-    ans=$(zenity ${ZENITY_COMMON_OPTIONS} \
-	  --list  \
-	  --text "${PREPARE_ORDER_HDS_STR}" \
-	  --radiolist  \
-	  --column "${SELECT_STR}" \
-	  --column "${HARDDISK_STR}" \
-	  --column "${SIZE_STR}" \
-	  ${HD_LIST_VALUES});
+    $(rtux_Choose_Hard_Disk() ${PREPARE_ORDER_HDS_STR});
 
     # (Fetch hard disks detected and show to the user. - TODO - END
     # Tell them that they are going to be asked to choose which it is #1, #2,...)
