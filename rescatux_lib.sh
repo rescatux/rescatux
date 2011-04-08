@@ -12,6 +12,8 @@ RUN_STR="Run"
 FIREFOX_COMMAND="iceweasel"
 GEDIT_COMMAND="gedit"
 
+FIREFOX_WINDOW_STR="Iceweasel"
+
 CODE_STR="Code"
 NAME_STR="Name"
 DESCRIPTION_STR="Description"
