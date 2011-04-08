@@ -44,7 +44,7 @@ else
   fi
 
   # Add local documentation option if there is the local_doc.html file
-  if [ -e ${DIRECTORY}/${LOCAL_DOC_STR} ] ; then
+  if [ -e ${DIRECTORY}/${LOCAL_FILE_STR} ] ; then
     zenity_option_line[$n_zenity_option_line]="${LOCAL_DOC_CODE}"
     let n_zenity_option_line=n_zenity_option_line+1
     zenity_option_line[$n_zenity_option_line]="${LOCAL_DOC_STR}"
@@ -52,7 +52,7 @@ else
   fi
 
   # Add online documentation option if there is the online_doc.html file
-  if [ -e ${DIRECTORY}/${ONLINE_DOC_STR} ] ; then
+  if [ -e ${DIRECTORY}/${ONLINE_FILE_STR} ] ; then
     zenity_option_line[$n_zenity_option_line]="${ONLINE_DOC_CODE}"
     let n_zenity_option_line=n_zenity_option_line+1
     zenity_option_line[$n_zenity_option_line]="${ONLINE_DOC_STR}"
@@ -60,7 +60,7 @@ else
   fi
 
 
-     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}" "${n_zenity_option_line[@]}")"
+     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}" "${zenity_option_line[@]}")"
      result=$?
 
 SUDO="sudo"
@@ -79,7 +79,7 @@ case $result in
 	${FIREFOX_COMMAND} --new-window ${DIRECTORY}/${LOCAL_DOC_STR} &
 	;;
 	${ONLINE_DOC_CODE})
-	${FIREFOX_COMMAND} --new-window `${DIRECTORY}/${ONLINE_DOC_STR} &
+	${FIREFOX_COMMAND} --new-window ${DIRECTORY}/${ONLINE_DOC_STR} &
 	;;
 	esac
 
@@ -120,8 +120,8 @@ GEDIT_COMMAND="gedit"
 
 
 RUN_FILE_STR="run"
-LOCAL_DOC_STR="local_doc.html"
-ONLINE_DOC_STR="online_doc.html"
+LOCAL_FILE_STR="local_doc.html"
+ONLINE_FILE_STR="online_doc.html"
 
 cd ${DEFAULT_PATH}
 
