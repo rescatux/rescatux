@@ -25,7 +25,7 @@ RUN_STR="Run"
 
 FIREFOX_COMMAND="iceweasel"
 GEDIT_COMMAND="gedit"
-XCHAT_COMMAND="iceweasel"
+XCHAT_COMMAND="xchat"
 
 FIREFOX_WINDOW_STR="Iceweasel"
 XCHAT_WINDOW_STR="Xchat"
