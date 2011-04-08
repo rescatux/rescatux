@@ -9,7 +9,7 @@ GRAVITY=0
 X_POSITION=0
 Y_POSITION=0
 
-${FIREFOX_COMMAND} --new-window http://rescatux.berlios.de &
+${FIREFOX_COMMAND} --new-window ${RESCATUX_URL} &
 sleep 5s;
 
 wmctrl \

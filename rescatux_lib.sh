@@ -2,6 +2,8 @@
 
 # Rescatux lib main variables
 
+RESCATUX_URL="http://rescatux.berlios.de"
+
 RESCAPP_WIDTH="600"
 RESCAPP_HEIGHT="400"
 
