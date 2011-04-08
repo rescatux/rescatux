@@ -66,7 +66,6 @@ else
 SUDO="sudo"
 [ -e ${DIRECTORY}/sudo ] || SUDO=""
 
-echo -e -n "result is: $result\n"
 case $result in
 0)
 
