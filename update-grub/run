@@ -6,45 +6,7 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
-
-# First of all let decide the user to rename their hard disks to meet their possible different mapping at hard disk installation  - BEGIN
-
-DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks)
-
-mkdir /dev/new
-
-# Let's loop on detected hard disks so that user can rename them
-for n_hard_disk in ${DETECTED_HARD_DISKS} ; do
-
-  new_hard_disk_name=$(zenity ${ZENITY_COMMON_OPTIONS}  --entry --title="Rename hard disk if needed" --text="Detected: ${n_hard_disk}" --entry-text="${n_hard_disk}");
-
-  ln -s /dev/${n_hard_disk} /dev/new/${new_hard_disk_name}
-  for n_partition in /dev/* ; do
-    actual_partition=$(echo "${n_partition}" | sed 's%/dev/%%g')
-    test_partition=$(echo ${actual_partition} | grep ${n_hard_disk})
-    partition_number=$(echo ${test_partition} | sed "s%${n_hard_disk}%%g")
-    if [[ "${test_partition}x" != "x" ]] ; then
-	ln -s /dev/${n_hard_disk}${partition_number} /dev/new/${new_hard_disk_name}${partition_number}
-    fi
-  done
-done
-
-
-# We are going to redefine TARGET_PARTITIONS with user choosen hard disks
-TARGET_PARTITIONS=""
-# Let's move some partitions
-for n_partition in /dev/new/* ; do
-  new_partition=$(echo $n_partition | sed 's%/dev/new/%%g')
-  old_partition=$(readlink ${n_partition})
-  mv $old_partition /dev/${new_partition}
-  TARGET_PARTITIONS="${TARGET_PARTITIONS} ${new_partition}"
-
-done
-
-
-
-
-# First of all let decide the user to rename their hard disks to meet their possible different mapping at hard disk installation  - END
+$TARGET_PARTITIONS=$(rtux_Choose_HardDisk_Renaming)
 
 # TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
 
@@ -82,19 +44,10 @@ echo -e -n "Detected grub-install partitions: ${SBIN_GRUB_PARTITIONS}\n"
 
 # MAIN PROGRAM
 
-# TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
-
-GRUB_INSTALL_MBR_WIDTH="600"
-GRUB_INSTALL_MBR_HEIGHT="400"
-ZENITY_COMMON_OPTIONS="--width=${GRUB_INSTALL_MBR_WIDTH} --height=${GRUB_INSTALL_MBR_HEIGHT}"
-
 TMP_FOLDER="/tmp"
 DEVICE_MAP_NUMBERED_FILE="${TMP_FOLDER}/device.map.numbered"
 DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
 DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
-
-#alias zenity = 'zenity ${ZENITY_COMMON_OPTIONS}' # It does not seem to work
-# Select one of the partitions - BEGIN
 
 n=0
 LIST_VALUES=""

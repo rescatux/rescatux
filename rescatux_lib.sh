@@ -140,6 +140,47 @@ function rtux_Choose_Linux_partition () {
 	--column "${DESCRIPTION_STR}" ${LIST_VALUES})";
 } # function rtux_Choose_Linux_partition ()
 
+# Let the user rename hard disks if they want to
+# Returns the new target partitions
+function rtux_Choose_HardDisk_Renaming () {
+  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks)
+
+  mkdir /dev/new
+
+  # Let's loop on detected hard disks so that user can rename them
+  for n_hard_disk in ${DETECTED_HARD_DISKS} ; do
+
+    local new_hard_disk_name=$(zenity ${ZENITY_COMMON_OPTIONS}  \
+			  --entry --title="Rename hard disk if needed" \
+			  --text="Detected: ${n_hard_disk}" \
+			  --entry-text="${n_hard_disk}");
+
+    ln -s /dev/${n_hard_disk} /dev/new/${new_hard_disk_name}
+    for n_partition in /dev/* ; do
+      local actual_partition=$(echo "${n_partition}" | sed 's%/dev/%%g')
+      local test_partition=$(echo ${actual_partition} | grep ${n_hard_disk})
+      local partition_number=$(echo ${test_partition} | sed "s%${n_hard_disk}%%g")
+      if [[ "${test_partition}x" != "x" ]] ; then
+	  ln -s /dev/${n_hard_disk}${partition_number} \
+	    /dev/new/${new_hard_disk_name}${partition_number}
+      fi
+    done
+  done
+
+
+  # We are going to redefine TARGET_PARTITIONS with user choosen hard disks
+  local TARGET_PARTITIONS=""
+  # Let's move some partitions
+  for n_partition in /dev/new/* ; do
+    local new_partition=$(echo $n_partition | sed 's%/dev/new/%%g')
+    local old_partition=$(readlink ${n_partition})
+    mv $old_partition /dev/${new_partition}
+    TARGET_PARTITIONS="${TARGET_PARTITIONS} ${new_partition}"
+
+  done
+  echo ${TARGET_PARTITIONS}
+} # rtux_Choose_HardDisk_Renaming ()
+
 
 # Returns Desktop width
 function rtux_Get_Desktop_Width () {
