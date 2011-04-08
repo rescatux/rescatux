@@ -3,6 +3,7 @@
 # Rescatux lib main variables
 
 RESCATUX_URL="http://rescatux.berlios.de"
+RESCATUX_IRC_URL="irc://irc.freenode.net/rescatux"
 
 RESCAPP_WIDTH="600"
 RESCAPP_HEIGHT="400"

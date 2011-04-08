@@ -1,4 +1,5 @@
 #!/bin/bash
+source ${RESCATUX_LIB_FILE}
 # Top right corner
 WIDTH=600
 HEIGHT=460
@@ -15,7 +16,7 @@ RESC_USER_PREFIX="resc_user_"
 
 mkdir --parents $HOME/.xchat2/
 echo -e -n "irc_nick1 = ${RESC_USER_PREFIX}${USER_NUMBER}\nirc_nick2 = ${RESC_USER_PREFIX}${USER_NUMBER_2}\nirc_nick3 = ${RESC_USER_PREFIX}${USER_NUMBER_3}" > $HOME/.xchat2/xchat.conf ;  
-xchat --url=irc://irc.freenode.net/rescatux & 
+xchat --url=${RESCATUX_IRC_URL} & 
 sleep 2s;
 
 wmctrl -r XChat -e ${GRAVITY},${X_POSITION},${Y_POSITION},${WIDTH},${HEIGHT}
