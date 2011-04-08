@@ -126,15 +126,9 @@ EOF
 
     # TODO: Let the user use other than now hard-coded /bin/bash
     if chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT} ; then
-      zenity ${ZENITY_COMMON_OPTIONS} \
-	--info \
-	--title="${SUCCESS_STR}" \
-	--text="${GRUB_INSTALLED_OK_STR}";
+      rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
     else
-      zenity ${ZENITY_COMMON_OPTIONS} \
-	--info \
-	--title="${FAILURE_STR}" \
-	--text="${GRUB_NOT_INSTALLED_STR}";
+      rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
     fi
     mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
     rm ${TMP_MNT_PARTITION_SCRIPT}

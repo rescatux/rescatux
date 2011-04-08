@@ -59,6 +59,26 @@ function rtux_Get_System_HardDisks () {
 	  | tr '\n' ' ');
 } # function rtux_Get_System_HardDisks ()
 
+# Informs the user about an operation that has been successful
+# Every parametre is treated as the message to be shown to the user.
+function rtux_Message_Success () {
+  local text_to_show="$@"
+  zenity ${ZENITY_COMMON_OPTIONS} \
+    --info \
+    --title="${SUCCESS_STR}" \
+    --text="${text_to_show}";
+} # function rtux_Message_Success ()
+
+# Informs the user about an operation that has been not successful
+# Every parametre is treated as the message to be shown to the user.
+function rtux_Message_Failure () {
+  local text_to_show="$@"
+  zenity ${ZENITY_COMMON_OPTIONS} \
+    --info \
+    --title="${FAILURE_STR}" \
+    --text="${text_to_show}";
+} # function rtux_Message_Failure ()
+
 # Return hard disk that the user chooses
 # Every parametre is treated as the question to be asked to the user.
 function rtux_Choose_Hard_Disk () {
