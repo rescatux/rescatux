@@ -18,7 +18,7 @@ function rtux_Get_Etc_Issue_Content() {
     fi
     umount ${TMP_MNT_PARTITION};
   fi
-} # rtux_Get_Etc_Issue_Content()
+} # function rtux_Get_Etc_Issue_Content()
 
 # Return partitions detected on the system
 function rtux_Get_System_Partitions () {
@@ -57,7 +57,39 @@ function rtux_Get_System_HardDisks () {
 	  | tr ' ' '\n' \
 	  | uniq \
 	  | tr '\n' ' ');
-} # rtux_Get_System_HardDisks ()
+} # function rtux_Get_System_HardDisks ()
+
+# Return hard disk that the user chooses
+# Every parametre is treated as the question to be asked to the user.
+function rtux_Choose_Hard_Disk () {
+  local text_to_ask="$@"
+  local n=0
+  local HD_LIST_VALUES=""
+  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks());
+  for n_hard_disk in ${DETECTED_HARD_DISKS}; do
+    if [[ ${n} -eq 0 ]] ; then
+      local HD_LIST_VALUES="TRUE ${n_hard_disk} `${FDISK_COMMAND} -l \
+      | egrep ${n_hard_disk} \
+      | egrep 'Disk.*bytes' \
+      | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+    else
+      local HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `${FDISK_COMMAND} -l \
+      | egrep ${n_hard_disk} \
+      | egrep 'Disk.*bytes' \
+      | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+    fi
+    let n=n+1
+  done
+
+  echo $(zenity ${ZENITY_COMMON_OPTIONS}  \
+	--list  \
+	--text "${text_to_ask}" \
+	--radiolist  \
+	--column "${SELECT_STR}" \
+	--column "${HARDDISK_STR}" \
+	--column "${SIZE_STR}" ${HD_LIST_VALUES}); 
+
+} # function rtux_Choose_Hard_Disk ()
 
 
 # Let the user choose his main GNU/Linux partition
@@ -86,7 +118,7 @@ function rtux_Choose_Linux_partition () {
 	--column "${SELECT_STR}" \
 	--column "${PARTITION_STR}" \
 	--column "${DESCRIPTION_STR}" ${LIST_VALUES})";
-} # rtux_Choose_Linux_partition ()
+} # function rtux_Choose_Linux_partition ()
 
 
 # Returns Desktop width
