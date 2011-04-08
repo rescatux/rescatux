@@ -49,27 +49,39 @@ if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; the
 		    # LOOP - Show hard disk and ask position - TODO - BEGIN
 		    echo "" > ${DEVICE_MAP_NUMBERED_FILE}
 		    n=1
-		    HD_LIST_VALUES=""
+		    local HD_LIST_VALUES=""
 		    for n_hard_disk in ${DETECTED_HARD_DISKS}; do
-			m=1
-			for m_hard_disk in ${DETECTED_HARD_DISKS}; do			      
-			  if [[ m -eq 1 ]] ; then
-			    HD_LIST_VALUES="TRUE ${m} ${n_hard_disk} `/sbin/fdisk -l /dev/${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
-			  else
-			    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${m} ${n_hard_disk} `/sbin/fdisk -l /dev/${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
-			  fi
-			  let m=m+1
-			done
-			# Ask position - TODO - BEGIN
-			ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which is the right position for this hard disk?" --radiolist  --column "Select" --column "Position" --column "Hard Disk" --column "Size" ${HD_LIST_VALUES}); 
-			echo $ans
+		      m=1
+		      for m_hard_disk in ${DETECTED_HARD_DISKS}; do			      
+			if [[ m -eq 1 ]] ; then
+			  HD_LIST_VALUES="TRUE ${m} ${n_hard_disk} \
+			  `/sbin/fdisk -l /dev/${n_hard_disk} \
+				    | egrep 'Disk.*bytes' \
+				    | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+			else
+			  HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${m} ${n_hard_disk} \
+			  `/sbin/fdisk -l /dev/${n_hard_disk} \
+				    | egrep 'Disk.*bytes' \
+				    | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+			fi
+			let m=m+1
+		      done
 
-			SELECTED_POSITION=$ans
-			# Ask position - TODO - END
-			# Generate temporal file with order - TODO - BEGIN
-			echo -e -n "${SELECTED_POSITION} (hd$(( ${SELECTED_POSITION} - 1 ))) /dev/${n_hard_disk}\n" >> ${DEVICE_MAP_NUMBERED_FILE}
-			# Generate temporal file with order - TODO - END
-			let n=n+1
+		      # Ask position - BEGIN
+		      local SELECTED_POSITION=$(zenity ${ZENITY_COMMON_OPTIONS} \
+			    --list  \
+			    --text "${RIGHT_HD_POSITION_STR}" \
+			    --radiolist  \
+			    --column "${SELECT_STR}" \
+			    --column "${POSITION_STR}" \
+			    --column "${HARDDISK_STR}" \
+			    ${HD_LIST_VALUES}); 
+
+		      # Ask position - END
+		      # Generate temporal file with order - TODO - BEGIN
+		      echo -e -n "${SELECTED_POSITION} (hd$(( ${SELECTED_POSITION} - 1 ))) /dev/${n_hard_disk}\n" >> ${DEVICE_MAP_NUMBERED_FILE}
+		      # Generate temporal file with order - TODO - END
+		      let n=n+1
 		    done
 		      # Generate a temporal txt file that begins with a number in first column
 		    # LOOP - Show hard disk and ask position - TODO - END
