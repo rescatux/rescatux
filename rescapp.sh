@@ -8,8 +8,7 @@ function show_menu() {
   choice="$(find `cat ${OPTIONS_FILE}` -maxdepth 1 -type d \
 	    -exec cat {}/$DIRECTORY_FILE_STR {}/$NAME_FILE_STR {}/$DESCRIPTION_FILE_STR \; \
 	    | zenity \
-		--width=${RESCAPP_WIDTH} \
-		--height=${RESCAPP_HEIGHT} \
+		${ZENITY_COMMON_OPTIONS} \
 		--list --column "${CODE_STR}" \
 		--column "${NAME_STR}" \
 		--column "${DESCRIPTION_STR}" \
@@ -67,8 +66,7 @@ function show_item() {
 
 
     choice="$(zenity \
-	  --width=${RESCAPP_WIDTH} \
-	  --height=${RESCAPP_HEIGHT} \
+		${ZENITY_COMMON_OPTIONS} \
 	  --list \
 	  --column "${CODE_STR}" \
 	  --column "${DESCRIPTION_STR}" \
@@ -144,8 +142,7 @@ while true; do
   choice="$(find `cat rescatux.lis` -maxdepth 1 -type d \
   -exec cat {}/directory {}/name {}/description \; \
   | zenity \
-    --width=${RESCAPP_WIDTH} \
-    --height=${RESCAPP_HEIGHT} \
+    ${ZENITY_COMMON_OPTIONS} \
     --list \
     --column "${CODE_STR}" \
     --column "${NAME_STR}" \
