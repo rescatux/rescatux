@@ -27,110 +27,110 @@ DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
 n_partition=${SELECTED_PARTITION}
 
 TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
-        TMP_DEV_PARTITION=/dev/${n_partition}
-        mkdir --parents ${TMP_MNT_PARTITION}
-        if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
-		mount -o bind /dev ${TMP_MNT_PARTITION}/dev
-		mount -o bind /proc ${TMP_MNT_PARTITION}/proc
-		mount -o bind /sys ${TMP_MNT_PARTITION}/sys
+TMP_DEV_PARTITION=/dev/${n_partition}
+mkdir --parents ${TMP_MNT_PARTITION}
+if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
+	mount -o bind /dev ${TMP_MNT_PARTITION}/dev
+	mount -o bind /proc ${TMP_MNT_PARTITION}/proc
+	mount -o bind /sys ${TMP_MNT_PARTITION}/sys
 
 
-                #echo -e -n "Detected partition is: ${n_partition}\n";
-                if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
+	#echo -e -n "Detected partition is: ${n_partition}\n";
+	if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
 
 
 
-			# Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - BEGIN
-			    # (Fetch hard disks detected and show to the user. - TODO - BEGIN
-			    # Tell them that they are going to be asked to choose which it is #1, #2,...)
-			    $(rtux_Choose_Hard_Disk ${PREPARE_ORDER_HDS_STR});      
-			    # (Fetch hard disks detected and show to the user. - TODO - END
-			    # Tell them that they are going to be asked to choose which it is #1, #2,...)
-			    # LOOP - Show hard disk and ask position - TODO - BEGIN
-			    echo "" > ${DEVICE_MAP_NUMBERED_FILE}
-			    n=1
-			    HD_LIST_VALUES=""
-			    for n_hard_disk in ${DETECTED_HARD_DISKS}; do
-				m=1
-				for m_hard_disk in ${DETECTED_HARD_DISKS}; do			      
-				  if [[ m -eq 1 ]] ; then
-				    HD_LIST_VALUES="TRUE ${m} ${n_hard_disk} `/sbin/fdisk -l /dev/${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
-				  else
-				    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${m} ${n_hard_disk} `/sbin/fdisk -l /dev/${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
-				  fi
-				  let m=m+1
-				done
-				# Ask position - TODO - BEGIN
-				ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which is the right position for this hard disk?" --radiolist  --column "Select" --column "Position" --column "Hard Disk" --column "Size" ${HD_LIST_VALUES}); 
-				echo $ans
+		# Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - BEGIN
+		    # (Fetch hard disks detected and show to the user. - TODO - BEGIN
+		    # Tell them that they are going to be asked to choose which it is #1, #2,...)
+		    $(rtux_Choose_Hard_Disk ${PREPARE_ORDER_HDS_STR});      
+		    # (Fetch hard disks detected and show to the user. - TODO - END
+		    # Tell them that they are going to be asked to choose which it is #1, #2,...)
+		    # LOOP - Show hard disk and ask position - TODO - BEGIN
+		    echo "" > ${DEVICE_MAP_NUMBERED_FILE}
+		    n=1
+		    HD_LIST_VALUES=""
+		    for n_hard_disk in ${DETECTED_HARD_DISKS}; do
+			m=1
+			for m_hard_disk in ${DETECTED_HARD_DISKS}; do			      
+			  if [[ m -eq 1 ]] ; then
+			    HD_LIST_VALUES="TRUE ${m} ${n_hard_disk} `/sbin/fdisk -l /dev/${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+			  else
+			    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${m} ${n_hard_disk} `/sbin/fdisk -l /dev/${n_hard_disk} | egrep 'Disk.*bytes' | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+			  fi
+			  let m=m+1
+			done
+			# Ask position - TODO - BEGIN
+			ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which is the right position for this hard disk?" --radiolist  --column "Select" --column "Position" --column "Hard Disk" --column "Size" ${HD_LIST_VALUES}); 
+			echo $ans
 
-				SELECTED_POSITION=$ans
-				# Ask position - TODO - END
-				# Generate temporal file with order - TODO - BEGIN
-				echo -e -n "${SELECTED_POSITION} (hd$(( ${SELECTED_POSITION} - 1 ))) /dev/${n_hard_disk}\n" >> ${DEVICE_MAP_NUMBERED_FILE}
-				# Generate temporal file with order - TODO - END
-				let n=n+1
-			    done
-			      # Generate a temporal txt file that begins with a number in first column
-			    # LOOP - Show hard disk and ask position - TODO - END
-			    # Read the temporal txt file, sort by first column and generate device.map file
-			    cat ${DEVICE_MAP_NUMBERED_FILE} | sort | awk '{printf("%s\t%s\n",$2,$3);}' > ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
-			# Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - END
-
-
-			# TODO: Improve with a cat command ended with a EOF mark
-			echo -e -n "mount -a" > ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+			SELECTED_POSITION=$ans
+			# Ask position - TODO - END
+			# Generate temporal file with order - TODO - BEGIN
+			echo -e -n "${SELECTED_POSITION} (hd$(( ${SELECTED_POSITION} - 1 ))) /dev/${n_hard_disk}\n" >> ${DEVICE_MAP_NUMBERED_FILE}
+			# Generate temporal file with order - TODO - END
+			let n=n+1
+		    done
+		      # Generate a temporal txt file that begins with a number in first column
+		    # LOOP - Show hard disk and ask position - TODO - END
+		    # Read the temporal txt file, sort by first column and generate device.map file
+		    cat ${DEVICE_MAP_NUMBERED_FILE} | sort | awk '{printf("%s\t%s\n",$2,$3);}' > ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
+		# Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - END
 
 
-			# Backup current device.map file (inside chroot) - TODO - BEGIN
-			echo -e -n "cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			# Backup current device.map file (inside chroot) - TODO - END
+		# TODO: Improve with a cat command ended with a EOF mark
+		echo -e -n "mount -a" > ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 
-			# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
-			echo -e -n "cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
-			echo -e -n "${UPDATE_GRUB_BINARY}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "UPDATE_GRUB_OUTPUT=\$?" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
- 			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 
-			# Restore current device.map file - TODO - BEGIN
-			echo -e -n "cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			# Restore current device.map file - TODO - END
-			# Delete temporal and backup device.map files- TODO - BEGIN
-			echo -e -n "rm /boot/grub/${DEVICE_MAP_BACKUP_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		# Backup current device.map file (inside chroot) - TODO - BEGIN
+		echo -e -n "cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		# Backup current device.map file (inside chroot) - TODO - END
 
-			echo -e -n "rm /${DEVICE_MAP_RESCATUX_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			# Delete temporal and backup device.map files- TODO - END
+		# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
+		echo -e -n "cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
+		echo -e -n "${UPDATE_GRUB_BINARY}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "UPDATE_GRUB_OUTPUT=\$?" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 
-			echo -e -n "umount -a" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "exit \${UPDATE_GRUB_OUTPUT}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-			chmod +x ${TMP_MNT_PARTITION}/tmp/$$.sh
+		# Restore current device.map file - TODO - BEGIN
+		echo -e -n "cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		# Restore current device.map file - TODO - END
+		# Delete temporal and backup device.map files- TODO - BEGIN
+		echo -e -n "rm /boot/grub/${DEVICE_MAP_BACKUP_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
 
-			# TODO: Let the user use other than now hard-coded /bin/bash
-			if chroot ${TMP_MNT_PARTITION} /bin/bash /tmp/$$.sh ; then
-				zenity ${ZENITY_COMMON_OPTIONS} --info --title="Success!" --text="Grub configuration was updated OK! :)";
-			else
-				zenity ${ZENITY_COMMON_OPTIONS} --info --title="Failure!" --text="Grub configuration update went wrong! :(";
-			fi
-			mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
-			rm ${TMP_MNT_PARTITION}/tmp/$$.sh
-			
+		echo -e -n "rm /${DEVICE_MAP_RESCATUX_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		# Delete temporal and backup device.map files- TODO - END
 
-                fi
-		umount ${TMP_MNT_PARTITION}/sys
-		umount ${TMP_MNT_PARTITION}/proc
-		umount ${TMP_MNT_PARTITION}/dev
-                umount ${TMP_MNT_PARTITION};
-        fi
+		echo -e -n "umount -a" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "exit \${UPDATE_GRUB_OUTPUT}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+		chmod +x ${TMP_MNT_PARTITION}/tmp/$$.sh
+
+		# TODO: Let the user use other than now hard-coded /bin/bash
+		if chroot ${TMP_MNT_PARTITION} /bin/bash /tmp/$$.sh ; then
+			zenity ${ZENITY_COMMON_OPTIONS} --info --title="Success!" --text="Grub configuration was updated OK! :)";
+		else
+			zenity ${ZENITY_COMMON_OPTIONS} --info --title="Failure!" --text="Grub configuration update went wrong! :(";
+		fi
+		mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
+		rm ${TMP_MNT_PARTITION}/tmp/$$.sh
+		
+
+	fi
+	umount ${TMP_MNT_PARTITION}/sys
+	umount ${TMP_MNT_PARTITION}/proc
+	umount ${TMP_MNT_PARTITION}/dev
+	umount ${TMP_MNT_PARTITION};
+fi
 
 
 
