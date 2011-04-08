@@ -24,4 +24,11 @@ EOF
 ${XCHAT_COMMAND} --url=${RESCATUX_IRC_URL} & 
 sleep 2s;
 
-wmctrl -r ${XCHAT_WINDOW_STR} -e ${GRAVITY},${X_POSITION},${Y_POSITION},${WIDTH},${HEIGHT}
+wmctrl \
+  -r ${XCHAT_WINDOW_STR} \
+  -e ${GRAVITY},\
+${X_POSITION},\
+${Y_POSITION},\
+${WIDTH},\
+${HEIGHT}
+
