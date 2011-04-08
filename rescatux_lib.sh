@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# Given a partition it returns its etc issue content
+# Format is modified so that zenity does not complain
+function rtux_Get_Etc_Issue_Content() {
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
+    if [[ -e ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} ]] ; then
+      echo $(head -n 1 ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} |\
+	sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /-/g' -e 's/\ \ /-/g' -e 's/\n/-/g')
+    else
+      echo "${NOT_DETECTED_STR}"
+    fi
+    umount ${TMP_MNT_PARTITION};
+  fi
+} # rtux_Get_Etc_Issue_Content() end
 
 # Return partitions detected on the system
 function rtux_Get_System_Partitions () {
@@ -77,6 +96,7 @@ PREPARE_ORDER_HDS_STR="These are detected hard disks. Prepare to order them acco
 RIGHT_HD_POSITION_STR="Which is the right position for this hard disk?"
 SUCCESS_STR="Success!"
 FAILURE_STR="Failure!"
+NOT_DETECTED_STR="Not detected"
 
 
 

@@ -14,23 +14,7 @@ TARGET_PARTITIONS=$(rtux_Get_System_Partitions())
 
 SBIN_GRUB_PARTITIONS="$(rtux_Get_Linux_Os_Partitions())"
 
-function etc_issue() {
-  local PARTITION_TO_MOUNT=$1
-  local n_partition=${PARTITION_TO_MOUNT}
 
-  TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
-  TMP_DEV_PARTITION=/dev/${n_partition}
-  mkdir --parents ${TMP_MNT_PARTITION}
-  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
-    if [[ -e ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} ]] ; then
-      echo $(head -n 1 ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} |\
-	sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /-/g' -e 's/\ \ /-/g' -e 's/\n/-/g')
-    else
-      echo "Not detected"
-    fi
-    umount ${TMP_MNT_PARTITION};
-  fi
-} # function etc_issue() end
 
 
 # MAIN PROGRAM
@@ -55,7 +39,7 @@ n=0
 LIST_VALUES=""
 DESC_VALUES=""
 for n_partition in ${SBIN_GRUB_PARTITIONS}; do
-  issue_value=`etc_issue ${n_partition}`
+  issue_value=`rtux_Get_Etc_Issue_Content ${n_partition}`
   issue_value=$(echo $issue_value | sed 's/\ /\-/')
   issue_value=$(echo $issue_value | sed 's/ /\-/')
   
