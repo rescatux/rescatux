@@ -10,14 +10,9 @@ set -v
 
 # TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
 
-PROC_PARTITIONS_FILE=/proc/partitions
-
 TARGET_PARTITIONS=$(awk '{print $4}' ${PROC_PARTITIONS_FILE} | sed -e '/name/d' -e '/^$/d' -e '/[1-9]/!d')
 
 SBIN_GRUB_PARTITIONS=""
-RESCATUX_ROOT_MNT=/mnt/rescatux
-LINUX_OS_DETECTOR="/etc/issue"
-GRUB_INSTALL_BINARY=grub-install
 
 for n_partition in ${TARGET_PARTITIONS}; do
   TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
@@ -33,7 +28,6 @@ for n_partition in ${TARGET_PARTITIONS}; do
 done
 
 function etc_issue() {
-  local ETC_ISSUE_PATH="/etc/issue"
   local PARTITION_TO_MOUNT=$1
   local n_partition=${PARTITION_TO_MOUNT}
 
@@ -59,10 +53,14 @@ function etc_issue() {
 GRUB_INSTALL_MBR_WIDTH="${RESCAPP_WIDTH}"
 GRUB_INSTALL_MBR_HEIGHT="${RESCAPP_HEIGHT}"
 
-TMP_FOLDER="/tmp"
+
 DEVICE_MAP_NUMBERED_FILE="${TMP_FOLDER}/device.map.numbered"
 DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
 DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
+
+GRUB_INSTALLED_OK_STR="Grub was installed OK! :)"
+GRUB_NOT_INSTALLED_STR="Grub was not installed. Something went wrong! :("
+WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
 
 # Select one of the partitions - BEGIN
 
@@ -86,11 +84,11 @@ echo -e -n "a: $LIST_VALUES\n"
 
 ans=$(zenity ${ZENITY_COMMON_OPTIONS}  \
       --list  \
-      --text "Which partition is your main GNU/Linux?" \
+      --text "${WHICH_PARTITION_STR}" \
       --radiolist  \
-      --column "Select" \
-      --column "Partition" \
-      --column "Desc" ${LIST_VALUES});
+      --column "${SELECT_STR}" \
+      --column "${PARTITION_STR}" \
+      --column "${DESCRIPTION_STR}" ${LIST_VALUES});
 
 SELECTED_PARTITION="$ans"
 # Select one of the partitions - END
@@ -105,12 +103,12 @@ n=0
 HD_LIST_VALUES=""
 for n_hard_disk in ${DETECTED_HARD_DISKS}; do
   if [[ ${n} -eq 0 ]] ; then
-    HD_LIST_VALUES="TRUE ${n_hard_disk} `/sbin/fdisk -l \
+    HD_LIST_VALUES="TRUE ${n_hard_disk} `${FDISK_COMMAND} -l \
     | egrep ${n_hard_disk} \
     | egrep 'Disk.*bytes' \
     | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
   else
-    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `/sbin/fdisk -l \
+    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `${FDISK_COMMAND} -l \
     | egrep ${n_hard_disk} \
     | egrep 'Disk.*bytes' \
     | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
@@ -122,11 +120,11 @@ TOTAL_HD_NUMBER="${n}"
 
 ans=$(zenity ${ZENITY_COMMON_OPTIONS}  \
       --list  \
-      --text "Which hard disk to install Linux on?" \
+      --text "${WHICH_HARD_DISK_INSTALL_GRUB_STR}" \
       --radiolist  \
-      --column "Select" \
-      --column "Hard Disk" \
-      --column "Size" ${HD_LIST_VALUES}); 
+      --column "${SELECT_STR}" \
+      --column "${HARDDISK_STR}" \
+      --column "${SIZE_STR}" ${HD_LIST_VALUES}); 
 
 SELECTED_HARD_DISK=$ans
 
@@ -151,11 +149,11 @@ if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; the
     # Tell them that they are going to be asked to choose which it is #1, #2,...)
     ans=$(zenity ${ZENITY_COMMON_OPTIONS} \
 	  --list  \
-	  --text "These are detected hard disks. Prepare to order them according to boot order. Press OK to continue." \
+	  --text "${PREPARE_ORDER_HDS_STR}" \
 	  --radiolist  \
-	  --column "Select" \
-	  --column "Hard Disk" \
-	  --column "Size" \
+	  --column "${SELECT_STR}" \
+	  --column "${HARDDISK_STR}" \
+	  --column "${SIZE_STR}" \
 	  ${HD_LIST_VALUES});
 
     # (Fetch hard disks detected and show to the user. - TODO - END
@@ -178,11 +176,11 @@ if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; the
       # Ask position - TODO - BEGIN
       ans=$(zenity ${ZENITY_COMMON_OPTIONS} \
 	    --list  \
-	    --text "Which is the right position for this hard disk?" \
+	    --text "${RIGHT_HD_POSITION_STR}" \
 	    --radiolist  \
-	    --column "Select" \
-	    --column "Position" \
-	    --column "Hard Disk" \
+	    --column "${SELECT_STR}" \
+	    --column "${POSITION_STR}" \
+	    --column "${HARDDISK_STR}" \
 	    ${HD_LIST_VALUES}); 
       SELECTED_POSITION=$ans
       # Ask position - TODO - END
@@ -239,13 +237,13 @@ if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; the
     if chroot ${TMP_MNT_PARTITION} /bin/bash /tmp/$$.sh ; then
       zenity ${ZENITY_COMMON_OPTIONS} \
 	--info \
-	--title="Success!" \
-	--text="Grub was installed OK! :)";
+	--title="${SUCCESS_STR}" \
+	--text="${GRUB_INSTALLED_OK_STR}";
     else
       zenity ${ZENITY_COMMON_OPTIONS} \
 	--info \
-	--title="Failure!" \
-	--text="Grub was not installed. Something went wrong! :(";
+	--title="${FAILURE_STR}" \
+	--text="${GRUB_NOT_INSTALLED_STR}";
     fi
     mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
     rm ${TMP_MNT_PARTITION}/tmp/$$.sh

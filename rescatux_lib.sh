@@ -28,6 +28,7 @@ RUN_STR="Run"
 FIREFOX_COMMAND="iceweasel"
 GEDIT_COMMAND="gedit"
 XCHAT_COMMAND="xchat"
+FDISK_COMMAND="/sbin/fdisk"
 
 FIREFOX_WINDOW_STR="Iceweasel"
 XCHAT_WINDOW_STR="Xchat"
@@ -35,3 +36,29 @@ XCHAT_WINDOW_STR="Xchat"
 CODE_STR="Code"
 NAME_STR="Name"
 DESCRIPTION_STR="Description"
+WHICH_PARTITION_STR="Which partition is your main GNU/Linux?"
+SELECT_STR="Select"
+PARTITION_STR="Partition"
+POSITION_STR="Position"
+HARDDISK_STR="Hard Disk"
+SIZE_STR="Size"
+
+PREPARE_ORDER_HDS_STR="These are detected hard disks. Prepare to order them according to boot order. Press OK to continue."
+RIGHT_HD_POSITION_STR="Which is the right position for this hard disk?"
+SUCCESS_STR="Success!"
+FAILURE_STR="Failure!"
+
+
+
+PROC_PARTITIONS_FILE=/proc/partitions
+
+RESCATUX_ROOT_MNT=/mnt/rescatux
+LINUX_OS_DETECTOR="/etc/issue"
+GRUB_INSTALL_BINARY=grub-install
+ETC_ISSUE_PATH="/etc/issue"
+
+
+TMP_FOLDER="/tmp"
+
+
+
