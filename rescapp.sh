@@ -106,26 +106,27 @@ function show_item() {
 
 # Main program
 DEFAULT_PATH="${HOME}/Desktop/"
+
+RESCATUX_PATH=${DEFAULT_PATH}
+export RESCATUX_PATH # Make it available to run scripts
+
+RESCATUX_LIB_FILE="${DEFAULT_PATH}/rescatux_lib.sh"
+export RESCATUX_LIB_FILE # Make it available to run scripts
+
+
+source ${RESCATUX_LIB_FILE}
 LOG_DIRECTORY="log"
 LIST_FILE_SUFFIX="lis"
-RESCAPP_WIDTH="600"
-RESCAPP_HEIGHT="400"
 GRUB_INSTALL_TO_MBR_STR="Restore GRUB / Fix Linux Boot"
 CHAT_STR="Get online human help (chat)"
 DOC_STR="Access online Rescatux website"
-EXIT_STR="Exit"
 
 RUN_CODE="run"
 LOCAL_DOC_CODE="localdoc"
 ONLINE_DOC_CODE="onlinedoc"
 
-RUN_STR="Run"
 LOCAL_DOC_STR="Local Documentation"
 ONLINE_DOC_STR="Online Documentation"
-
-FIREFOX_COMMAND="iceweasel"
-GEDIT_COMMAND="gedit"
-
 
 RUN_FILE_STR="run"
 LOCAL_FILE_STR="local_doc.html"
@@ -133,11 +134,6 @@ ONLINE_FILE_STR="online_doc.html"
 DIRECTORY_FILE_STR="directory"
 NAME_FILE_STR="name"
 DESCRIPTION_FILE_STR="description"
-
-
-CODE_STR="Code"
-NAME_STR="Name"
-DESCRIPTION_STR="Description"
 
 RESCAPP_TITLE_STR="RESCATUX's RESCAPP"
 
