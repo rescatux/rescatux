@@ -46,8 +46,19 @@ function rtux_Get_Linux_Os_Partitions() {
   done
 
   echo "${SBIN_GRUB_PARTITIONS}"
-
 } # function rtux_Get_System_Partitions ()
+
+
+# Return hard disks detected on the system
+function rtux_Get_System_HardDisks () {
+  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions())
+  echo $(echo ${TARGET_PARTITIONS} \
+	  | sed 's/[0-9][0-9]*//g' \
+	  | tr ' ' '\n' \
+	  | uniq \
+	  | tr '\n' ' ');
+} # rtux_Get_System_HardDisks ()
+
 
 # Let the user choose his main GNU/Linux partition
 # It outputs choosen partition
@@ -75,7 +86,6 @@ function rtux_Choose_Linux_partition () {
 	--column "${SELECT_STR}" \
 	--column "${PARTITION_STR}" \
 	--column "${DESCRIPTION_STR}" ${LIST_VALUES})";
-
 } # rtux_Choose_Linux_partition ()
 
 
