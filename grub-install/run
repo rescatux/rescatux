@@ -95,44 +95,37 @@ if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; the
 
 
     # TODO: Improve with a cat command ended with a EOF mark
-    echo -e -n "mount -a" > ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+    TMP_SCRIPT="/tmp/$$.sh"
+    TMP_MNT_PARTITION_SCRIPT="${TMP_MNT_PARTITION}${TMP_SCRIPT}"
+
+    cat << EOF > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
+      mount -a
+      # Backup current device.map file (inside chroot) - TODO - BEGIN
+      cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}
+      # Backup current device.map file (inside chroot) - TODO - END
+
+      # Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
+      cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map
+      # Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
+      ${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV}
+      GRUB_INSTALL_OUTPUT=\$?
+      # Restore current device.map file - BEGIN
+      cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map
+      # Restore current device.map file - END
+      # Delete temporal and backup device.map files- TODO - BEGIN
+      rm /boot/grub/${DEVICE_MAP_BACKUP_STR}
+      rm /${DEVICE_MAP_RESCATUX_STR}
+      # Delete temporal and backup device.map files- TODO - END
+      umount -a
+      exit \${GRUB_INSTALL_OUTPUT}
+EOF
+    
 
 
-    # Backup current device.map file (inside chroot) - TODO - BEGIN
-    echo -e -n "cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    # Backup current device.map file (inside chroot) - TODO - END
-
-    # Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
-    echo -e -n "cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    # Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
-    echo -e -n "${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "GRUB_INSTALL_OUTPUT=\$?" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-
-    # Restore current device.map file - TODO - BEGIN
-    echo -e -n "cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    # Restore current device.map file - TODO - END
-    # Delete temporal and backup device.map files- TODO - BEGIN
-    echo -e -n "rm /boot/grub/${DEVICE_MAP_BACKUP_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-
-    echo -e -n "rm /${DEVICE_MAP_RESCATUX_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    # Delete temporal and backup device.map files- TODO - END
-
-    echo -e -n "umount -a" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "exit \${GRUB_INSTALL_OUTPUT}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-    chmod +x ${TMP_MNT_PARTITION}/tmp/$$.sh
+    chmod +x ${TMP_MNT_PARTITION_SCRIPT}
 
     # TODO: Let the user use other than now hard-coded /bin/bash
-    if chroot ${TMP_MNT_PARTITION} /bin/bash /tmp/$$.sh ; then
+    if chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT} ; then
       zenity ${ZENITY_COMMON_OPTIONS} \
 	--info \
 	--title="${SUCCESS_STR}" \
@@ -144,7 +137,7 @@ if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; the
 	--text="${GRUB_NOT_INSTALLED_STR}";
     fi
     mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
-    rm ${TMP_MNT_PARTITION}/tmp/$$.sh
+    rm ${TMP_MNT_PARTITION_SCRIPT}
 		
   fi # Linux detector was found
   umount ${TMP_MNT_PARTITION}/sys
