@@ -26,17 +26,42 @@ function show_item() {
 
 DIRECTORY=$1
 
+unset zenity_option_line
+declare -a zenity_option_line
+let n_zenity_option_line=0
+
+
 if [ -e ${DIRECTORY}.${LIST_FILE_SUFFIX} ] ; then
   show_menu ${DIRECTORY}
 else
 
-  if [ -e ${DIRECTORY}/run ] ; then
-     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}" "${RUN_CODE}" "${RUN_STR}" "${LOCAL_DOC_CODE}" "${LOCAL_DOC_STR}" "${ONLINE_DOC_CODE}" "${ONLINE_DOC_STR}")"
-     result=$?
-  else
-     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}"  "${LOCAL_DOC_CODE}" "${LOCAL_DOC_STR}" "${ONLINE_DOC_CODE}" "${ONLINE_DOC_STR}")"
-     result=$?
+  # Add run option if there is the run file
+  if [ -e ${DIRECTORY}/${RUN_FILE_STR} ] ; then
+    zenity_option_line[$n_zenity_option_line]="${RUN_CODE}"
+    let n_zenity_option_line=n_zenity_option_line+1
+    zenity_option_line[$n_zenity_option_line]="${RUN_STR}"
+    let n_zenity_option_line=n_zenity_option_line+1
   fi
+
+  # Add local documentation option if there is the local_doc.html file
+  if [ -e ${DIRECTORY}/${LOCAL_DOC_STR} ] ; then
+    zenity_option_line[$n_zenity_option_line]="${LOCAL_DOC_CODE}"
+    let n_zenity_option_line=n_zenity_option_line+1
+    zenity_option_line[$n_zenity_option_line]="${LOCAL_DOC_STR}"
+    let n_zenity_option_line=n_zenity_option_line+1
+  fi
+
+  # Add online documentation option if there is the online_doc.html file
+  if [ -e ${DIRECTORY}/${ONLINE_DOC_STR} ] ; then
+    zenity_option_line[$n_zenity_option_line]="${ONLINE_DOC_CODE}"
+    let n_zenity_option_line=n_zenity_option_line+1
+    zenity_option_line[$n_zenity_option_line]="${ONLINE_DOC_STR}"
+    let n_zenity_option_line=n_zenity_option_line+1
+  fi
+
+
+     choice="$(zenity --width=${RESCAPP_WIDTH} --height=${RESCAPP_HEIGHT} --list --column "Code" --column "Description" --title="${DIRECTORY}" "${n_zenity_option_line[@]}")"
+     result=$?
 
 SUDO="sudo"
 [ -e ${DIRECTORY}/sudo ] || SUDO=""
@@ -48,13 +73,13 @@ case $result in
 
 	case $choice in
 	${RUN_CODE})
-	exec ${SUDO} ${DIRECTORY}/run > ${LOG_DIRECTORY}/${DIRECTORY}_log.txt 2>&1 &
+	exec ${SUDO} ${DIRECTORY}/${RUN_FILE_STR} > ${LOG_DIRECTORY}/${DIRECTORY}_log.txt 2>&1 &
 	;;
 	${LOCAL_DOC_CODE})
-	${FIREFOX_COMMAND} --new-window ${DIRECTORY}/local_doc.html &
+	${FIREFOX_COMMAND} --new-window ${DIRECTORY}/${LOCAL_DOC_STR} &
 	;;
 	${ONLINE_DOC_CODE})
-	${FIREFOX_COMMAND} --new-window `cat ${DIRECTORY}/online_doc.html` &
+	${FIREFOX_COMMAND} --new-window `${DIRECTORY}/${ONLINE_DOC_STR} &
 	;;
 	esac
 
@@ -92,6 +117,11 @@ ONLINE_DOC_STR="Online Documentation"
 
 FIREFOX_COMMAND="iceweasel"
 GEDIT_COMMAND="gedit"
+
+
+RUN_FILE_STR="run"
+LOCAL_DOC_STR="local_doc.html"
+ONLINE_DOC_STR="online_doc.html"
 
 cd ${DEFAULT_PATH}
 
