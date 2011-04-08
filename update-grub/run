@@ -9,15 +9,7 @@ set -v
 
 # First of all let decide the user to rename their hard disks to meet their possible different mapping at hard disk installation  - BEGIN
 
-PROC_PARTITIONS_FILE=/proc/partitions
-
-
-TARGET_PARTITIONS=$(awk '{print $4}' ${PROC_PARTITIONS_FILE} | sed -e '/name/d' -e '/^$/d' -e '/[1-9]/!d')
-
-DETECTED_HARD_DISKS=""
-ans=$(echo ${TARGET_PARTITIONS} | sed 's/[0-9][0-9]*//g' | tr ' ' '\n' | uniq | tr '\n' ' ')
-DETECTED_HARD_DISKS="$ans"
-echo -e -n "DEBUG: detected hard disks: ${DETECTED_HARD_DISKS}\n"
+DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks)
 
 mkdir /dev/new
 
