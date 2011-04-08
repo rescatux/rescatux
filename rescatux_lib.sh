@@ -1,5 +1,15 @@
 #!/bin/bash
 
+
+# Returns Desktop width
+function rtux_Get_Desktop_Width () {
+  wmctrl -d \
+  | head -n 1 \
+  | awk '{print $4}' \
+  | awk -F 'x' '{print $1}'
+} # function rtux_Get_Desktop_Width ()
+
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://rescatux.berlios.de"

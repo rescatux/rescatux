@@ -4,7 +4,7 @@ source ${RESCATUX_LIB_FILE}
 WIDTH=600
 HEIGHT=460
 GRAVITY=0
-DESKTOP_WIDTH=`wmctrl -d | head -n 1 | awk '{print $4}' | awk -F 'x' '{print $1}'`
+DESKTOP_WIDTH=`rtux_Get_Desktop_Width()`
 let X_POSITION=${DESKTOP_WIDTH}-${WIDTH}
 Y_POSITION=0
 
@@ -13,7 +13,13 @@ let USER_NUMBER_2=$USER_NUMBER+1
 let USER_NUMBER_3=$USER_NUMBER+2
 
 mkdir --parents $HOME/.xchat2/
-echo -e -n "irc_nick1 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER}\nirc_nick2 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER_2}\nirc_nick3 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER_3}" > $HOME/.xchat2/xchat.conf ;  
+
+cat << EOF > $HOME/.xchat2/xchat.conf
+irc_nick1 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER}
+irc_nick2 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER_2}
+irc_nick3 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER_3}
+EOF
+
 xchat --url=${RESCATUX_IRC_URL} & 
 sleep 2s;
 
