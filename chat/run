@@ -12,10 +12,8 @@ USER_NUMBER=$$
 let USER_NUMBER_2=$USER_NUMBER+1
 let USER_NUMBER_3=$USER_NUMBER+2
 
-RESC_USER_PREFIX="resc_user_"
-
 mkdir --parents $HOME/.xchat2/
-echo -e -n "irc_nick1 = ${RESC_USER_PREFIX}${USER_NUMBER}\nirc_nick2 = ${RESC_USER_PREFIX}${USER_NUMBER_2}\nirc_nick3 = ${RESC_USER_PREFIX}${USER_NUMBER_3}" > $HOME/.xchat2/xchat.conf ;  
+echo -e -n "irc_nick1 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER}\nirc_nick2 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER_2}\nirc_nick3 = ${RESC_USER_IRC_PREFIX}${USER_NUMBER_3}" > $HOME/.xchat2/xchat.conf ;  
 xchat --url=${RESCATUX_IRC_URL} & 
 sleep 2s;
 
