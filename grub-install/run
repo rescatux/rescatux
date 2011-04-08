@@ -30,11 +30,11 @@ GRUB_INSTALLED_OK_STR="Grub was installed OK! :)"
 GRUB_NOT_INSTALLED_STR="Grub was not installed. Something went wrong! :("
 WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
 
-SELECTED_PARTITION=$(rtux_Choose_Linux_partition())
+SELECTED_PARTITION=$(rtux_Choose_Linux_partition());
 
 DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks());
 
-SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR})
+SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk() ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
 
 # TODO: TO BE IMPROVED WITH A FUNCTION
 SELECTED_HARD_DISK_DEV="/dev/${SELECTED_HARD_DISK}"
