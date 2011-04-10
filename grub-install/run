@@ -20,6 +20,8 @@ function rtux_Grub_Install () {
   local SELECTED_HARD_DISK="$1"
   local SELECTED_PARTITION="$2"
 
+  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
+
   local SELECTED_HARD_DISK_DEV="/dev/${SELECTED_HARD_DISK}"
   local n_partition=${SELECTED_PARTITION}
 
@@ -134,8 +136,6 @@ EOF
 
 # TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
 
-TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
-
 SBIN_GRUB_PARTITIONS="$(rtux_Get_Linux_Os_Partitions)"
 
 # MAIN PROGRAM
@@ -156,7 +156,7 @@ WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
 
 SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
-DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
+
 
 SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
 
