@@ -114,6 +114,7 @@ export RESCATUX_LIB_FILE # Make it available to run scripts
 
 source ${RESCATUX_LIB_FILE}
 LOG_DIRECTORY="log"
+export LOG_DIRECTORY # Make it available to run scripts
 LIST_FILE_SUFFIX="lis"
 GRUB_INSTALL_TO_MBR_STR="Restore GRUB / Fix Linux Boot"
 CHAT_STR="Get online human help (chat)"

@@ -5,14 +5,16 @@ LOG_CHOOSE_STR="Please choose a log file"
 LOG_STR="log"
 PASTEBIN_HINT="Right-click and select copy please. You will be able to paste it later at the chat option"
 
+m=1
 for ffile in ${RESCATUX_PATH}${LOG_DIRECTORY}/* ; do
-  m=1
-  BFILE=basename $ffile
+
+  BFILE=$(basename $ffile)
   if [[ m -eq 1 ]] ; then
     LOG_LIST_VALUES="TRUE ${BFILE}"
   else
-    LOG_LIST_VALUES="FALSE ${BFILE}"
+    LOG_LIST_VALUES="${LOG_LIST_VALUES} FALSE ${BFILE}"
   fi
+  let m=m+1
 done
 
 SELECTED_FILE=$(zenity ${ZENITY_COMMON_OPTIONS} \
