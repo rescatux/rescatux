@@ -66,8 +66,6 @@ function rtux_Grub_Install () {
 
 # TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
 
-SBIN_GRUB_PARTITIONS="$(rtux_Get_Linux_Os_Partitions)"
-
 # MAIN PROGRAM
 
 # TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
