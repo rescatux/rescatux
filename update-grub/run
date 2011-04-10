@@ -15,7 +15,6 @@ function rtux_Grub_Update_Config () {
 # TODO: Extract last user interaction (Success/Failure)
 # So that this function returns being successful or not
 
-  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
   local SELECTED_PARTITION=$1;
   local n_partition=${SELECTED_PARTITION}
 
@@ -30,55 +29,8 @@ function rtux_Grub_Update_Config () {
     mount -o bind /sys ${TMP_MNT_PARTITION}/sys
 
     if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
-      # Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - BEGIN
-      # (Fetch hard disks detected and show to the user. - TODO - BEGIN
-      # Tell them that they are going to be asked to choose which it is #1, #2,...)
-      $(rtux_Choose_Hard_Disk ${PREPARE_ORDER_HDS_STR});
-   
-      # (Fetch hard disks detected and show to the user. - TODO - END
-      # Tell them that they are going to be asked to choose which it is #1, #2,...)
-      # LOOP - Show hard disk and ask position - TODO - BEGIN
-      echo "" > ${DEVICE_MAP_NUMBERED_FILE}
-      local n=1
-      local HD_LIST_VALUES=""
-      for n_hard_disk in ${DETECTED_HARD_DISKS}; do
-	m=1
-	for m_hard_disk in ${DETECTED_HARD_DISKS}; do			      
-	  if [[ m -eq 1 ]] ; then
-	    HD_LIST_VALUES="TRUE ${m} ${n_hard_disk} \
-	      `/sbin/fdisk -l /dev/${n_hard_disk} \
-		      | egrep 'Disk.*bytes' \
-		      | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
-	  else
-	    HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${m} ${n_hard_disk} \
-	    `/sbin/fdisk -l /dev/${n_hard_disk} \
-		      | egrep 'Disk.*bytes' \
-		      | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
-	  fi
-	  let m=m+1
-	done
-
-	# Ask position - BEGIN
-	local SELECTED_POSITION=$(zenity ${ZENITY_COMMON_OPTIONS} \
-	      --list  \
-	      --text "${RIGHT_HD_POSITION_STR}" \
-	      --radiolist  \
-	      --column "${SELECT_STR}" \
-	      --column "${POSITION_STR}" \
-	      --column "${HARDDISK_STR}" \
-	      ${HD_LIST_VALUES}); 
-
-	# Ask position - END
-	# Generate temporal file with order - TODO - BEGIN
-	echo -e -n "${SELECTED_POSITION} (hd$(( ${SELECTED_POSITION} - 1 ))) /dev/${n_hard_disk}\n" >> ${DEVICE_MAP_NUMBERED_FILE}
-	# Generate temporal file with order - TODO - END
-	let n=n+1
-      done
-	# Generate a temporal txt file that begins with a number in first column
-      # LOOP - Show hard disk and ask position - TODO - END
-      # Read the temporal txt file, sort by first column and generate device.map file
-      cat ${DEVICE_MAP_NUMBERED_FILE} | sort | awk '{printf("%s\t%s\n",$2,$3);}' > ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
-      # Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - END
+      rtux_File_Reordered_Device_Map \
+      > ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
 
 
       # TODO: Improve with a cat command ended with a EOF mark

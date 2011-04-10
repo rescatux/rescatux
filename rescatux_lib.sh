@@ -224,6 +224,54 @@ EOF
 }
 
 
+# User is asked to order the hard disks
+#  so that they have their actual order
+# Outputs device.map file with ordered devices
+function rtux_File_Reordered_Device_Map() {
+
+  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
+  $(rtux_Choose_Hard_Disk ${PREPARE_ORDER_HDS_STR});
+
+  # LOOP - Show hard disk and ask position - TODO - BEGIN
+  local n=1
+  local HD_LIST_VALUES=""
+  for n_hard_disk in ${DETECTED_HARD_DISKS}; do
+    m=1
+    for m_hard_disk in ${DETECTED_HARD_DISKS}; do			      
+      if [[ m -eq 1 ]] ; then
+	HD_LIST_VALUES="TRUE ${m} ${n_hard_disk} \
+	  `/sbin/fdisk -l /dev/${n_hard_disk} \
+		  | egrep 'Disk.*bytes' \
+		  | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+      else
+	HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${m} ${n_hard_disk} \
+	`/sbin/fdisk -l /dev/${n_hard_disk} \
+		  | egrep 'Disk.*bytes' \
+		  | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+      fi
+      let m=m+1
+    done
+
+    # Ask position - BEGIN
+    local SELECTED_POSITION=$(zenity ${ZENITY_COMMON_OPTIONS} \
+	  --list  \
+	  --text "${RIGHT_HD_POSITION_STR}" \
+	  --radiolist  \
+	  --column "${SELECT_STR}" \
+	  --column "${POSITION_STR}" \
+	  --column "${HARDDISK_STR}" \
+	  ${HD_LIST_VALUES}); 
+
+    # Ask position - END
+    # Generate temporal file with order - TODO - BEGIN
+    echo -e -n "${SELECTED_POSITION} (hd$(( ${SELECTED_POSITION} - 1 ))) /dev/${n_hard_disk}\n"
+    # Generate temporal file with order - TODO - END
+    let n=n+1
+  done | sort | awk '{printf("%s\t%s\n",$2,$3);}' 
+
+} # rtux_File_Reordered_Device_Map()
+
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://rescatux.berlios.de"
@@ -273,7 +321,7 @@ GRUB_INSTALL_BINARY=grub-install
 ETC_ISSUE_PATH="/etc/issue"
 
 TMP_FOLDER="/tmp"
-DEVICE_MAP_NUMBERED_FILE="${TMP_FOLDER}/device.map.numbered"
+
 DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
 DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
 
