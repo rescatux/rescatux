@@ -190,6 +190,39 @@ function rtux_Get_Desktop_Width () {
   | awk -F 'x' '{print $1}'
 } # function rtux_Get_Desktop_Width ()
 
+# DEVICE_MAP_RESCATUX_STR has to be defined
+# DEVICE_MAP_BACKUP_STR has to be defined
+# Actually they are defined because they come with rescatux lib
+# Parametres: Main command line that has to be run.
+# Outputs the file to be run as an script inside chroot
+# It swaps current device.map with a temporal one
+function rtux_File_Chroot_Script_Device_Map() {
+local command_line_to_run="$@"
+  cat << EOF > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
+    mount -a
+    # Backup current device.map file (inside chroot) - TODO - BEGIN
+    cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}
+    # Backup current device.map file (inside chroot) - TODO - END
+
+    # Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
+    cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map
+    # Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
+
+    ${command_line_to_run}
+    UPDATE_GRUB_OUTPUT=\$?
+
+    # Restore current device.map file - BEGIN
+    cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map
+    # Restore current device.map file - END
+    # Delete temporal and backup device.map files- TODO - BEGIN
+    rm /boot/grub/${DEVICE_MAP_BACKUP_STR}
+    rm /${DEVICE_MAP_RESCATUX_STR}
+    # Delete temporal and backup device.map files- TODO - END
+    umount -a
+    exit \${UPDATE_GRUB_OUTPUT}"
+EOF
+}
+
 
 # Rescatux lib main variables
 
@@ -239,8 +272,13 @@ LINUX_OS_DETECTOR="/etc/issue"
 GRUB_INSTALL_BINARY=grub-install
 ETC_ISSUE_PATH="/etc/issue"
 
-
 TMP_FOLDER="/tmp"
+DEVICE_MAP_NUMBERED_FILE="${TMP_FOLDER}/device.map.numbered"
+DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
+DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
+
+
+
 
 
 

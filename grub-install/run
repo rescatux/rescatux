@@ -146,10 +146,6 @@ GRUB_INSTALL_MBR_WIDTH="${RESCAPP_WIDTH}"
 GRUB_INSTALL_MBR_HEIGHT="${RESCAPP_HEIGHT}"
 
 
-DEVICE_MAP_NUMBERED_FILE="${TMP_FOLDER}/device.map.numbered"
-DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
-DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
-
 GRUB_INSTALLED_OK_STR="Grub was installed OK! :)"
 GRUB_NOT_INSTALLED_STR="Grub was not installed. Something went wrong! :("
 WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
