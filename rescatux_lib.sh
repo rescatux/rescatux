@@ -17,6 +17,8 @@ function rtux_Get_Etc_Issue_Content() {
       echo "${NOT_DETECTED_STR}"
     fi
     umount ${TMP_MNT_PARTITION};
+  else
+    echo "${CANT_MOUNT_STR}"
   fi
 } # function rtux_Get_Etc_Issue_Content()
 
@@ -325,6 +327,7 @@ RIGHT_HD_POSITION_STR="Which is the right position for this hard disk?"
 SUCCESS_STR="Success!"
 FAILURE_STR="Failure!"
 NOT_DETECTED_STR="Not detected"
+CANT_MOUNT_STR="Cannot mount"
 RUNNING_STR="Running process... Please wait till finish message appears."
 
 
