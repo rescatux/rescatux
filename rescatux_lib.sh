@@ -292,6 +292,7 @@ function rtux_File_Reordered_Device_Map() {
 
 RESCATUX_URL="http://rescatux.berlios.de"
 RESCATUX_IRC_URL="irc://irc.freenode.net/rescatux"
+RESCATUX_PASTEBIN_URL="http://paste.debian.net"
 RESC_USER_IRC_PREFIX="resc_user_"
 
 RESCAPP_WIDTH="600"
