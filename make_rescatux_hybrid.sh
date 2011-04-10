@@ -6,7 +6,7 @@ MEDIA_STR="cdrom_usb_hybrid"
 FILE_EXTENSION="iso"
 GNOME_MINIMAL_PACKAGES="desktop-base gdm3 gedit gnome-menus gnome-panel gnome-terminal nautilus gnome-applets gnome-session gnome-settings-daemon metacity"
 #GNOME_MINIMAL_PACKAGES="gdm3 gedit gnome-core nautilus"
-PACKAGES="${GNOME_MINIMAL_PACKAGES} zenity iceweasel xchat wmctrl syslinux" # I add syslinux so that isohybrid command is recognised.
+PACKAGES="${GNOME_MINIMAL_PACKAGES} zenity iceweasel xchat wmctrl syslinux pastebinit" # I add syslinux so that isohybrid command is recognised.
 BOOT_OPTION="-b iso-hybrid"
 LINUX_FLAVOURS="486 amd64"
 source make_common
