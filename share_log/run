@@ -1,0 +1,22 @@
+#!/bin/bash
+source ${RESCATUX_LIB_FILE}
+
+LOG_CHOOSE_STR="Please choose a log file"
+LOG_STR="log"
+
+for ffile in ${RESCATUX_PATH}${LOG_DIRECTORY}/* ; do
+  m=1
+  if [[ m -eq 1 ]] ; then
+    LOG_LIST_VALUES="TRUE ${ffile}"
+  else
+    LOG_LIST_VALUES="FALSE ${ffile}"
+  fi
+done
+
+SELECTED_FILE=$(zenity ${ZENITY_COMMON_OPTIONS} \
+	  --list  \
+	  --text "${LOG_CHOOSE_STR}" \
+	  --radiolist  \
+	  --column "${SELECT_STR}" \
+	  --column "${LOG_STR}" \
+	  ${LOG_LIST_VALUES});
