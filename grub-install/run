@@ -15,6 +15,7 @@ set -v
 # and it is asked to order them
 function rtux_Grub_Install () {
 
+  local EXIT_VALUE=1 # Error by default
   local SELECTED_HARD_DISK="$1"
   local SELECTED_PARTITION="$2"
 
@@ -47,11 +48,8 @@ function rtux_Grub_Install () {
       chmod +x ${TMP_MNT_PARTITION_SCRIPT}
 
       # TODO: Let the user use other than now hard-coded /bin/bash
-      if chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT} ; then
-	return 0 ; # Ok
-      else
-	return 1 ; # Error
-      fi
+      chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT}
+      EXIT_VALUE=$?
       mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
       rm ${TMP_MNT_PARTITION_SCRIPT}
 		  
@@ -61,6 +59,8 @@ function rtux_Grub_Install () {
     umount ${TMP_MNT_PARTITION}/dev
     umount ${TMP_MNT_PARTITION};
   fi # Partition was mounted ok
+
+  return ${EXIT_VALUE}
 
 } # function rtux_Grub_Install ()
 
