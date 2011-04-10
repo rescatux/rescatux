@@ -118,6 +118,7 @@ function rtux_Choose_Linux_partition () {
   local n=0
   local LIST_VALUES=""
   local DESC_VALUES=""
+  local SBIN_GRUB_PARTITIONS=$(rtux_Get_Linux_Os_Partitions)
   for n_partition in ${SBIN_GRUB_PARTITIONS}; do
     local issue_value=`rtux_Get_Etc_Issue_Content ${n_partition}`
     issue_value=$(echo $issue_value | sed 's/\ /\-/')
