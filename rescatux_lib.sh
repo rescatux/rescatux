@@ -111,14 +111,20 @@ function rtux_Choose_Hard_Disk () {
 
 } # function rtux_Choose_Hard_Disk ()
 
-
-# Let the user choose his main GNU/Linux partition
+# Let the user choose a partition
 # It outputs choosen partition
-function rtux_Choose_Linux_partition () {
+function rtux_Choose_Partition () {
+  rtux_Abstract_Choose_Partition $(rtux_Get_System_Partitions)
+} # function rtux_Choose_Partition ()
+
+# Let the user choose a partition
+# Every parametre are the source partitions
+# It outputs choosen partition
+function rtux_Abstract_Choose_Partition () {
   local n=0
   local LIST_VALUES=""
   local DESC_VALUES=""
-  local SBIN_GRUB_PARTITIONS=$(rtux_Get_Linux_Os_Partitions)
+  local SBIN_GRUB_PARTITIONS="$@"
   for n_partition in ${SBIN_GRUB_PARTITIONS}; do
     local issue_value=`rtux_Get_Etc_Issue_Content ${n_partition}`
     issue_value=$(echo $issue_value | sed 's/\ /\-/')
@@ -139,6 +145,12 @@ function rtux_Choose_Linux_partition () {
 	--column "${SELECT_STR}" \
 	--column "${PARTITION_STR}" \
 	--column "${DESCRIPTION_STR}" ${LIST_VALUES})";
+} # function rtux_Abstract_Choose_Partition ()
+
+# Let the user choose his main GNU/Linux partition
+# It outputs choosen partition
+function rtux_Choose_Linux_partition () {
+  rtux_Abstract_Choose_Partition $(rtux_Get_Linux_Os_Partitions)
 } # function rtux_Choose_Linux_partition ()
 
 # Let the user rename hard disks if they want to
@@ -300,7 +312,7 @@ XCHAT_WINDOW_STR="Xchat"
 CODE_STR="Code"
 NAME_STR="Name"
 DESCRIPTION_STR="Description"
-WHICH_PARTITION_STR="Which partition is your main GNU/Linux?"
+WHICH_PARTITION_STR="Which partition?"
 SELECT_STR="Select"
 PARTITION_STR="Partition"
 POSITION_STR="Position"

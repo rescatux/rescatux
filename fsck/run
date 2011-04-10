@@ -10,6 +10,8 @@ set -v
 
 # Select one of the partitions - BEGIN
 
+TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
+
 n=0
 LIST_VALUES=""
 DESC_VALUES=""
