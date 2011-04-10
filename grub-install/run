@@ -14,8 +14,6 @@ set -v
 # While it is being run user is shown the hard disks
 # and it is asked to order them
 function rtux_Grub_Install () {
-# TODO: Extract last user interaction (Success/Failure)
-# So that this function returns being successful or not
 
   local SELECTED_HARD_DISK="$1"
   local SELECTED_PARTITION="$2"
@@ -50,9 +48,9 @@ function rtux_Grub_Install () {
 
       # TODO: Let the user use other than now hard-coded /bin/bash
       if chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT} ; then
-	rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
+	return 0 ; # Ok
       else
-	rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
+	return 1 ; # Error
       fi
       mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
       rm ${TMP_MNT_PARTITION_SCRIPT}
@@ -88,6 +86,10 @@ SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
 SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
 
-rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION}
+if rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ; then
+  rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
+else
+  rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
+fi
 
 
