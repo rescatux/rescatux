@@ -1,12 +1,7 @@
 #!/bin/bash
-# TODO: Get this variables from a common config
-FILEMANAGER_COMMAND="nautilus"
-RESCATUX_ROOT="/home/user/Desktop"
-LOG_DIRECTORY="log"
-RESCATUX_LOG="${RESCATUX_ROOT}/${LOG_DIRECTORY}"
+source ${RESCATUX_LIB_FILE}
 
-
-${FILEMANAGER_COMMAND} file://${RESCATUX_LOG} &
+${FILEMANAGER_COMMAND} file://${RESCATUX_PATH}${LOG_DIRECTORY} &
 
 
 
