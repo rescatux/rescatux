@@ -90,30 +90,9 @@ function rtux_Grub_Install () {
       local TMP_SCRIPT="/tmp/$$.sh"
       local TMP_MNT_PARTITION_SCRIPT="${TMP_MNT_PARTITION}${TMP_SCRIPT}"
 
-      cat << EOF > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
-	mount -a
-	# Backup current device.map file (inside chroot) - TODO - BEGIN
-	cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}
-	# Backup current device.map file (inside chroot) - TODO - END
-
-	# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
-	cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map
-	# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
-	${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV}
-	GRUB_INSTALL_OUTPUT=\$?
-	# Restore current device.map file - BEGIN
-	cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map
-	# Restore current device.map file - END
-	# Delete temporal and backup device.map files- TODO - BEGIN
-	rm /boot/grub/${DEVICE_MAP_BACKUP_STR}
-	rm /${DEVICE_MAP_RESCATUX_STR}
-	# Delete temporal and backup device.map files- TODO - END
-	umount -a
-	exit \${GRUB_INSTALL_OUTPUT}
-EOF
+      rtux_File_Chroot_Script_Device_Map ${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV} \
+      > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
       
-
-
       chmod +x ${TMP_MNT_PARTITION_SCRIPT}
 
       # TODO: Let the user use other than now hard-coded /bin/bash
