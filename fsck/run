@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rescapp Update-grub run script
+# Rescapp Fsck run script
 # Copyright Adrian Gibanel Lopez
 # Licensed under the GNU PUBLIC LICENSE 3.0
 
@@ -18,7 +18,7 @@ function rtux_Fsck_Forced () {
   | tee >(zenity ${ZENITY_COMMON_OPTIONS} \
 	--text "${RUNNING_STR}" \
 	--progress \
-	--pulsate) >> /dev/stdout )
+	--pulsate) >> /dev/stdout
   EXIT_VALUE=$?
   return ${EXIT_VALUE}
 
