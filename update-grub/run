@@ -44,9 +44,9 @@ function rtux_Grub_Update_Config () {
 
       # TODO: Let the user use other than now hard-coded /bin/bash
       if chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT} ; then
-	rtux_Message_Success ${UPDATE_GRUB_OK_STR}
+	return 0 ; # Ok
       else
-	rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
+	return 1 ; # Error
       fi
       mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
       rm ${TMP_MNT_PARTITION_SCRIPT}
@@ -74,7 +74,11 @@ UPDATE_GRUB_BINARY=update-grub
 UPDATE_GRUB_OK_STR="Grub configuration was updated OK! :)"
 UPDATE_GRUB_KO_STR="Grub configuration update went wrong! :("
 
+if rtux_Grub_Update_Config $(rtux_Choose_Linux_partition) ; then
+  rtux_Message_Success ${UPDATE_GRUB_OK_STR}
+else
+  rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
+fi
 
-rtux_Grub_Update_Config $(rtux_Choose_Linux_partition)
 
 #
