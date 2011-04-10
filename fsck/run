@@ -3,35 +3,10 @@
 # Copyright Adrian Gibanel Lopez
 # Licensed under the GNU PUBLIC LICENSE 3.0
 
+source ${RESCATUX_LIB_FILE}
+
 set -x
 set -v
-
-function etc_issue() {
-
-  local ETC_ISSUE_PATH="/etc/issue"
-  local PARTITION_TO_MOUNT=$1
-  local n_partition=${PARTITION_TO_MOUNT}
-
-        TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
-        TMP_DEV_PARTITION=/dev/${n_partition}
-        mkdir --parents ${TMP_MNT_PARTITION}
-        if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
-                #echo -e -n "Detectada particion: ${n_partition}\n";
-                if [[ -e ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} ]] ; then
-                  #echo -e -n "Detectado grub-install en particion: ${n_partition}\n"
-		  echo $(head -n 1 ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} | sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /-/g' -e 's/\ \ /-/g' -e 's/\n/-/g')
-		else
-		  echo "Not detected"
-                fi
-                umount ${TMP_MNT_PARTITION};
-	else
-		echo "Can't mount!"
-        fi
-
-
-
-} # function etc_issue() end
-
 
 # First of all let decide the user to rename their hard disks to meet their possible different mapping at hard disk installation  - BEGIN
 
