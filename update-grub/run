@@ -48,7 +48,7 @@ function rtux_Grub_Update_Config () {
       else
 	rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
       fi
-		mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
+      mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
       rm ${TMP_MNT_PARTITION_SCRIPT}
 		
 
