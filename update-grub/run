@@ -20,6 +20,9 @@ DEVICE_MAP_NUMBERED_FILE="${TMP_FOLDER}/device.map.numbered"
 DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
 DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
 
+UPDATE_GRUB_OK_STR="Grub configuration was updated OK! :)"
+UPDATE_GRUB_KO_STR="Grub configuration update went wrong! :("
+
 SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
 DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
@@ -90,51 +93,48 @@ if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; the
 		# Generate temporal device.map file in / (Chroot's root but outside chroot) - TODO - END
 
 
-		# TODO: Improve with a cat command ended with a EOF mark
-		echo -e -n "mount -a" > ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+      # TODO: Improve with a cat command ended with a EOF mark
+      local TMP_SCRIPT="/tmp/$$.sh"
+      local TMP_MNT_PARTITION_SCRIPT="${TMP_MNT_PARTITION}${TMP_SCRIPT}"
 
 
-		# Backup current device.map file (inside chroot) - TODO - BEGIN
-		echo -e -n "cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		# Backup current device.map file (inside chroot) - TODO - END
+      cat << EOF > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
+	mount -a
+	# Backup current device.map file (inside chroot) - TODO - BEGIN
+	cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}
+	# Backup current device.map file (inside chroot) - TODO - END
 
-		# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
-		echo -e -n "cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
-		echo -e -n "${UPDATE_GRUB_BINARY}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "UPDATE_GRUB_OUTPUT=\$?" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+	# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
+	cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map
+	# Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
 
-		# Restore current device.map file - TODO - BEGIN
-		echo -e -n "cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		# Restore current device.map file - TODO - END
-		# Delete temporal and backup device.map files- TODO - BEGIN
-		echo -e -n "rm /boot/grub/${DEVICE_MAP_BACKUP_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
+	${UPDATE_GRUB_BINARY}
 
-		echo -e -n "rm /${DEVICE_MAP_RESCATUX_STR}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		# Delete temporal and backup device.map files- TODO - END
+UPDATE_GRUB_OUTPUT=\$?
 
-		echo -e -n "umount -a" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "exit \${UPDATE_GRUB_OUTPUT}" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		echo -e -n "\n" >> ${TMP_MNT_PARTITION}/tmp/$$.sh
-		chmod +x ${TMP_MNT_PARTITION}/tmp/$$.sh
+	# Restore current device.map file - BEGIN
+	cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map
+	# Restore current device.map file - END
+	# Delete temporal and backup device.map files- TODO - BEGIN
+	rm /boot/grub/${DEVICE_MAP_BACKUP_STR}
+	rm /${DEVICE_MAP_RESCATUX_STR}
+	# Delete temporal and backup device.map files- TODO - END
+	umount -a
+		exit \${UPDATE_GRUB_OUTPUT}"
+EOF
 
-		# TODO: Let the user use other than now hard-coded /bin/bash
-		if chroot ${TMP_MNT_PARTITION} /bin/bash /tmp/$$.sh ; then
-			zenity ${ZENITY_COMMON_OPTIONS} --info --title="Success!" --text="Grub configuration was updated OK! :)";
-		else
-			zenity ${ZENITY_COMMON_OPTIONS} --info --title="Failure!" --text="Grub configuration update went wrong! :(";
-		fi
+      chmod +x ${TMP_MNT_PARTITION_SCRIPT}
+
+
+
+      # TODO: Let the user use other than now hard-coded /bin/bash
+      if chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT} ; then
+	rtux_Message_Success ${UPDATE_GRUB_OK_STR}
+      else
+	rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
+      fi
 		mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
-		rm ${TMP_MNT_PARTITION}/tmp/$$.sh
+      rm ${TMP_MNT_PARTITION_SCRIPT}
 		
 
 	fi
