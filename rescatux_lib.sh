@@ -219,7 +219,7 @@ local command_line_to_run="$@"
     rm /${DEVICE_MAP_RESCATUX_STR}
     # Delete temporal and backup device.map files- TODO - END
     umount -a
-    exit \${UPDATE_GRUB_OUTPUT}"
+    exit \${UPDATE_GRUB_OUTPUT}
 EOF
 }
 
@@ -230,7 +230,7 @@ EOF
 function rtux_File_Reordered_Device_Map() {
 
   local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
-  $(rtux_Choose_Hard_Disk ${PREPARE_ORDER_HDS_STR});
+  rtux_Choose_Hard_Disk ${PREPARE_ORDER_HDS_STR} > /dev/null
 
   # LOOP - Show hard disk and ask position - TODO - BEGIN
   local n=1
@@ -260,6 +260,7 @@ function rtux_File_Reordered_Device_Map() {
 	  --column "${SELECT_STR}" \
 	  --column "${POSITION_STR}" \
 	  --column "${HARDDISK_STR}" \
+	  --column "${SIZE_STR}" \
 	  ${HD_LIST_VALUES}); 
 
     # Ask position - END
