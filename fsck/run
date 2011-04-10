@@ -8,38 +8,33 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
-# Select one of the partitions - BEGIN
+# Forces a fsck of a partition
+# 1 parametre = Selected partition
+function rtux_Fsck_Forced () {
+  local SELECTED_PARTITION=$1
+  local EXIT_VALUE=1 # Error by default
 
-TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
+  fsck /dev/stdout -fy /dev/${SELECTED_PARTITION} \
+  | tee >(zenity ${ZENITY_COMMON_OPTIONS} \
+	--text "${RUNNING_STR}" \
+	--progress \
+	--pulsate) >> /dev/stdout )
+  EXIT_VALUE=$?
+  return ${EXIT_VALUE}
 
-n=0
-LIST_VALUES=""
-DESC_VALUES=""
-for n_partition in ${TARGET_PARTITIONS}; do
-  issue_value=`etc_issue ${n_partition}`
-  issue_value=$(echo $issue_value | sed 's/\ /\-/')
-  issue_value=$(echo $issue_value | sed 's/ /\-/')
-  
-  if [[ n -eq 0 ]] ; then
-    LIST_VALUES="TRUE ${n_partition} ${issue_value}"
-  else
-    LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value}"
-  fi
-let n=n+1
-done
+} # rtux_Fsck_Forced ()
 
-echo -e -n "a: $LIST_VALUES\n"
+# fsck Main program
 
-ans=$(zenity ${ZENITY_COMMON_OPTIONS}  --list  --text "Which partition do you want to Filesystem check with automatic fix?\n Please be patient. \nWhenever filesystem is finished a window will appear." --radiolist  --column "Select" --column "Partition" --column "Desc" ${LIST_VALUES}); echo $ans
-# Lets suppose that selected partition is: sda3
-SELECTED_PARTITION="$ans"
-# Select one of the partitions - END
+FSCK_FORCED_OK_STR="Filesystem check with automatic fix was OK! :)"
+FSCK_FORCED_KO_STR="Filesystem check with automatic fix went wrong! :("
+FSCK_FORCED_RUNNING_STR=""
 
 
-n_partition=${SELECTED_PARTITION}
+SELECTED_PARTITION=$(rtux_Choose_Partition)
 
-if ( fsck /dev/stdout -fy /dev/${SELECTED_PARTITION} | tee >(zenity ${ZENITY_COMMON_OPTIONS} --text "Running forced filesystem check and fix" --progress --pulsate) >> /dev/stdout ) ; then
-	zenity ${ZENITY_COMMON_OPTIONS} --info --title="Success!" --text="Filesystem check with automatic fix was OK! :)";
+if ( rtux_Fsck_Forced ${SELECTED_PARTITION} ) ; then
+  rtux_Message_Success ${FSCK_FORCED_OK_STR}
 else 
-	zenity ${ZENITY_COMMON_OPTIONS} --info --title="Failure!" --text="Filesystem check with automatic fix went wrong! :(";
+  rtux_Message_Failure ${FSCK_FORCED_KO_STR}
 fi

@@ -324,7 +324,7 @@ RIGHT_HD_POSITION_STR="Which is the right position for this hard disk?"
 SUCCESS_STR="Success!"
 FAILURE_STR="Failure!"
 NOT_DETECTED_STR="Not detected"
-
+RUNNING_STR="Running process... Please wait till finish message appears."
 
 
 PROC_PARTITIONS_FILE=/proc/partitions
