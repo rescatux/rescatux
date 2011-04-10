@@ -28,8 +28,6 @@ function rtux_Fsck_Forced () {
 
 FSCK_FORCED_OK_STR="Filesystem check with automatic fix was OK! :)"
 FSCK_FORCED_KO_STR="Filesystem check with automatic fix went wrong! :("
-FSCK_FORCED_RUNNING_STR=""
-
 
 SELECTED_PARTITION=$(rtux_Choose_Partition)
 
