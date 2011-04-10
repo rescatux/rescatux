@@ -8,49 +8,6 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
-echo $TARGET_PARTITIONS
-
-#SBIN_GRUB_PARTITIONS=""
-RESCATUX_ROOT_MNT=/mnt/rescatux
-LINUX_OS_DETECTOR="/etc/issue"
-#GRUB_INSTALL_BINARY=/etc/issue
-GRUB_INSTALL_BINARY=grub-install
-UPDATE_GRUB_BINARY=update-grub
-
-#for n_partition in ${TARGET_PARTITIONS}; do
-#	TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
-#	TMP_DEV_PARTITION=/dev/${n_partition}
-#	mkdir --parents ${TMP_MNT_PARTITION}
-#	if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
-#		#echo -e -n "Detectada particion: ${n_partition}\n";
-#		if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
-#		  #echo -e -n "Detectado grub-install en particion: ${n_partition}\n"
-#		  SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-#		fi
-#		umount ${TMP_MNT_PARTITION};
-#	fi
-#done
-
-#echo -e -n "Detected grub-install partitions: ${SBIN_GRUB_PARTITIONS}\n"
-
-
-
-
-
-# MAIN PROGRAM
-
-# TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
-
-GRUB_INSTALL_MBR_WIDTH="600"
-GRUB_INSTALL_MBR_HEIGHT="400"
-ZENITY_COMMON_OPTIONS="--width=${GRUB_INSTALL_MBR_WIDTH} --height=${GRUB_INSTALL_MBR_HEIGHT}"
-
-TMP_FOLDER="/tmp"
-DEVICE_MAP_NUMBERED_FILE="${TMP_FOLDER}/device.map.numbered"
-DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
-DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
-
-#alias zenity = 'zenity ${ZENITY_COMMON_OPTIONS}' # It does not seem to work
 # Select one of the partitions - BEGIN
 
 n=0
