@@ -86,10 +86,10 @@ function show_item() {
 	exec ${SUDO} ${DIRECTORY}/${RUN_FILE_STR} > ${LOG_DIRECTORY}/${DIRECTORY}_log.txt 2>&1 &
       ;;
       ${LOCAL_DOC_CODE})
-	${FIREFOX_COMMAND} --new-window ${DIRECTORY}/${LOCAL_DOC_STR} &
+	${FIREFOX_COMMAND} --new-window file://${RESCATUX_PATH}/${DIRECTORY}/${LOCAL_FILE_STR} &
       ;;
       ${ONLINE_DOC_CODE})
-	${FIREFOX_COMMAND} --new-window ${DIRECTORY}/${ONLINE_DOC_STR} &
+	${FIREFOX_COMMAND} --new-window file://${RESCATUX_PATH}/${DIRECTORY}/${ONLINE_DOC_STR} &
       ;;
       esac
     ;;
