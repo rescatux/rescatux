@@ -18,7 +18,8 @@ function rtux_Fsck_Forced () {
   | tee >(zenity ${ZENITY_COMMON_OPTIONS} \
 	--text "${RUNNING_STR}" \
 	--progress \
-	--pulsate) >> /dev/stdout
+	--pulsate \
+	--auto-close) >> /dev/stdout
   EXIT_VALUE=$?
   return ${EXIT_VALUE}
 
