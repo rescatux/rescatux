@@ -89,7 +89,7 @@ function show_item() {
 	${FIREFOX_COMMAND} --new-window file://${RESCATUX_PATH}/${DIRECTORY}/${LOCAL_FILE_STR} &
       ;;
       ${ONLINE_DOC_CODE})
-	${FIREFOX_COMMAND} --new-window file://${RESCATUX_PATH}/${DIRECTORY}/${ONLINE_DOC_STR} &
+	${FIREFOX_COMMAND} --new-window ${ONLINE_DOC_URL}/${DIRECTORY}/${LOCAL_FILE_STR} &
       ;;
       esac
     ;;
@@ -133,6 +133,7 @@ ONLINE_FILE_STR="online_doc.html"
 DIRECTORY_FILE_STR="directory"
 NAME_FILE_STR="name"
 DESCRIPTION_FILE_STR="description"
+ONLINE_DOC_URL="http://git.berlios.de/cgi-bin/cgit.cgi/rescatux/plain"
 
 RESCAPP_TITLE_STR="RESCATUX's RESCAPP"
 
