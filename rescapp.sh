@@ -22,7 +22,7 @@ function show_menu() {
     show_item $choice
   ;;
   1)
-    exit;
+    return 0;
   ;;
   esac
 } # show_menu function
