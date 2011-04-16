@@ -1,0 +1,93 @@
+#!/bin/bash
+# Rescapp Grub-install run script
+# Copyright Adrian Gibanel Lopez
+# Licensed under the GNU PUBLIC LICENSE 3.0
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+# Install Grub from the choosen Linux partition to the choosen hard disk
+# 1 parametre = Selected hard disk
+# 2 parametre = Selected partition
+# While it is being run user is shown the hard disks
+# and it is asked to order them
+function rtux_Grub_Install () {
+
+  local EXIT_VALUE=1 # Error by default
+  local SELECTED_HARD_DISK="$1"
+  local SELECTED_PARTITION="$2"
+
+  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
+
+  local SELECTED_HARD_DISK_DEV="/dev/${SELECTED_HARD_DISK}"
+  local n_partition=${SELECTED_PARTITION}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+    mount -o bind /dev ${TMP_MNT_PARTITION}/dev
+    mount -o bind /proc ${TMP_MNT_PARTITION}/proc
+    mount -o bind /sys ${TMP_MNT_PARTITION}/sys
+
+    if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
+       rtux_File_Reordered_Device_Map \
+      > ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
+
+
+      # TODO: Improve with a cat command ended with a EOF mark
+      local TMP_SCRIPT="/tmp/$$.sh"
+      local TMP_MNT_PARTITION_SCRIPT="${TMP_MNT_PARTITION}${TMP_SCRIPT}"
+
+      rtux_File_Chroot_Script_Device_Map ${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV} \
+      > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
+      
+      chmod +x ${TMP_MNT_PARTITION_SCRIPT}
+
+      # TODO: Let the user use other than now hard-coded /bin/bash
+      chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT}
+      EXIT_VALUE=$?
+      mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
+      rm ${TMP_MNT_PARTITION_SCRIPT}
+		  
+    fi # Linux detector was found
+    umount ${TMP_MNT_PARTITION}/sys
+    umount ${TMP_MNT_PARTITION}/proc
+    umount ${TMP_MNT_PARTITION}/dev
+    umount ${TMP_MNT_PARTITION};
+  fi # Partition was mounted ok
+
+  return ${EXIT_VALUE}
+
+} # function rtux_Grub_Install ()
+
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+# MAIN PROGRAM
+
+# TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
+
+GRUB_INSTALL_MBR_WIDTH="${RESCAPP_WIDTH}"
+GRUB_INSTALL_MBR_HEIGHT="${RESCAPP_HEIGHT}"
+
+
+GRUB_INSTALLED_OK_STR="Grub was installed OK! :)"
+GRUB_NOT_INSTALLED_STR="Grub was not installed. Something went wrong! :("
+WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
+
+SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
+
+
+
+SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
+
+if rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ; then
+  rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
+else
+  rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
+fi
+
+
