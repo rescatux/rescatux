@@ -27,9 +27,9 @@ function rtux_Winmbr_Install () {
   local SELECTED_PARTITION_NUMBER="$(echo ${SELECTED_PARTITION} | sed 's/[A-Za-z]*//g')"
   let BIOS_HARD_DISK=${HARD_DISK_POSITION}+80-1
   if [[ ${BIOS_HARD_DISK} -eq 80 ]] ; then
-    local OTHER_HARD_DISK_PARAMETRE="-d 0x${BIOS_HARD_DISK}"
-  else
     local OTHER_HARD_DISK_PARAMETRE=""
+  else
+    local OTHER_HARD_DISK_PARAMETRE="-d 0x${BIOS_HARD_DISK}"
   fi
   install-mbr ${OTHER_HARD_DISK_PARAMETRE} -e ${SELECTED_PARTITION_NUMBER} /dev/${SELECTED_HARD_DISK}
   EXIT_VALUE=$?
