@@ -48,7 +48,7 @@ WHICH_HARD_DISK_INSTALL_WINMBR_STR="Which hard disk to install Windows mbr on?"
 
 SELECTED_PARTITION=$(rtux_Choose_Primary_Partition);
 
-SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_WINMBR_STR});
+SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk "${WHICH_HARD_DISK_INSTALL_WINMBR_STR}");
 
 SELECTED_PARTITION_HARD_DISK=$(echo "${SELECTED_PARTITION}" | sed 's/[0-9]*//g' )
 

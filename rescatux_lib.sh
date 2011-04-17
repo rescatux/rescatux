@@ -287,8 +287,9 @@ function rtux_Choose_Hard_Disk_Position() {
 
   # LOOP - Show hard disk and ask position - TODO - BEGIN
   local HD_LIST_VALUES=""
+  local m=1
   for n_hard_disk in ${DETECTED_HARD_DISKS}; do
-    m=1			      
+			      
       if [[ m -eq 1 ]] ; then
 	HD_LIST_VALUES="TRUE ${m} ${SELECTED_HARD_DISK} \
 	  `/sbin/fdisk -l /dev/${SELECTED_HARD_DISK} \
