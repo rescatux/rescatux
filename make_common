@@ -9,7 +9,7 @@ set -v
 # Fetch version from folder directory name
 VERSION=`head -1 VERSION`
 
-RESCATUX_FILES="rescapp.sh setbackground.sh chat web grub-install update-grub grub.lis grub rescatux.lis log show_log support support.lis fsck fs fs.lis logos about.lis about about-rescapp rescatux_lib.sh share_log"
+RESCATUX_FILES="rescapp.sh setbackground.sh chat web grub-install update-grub grub.lis grub rescatux.lis log show_log support support.lis fsck fs fs.lis logos about.lis about about-rescapp rescatux_lib.sh share_log win win.lis"
 
 # This was for lenny
 #MIRROR_BOOTSTRAP="http://192.168.0.50/debian/"
