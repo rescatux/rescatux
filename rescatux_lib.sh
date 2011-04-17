@@ -286,7 +286,6 @@ function rtux_Choose_Hard_Disk_Position() {
   local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
 
   # LOOP - Show hard disk and ask position - TODO - BEGIN
-  local n=1
   local HD_LIST_VALUES=""
   for n_hard_disk in ${DETECTED_HARD_DISKS}; do
     m=1			      
