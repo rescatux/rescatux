@@ -28,6 +28,39 @@ function rtux_Get_System_Partitions () {
   | sed -e '/name/d' -e '/^$/d' -e '/[1-9]/!d'
 } # function rtux_Get_System_Partitions ()
 
+# Return partitions which are primary partitions
+function rtux_Get_Primary_Partitions() {
+  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
+  local TMP_PRIMARY=""
+  local SBIN_GRUB_PARTITIONS=""
+
+# TODO: Improve with a single regular expression maybe inside another function
+  for n_partition in ${TARGET_PARTITIONS}; do
+      TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]1$")
+      if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
+        SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
+      else
+	TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]2$")
+	if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
+	  SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
+	else
+	  TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]3$")
+	  if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
+	    SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
+	  else
+	    TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]4$")
+	    if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
+	      SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
+	    fi
+	  fi
+	fi
+      fi
+  done
+
+  echo "${SBIN_GRUB_PARTITIONS}"
+} # function rtux_Get_Primary_Partitions ()
+
+
 # Return partitions which have Linux os detector on them
 function rtux_Get_Linux_Os_Partitions() {
   local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
