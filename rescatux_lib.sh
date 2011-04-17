@@ -277,6 +277,50 @@ local command_line_to_run="$@"
 EOF
 }
 
+# 1 parametre = Selected hard disk
+# User is asked to select hard disk
+# position
+function rtux_Choose_Hard_Disk_Position() {
+
+  local SELECTED_HARD_DISK="$1"
+  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
+
+  # LOOP - Show hard disk and ask position - TODO - BEGIN
+  local n=1
+  local HD_LIST_VALUES=""
+  for n_hard_disk in ${DETECTED_HARD_DISKS}; do
+    m=1			      
+      if [[ m -eq 1 ]] ; then
+	HD_LIST_VALUES="TRUE ${m} ${SELECTED_HARD_DISK} \
+	  `/sbin/fdisk -l /dev/${SELECTED_HARD_DISK} \
+		  | egrep 'Disk.*bytes' \
+		  | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+      else
+	HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${m} ${SELECTED_HARD_DISK} \
+	`/sbin/fdisk -l /dev/${SELECTED_HARD_DISK} \
+		  | egrep 'Disk.*bytes' \
+		  | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
+      fi
+      let m=m+1
+  done
+
+    # Ask position - BEGIN
+    local SELECTED_POSITION=$(zenity ${ZENITY_COMMON_OPTIONS} \
+	  --list  \
+	  --text "${RIGHT_HD_POSITION_STR}" \
+	  --radiolist  \
+	  --column "${SELECT_STR}" \
+	  --column "${POSITION_STR}" \
+	  --column "${HARDDISK_STR}" \
+	  --column "${SIZE_STR}" \
+	  ${HD_LIST_VALUES}); 
+
+    # Ask position - END
+    
+    echo "${SELECTED_POSITION}"
+
+} # rtux_Choose_Hard_Disk_Position()
+
 
 # User is asked to order the hard disks
 #  so that they have their actual order
