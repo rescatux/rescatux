@@ -31,7 +31,9 @@ function rtux_Winmbr_Install () {
   else
     local OTHER_HARD_DISK_PARAMETRE=""
   fi
-  install-mbr ${OTHER_HARD_DISK_PARAMETRE} -e ${SELECTED_PARTITION_NUMBER} /dev/${SELECTED_HARD_DISK} 
+  install-mbr ${OTHER_HARD_DISK_PARAMETRE} -e ${SELECTED_PARTITION_NUMBER} /dev/${SELECTED_HARD_DISK}
+  EXIT_VALUE=$?
+  return ${EXIT_VALUE}
 
 } # function rtux_Grub_Install ()
 
