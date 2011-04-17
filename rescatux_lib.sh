@@ -153,6 +153,12 @@ function rtux_Choose_Partition () {
 } # function rtux_Choose_Partition ()
 
 # Let the user choose a partition
+# It outputs choosen partition
+function rtux_Choose_Primary_Partition () {
+  rtux_Abstract_Choose_Primary_Partition $(rtux_Get_Primary_Partitions)
+} # function rtux_Choose_Primary_Partition ()
+
+# Let the user choose a partition
 # Every parametre are the source partitions
 # It outputs choosen partition
 function rtux_Abstract_Choose_Partition () {
