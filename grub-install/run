@@ -43,7 +43,7 @@ function rtux_Grub_Install () {
       local TMP_MNT_PARTITION_SCRIPT="${TMP_MNT_PARTITION}${TMP_SCRIPT}"
 
       rtux_File_Chroot_Script_Device_Map \
-      "if [ -x ] ${GRUB_INSTALL_BINARY}.unsupported ] ; then " \
+      "if [ -x ${GRUB_INSTALL_BINARY}.unsupported ] ; then " \
       "${GRUB_INSTALL_BINARY}.unsupported ${SELECTED_HARD_DISK_DEV} "\
       " else " \
       "${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV} " \
