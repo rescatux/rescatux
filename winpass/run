@@ -50,14 +50,17 @@ function rtux_winpass_reset () {
       done
   # Backup of the files in a temporal folder
     # TODO
+  # Define SAM_USERS as a bash array
+    # TODO
   # Obtain users from SAM file
-      SAM_USERS=$( chntpw -l ${SAM_FILE} \
-	| grep "|" \
-	| grep -v "^|\ RID") \
-	| awk -F "|" '{print $3}'
+      SAM_USERS=$( bkhive ${SYSTEM_FILE} /dev/stdout\
+	| samdump2 ${SAM_FILE} /dev/stdin \
+	| awk -F ":" '{print "\42"$1"\42"}'
+
   # Ask the user which password to reset
+     # TODO - Loop SAM_USERS array
   # Run chntpw -L sam-file security-file
-	chntpw -L ${SAM_FILE} ${SECURITY_FILE};
+	chntpw -u "${CHOOSEN_USER}" -L ${SAM_FILE} ${SECURITY_FILE};
   # Umount the partition
 
     umount ${TMP_MNT_PARTITION};
