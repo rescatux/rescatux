@@ -1,0 +1,63 @@
+#!/bin/bash
+# Rescapp winpass run script
+# Copyright Adrian Gibanel Lopez
+# Licensed under the GNU PUBLIC LICENSE 3.0
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+# Install Windows MBR so that it boots choosen Windows partition
+# From the choosen hard disk
+# 1 parametre = Selected hard disk
+# 2 parametre = Selected partition
+# 3 parametre = Hard Disk position
+# While it is being run user is shown the hard disks
+# and it is asked to order them
+function rtux_Winmbr_Install () {
+
+  local EXIT_VALUE=1 # Error by default
+  local SELECTED_HARD_DISK="$1"
+  local SELECTED_PARTITION="$2"
+  local HARD_DISK_POSITION="$3"
+
+  local BIOS_HARD_DISK=0
+
+  local SELECTED_PARTITION_NUMBER="$(echo ${SELECTED_PARTITION} | sed 's/[A-Za-z]*//g')"
+  let BIOS_HARD_DISK=${HARD_DISK_POSITION}+80-1
+  if [[ ${BIOS_HARD_DISK} -eq 80 ]] ; then
+    local OTHER_HARD_DISK_PARAMETRE=""
+  else
+    local OTHER_HARD_DISK_PARAMETRE="-d 0x${BIOS_HARD_DISK}"
+  fi
+  install-mbr ${OTHER_HARD_DISK_PARAMETRE} -e ${SELECTED_PARTITION_NUMBER} /dev/${SELECTED_HARD_DISK}
+  EXIT_VALUE=$?
+  return ${EXIT_VALUE}
+
+} # function rtux_Grub_Install ()
+
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+# MAIN PROGRAM
+
+
+WINMBR_INSTALLED_OK_STR="Windows mbr was installed OK! :)"
+WINMBR_NOT_INSTALLED_STR="Windows mbr was not installed. Something went wrong! :("
+WHICH_HARD_DISK_INSTALL_WINMBR_STR="Which hard disk to install Windows mbr on?"
+
+SELECTED_PARTITION=$(rtux_Choose_Primary_Partition);
+
+SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk "${WHICH_HARD_DISK_INSTALL_WINMBR_STR}");
+
+SELECTED_PARTITION_HARD_DISK=$(echo "${SELECTED_PARTITION}" | sed 's/[0-9]*//g' )
+
+HARD_DISK_POSITION=$(rtux_Choose_Hard_Disk_Position ${SELECTED_PARTITION_HARD_DISK})
+
+if rtux_Winmbr_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ${HARD_DISK_POSITION}; then
+  rtux_Message_Success ${WINMBR_INSTALLED_OK_STR}
+else
+  rtux_Message_Failure ${WINMBR_NOT_INSTALLED_STR}
+fi
+
+
