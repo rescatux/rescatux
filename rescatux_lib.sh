@@ -81,7 +81,33 @@ function rtux_Get_Linux_Os_Partitions() {
   done
 
   echo "${SBIN_GRUB_PARTITIONS}"
-} # function rtux_Get_System_Partitions ()
+} # function rtux_Get_Linux_Os_Partitions ()
+
+# Return partitions which have Windows os detector on them
+function rtux_Get_Windows_Os_Partitions() {
+  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
+  local SBIN_GRUB_PARTITIONS=""
+
+  for n_partition in ${TARGET_PARTITIONS}; do
+    local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+    local TMP_DEV_PARTITION=/dev/${n_partition}
+    mkdir --parents ${TMP_MNT_PARTITION}
+
+    if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ;
+    then
+      if [[ -e ${TMP_MNT_PARTITION}\
+"/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Aa][Mm]"\
+	 ]] ; then
+        SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
+      fi
+      umount ${TMP_MNT_PARTITION};
+    fi
+  done
+
+  echo "${SBIN_GRUB_PARTITIONS}"
+} # rtux_Get_Windows_Os_Partitions ()
 
 
 # Return hard disks detected on the system
