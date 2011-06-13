@@ -8,31 +8,61 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
-# Install Windows MBR so that it boots choosen Windows partition
-# From the choosen hard disk
-# 1 parametre = Selected hard disk
-# 2 parametre = Selected partition
-# 3 parametre = Hard Disk position
-# While it is being run user is shown the hard disks
-# and it is asked to order them
-function rtux_Winmbr_Install () {
+# Reset windows password
+# 1 parametre = Selected partition
+function rtux_winpass_reset () {
 
   local EXIT_VALUE=1 # Error by default
-  local SELECTED_HARD_DISK="$1"
-  local SELECTED_PARTITION="$2"
-  local HARD_DISK_POSITION="$3"
+  local SELECTED_PARTITION="$1"
 
-  local BIOS_HARD_DISK=0
 
-  local SELECTED_PARTITION_NUMBER="$(echo ${SELECTED_PARTITION} | sed 's/[A-Za-z]*//g')"
-  let BIOS_HARD_DISK=${HARD_DISK_POSITION}+80-1
-  if [[ ${BIOS_HARD_DISK} -eq 80 ]] ; then
-    local OTHER_HARD_DISK_PARAMETRE=""
-  else
-    local OTHER_HARD_DISK_PARAMETRE="-d 0x${BIOS_HARD_DISK}"
-  fi
-  install-mbr ${OTHER_HARD_DISK_PARAMETRE} -e ${SELECTED_PARTITION_NUMBER} /dev/${SELECTED_HARD_DISK}
-  EXIT_VALUE=$?
+  # Mount the partition
+  local n_partition=${SELECTED_PARTITION}
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+  # Find the exact name for sam file
+      for n_windir in ${TMP_MNT_PARTITION}/* ; do
+	if [[ -e ${n_windir}\
+"/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Aa][Mm]"\
+	]] ; then
+	  SAM_FILE="${TMP_MNT_PARTITION}/${n_windir}\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Aa][Mm]"
+	fi
+
+  # Find the exact name for security file
+	if [[ -e ${n_windir}\
+"/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]"\
+	]] ; then
+	  SECURITY_FILE="${TMP_MNT_PARTITION}/${n_windir}\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]"
+	fi
+      done
+  # Backup of the files in a temporal folder
+    # TODO
+  # Obtain users from SAM file
+      SAM_USERS=$( chntpw -l ${SAM_FILE} \
+	| grep "|" \
+	| grep -v "^|\ RID") \
+	| awk -F "|" '{print $3}'
+  # Ask the user which password to reset
+  # Run chntpw -L sam-file security-file
+	chntpw -L ${SAM_FILE} ${SECURITY_FILE};
+  # Umount the partition
+
+    umount ${TMP_MNT_PARTITION};
+  fi # Partition was mounted ok
+
   return ${EXIT_VALUE}
 
 } # function rtux_Grub_Install ()
@@ -41,23 +71,23 @@ function rtux_Winmbr_Install () {
 
 # MAIN PROGRAM
 
+# TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
 
-WINMBR_INSTALLED_OK_STR="Windows mbr was installed OK! :)"
-WINMBR_NOT_INSTALLED_STR="Windows mbr was not installed. Something went wrong! :("
-WHICH_HARD_DISK_INSTALL_WINMBR_STR="Which hard disk to install Windows mbr on?"
 
-SELECTED_PARTITION=$(rtux_Choose_Primary_Partition);
+WINPASS_RESET_OK_STR="Windows password was reset OK! :)"
+WINPASS_NOT_RESET_STR="Windows password was not reset. Something went wrong! :("
 
-SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk "${WHICH_HARD_DISK_INSTALL_WINMBR_STR}");
 
-SELECTED_PARTITION_HARD_DISK=$(echo "${SELECTED_PARTITION}" | sed 's/[0-9]*//g' )
+SELECTED_PARTITION=$(rtux_Get_Windows_Os_Partitions);
 
-HARD_DISK_POSITION=$(rtux_Choose_Hard_Disk_Position ${SELECTED_PARTITION_HARD_DISK})
 
-if rtux_Winmbr_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ${HARD_DISK_POSITION}; then
-  rtux_Message_Success ${WINMBR_INSTALLED_OK_STR}
+
+SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
+
+if rtux_winpass_reset ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ; then
+  rtux_Message_Success ${WINPASS_RESET_OK_STR}
 else
-  rtux_Message_Failure ${WINMBR_NOT_INSTALLED_STR}
+  rtux_Message_Failure ${WINPASS_NOT_RESET_STR}
 fi
 
 
