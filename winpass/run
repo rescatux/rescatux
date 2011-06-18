@@ -8,6 +8,34 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
+
+# Return Windows SAM user that the user chooses
+# Every parametre is treated as the question to be asked to the user.
+function rtux_Choose_Sam_User () {
+  local text_to_ask="$@"
+  local n=0
+  local SAM_LIST_VALUES=""
+  local DETECTED_SAM_USERS=${SAM_USERS}; # TODO: Pass as a parametre
+  for n_sam_user in ${DETECTED_SAM_USERS}; do
+    if [[ ${n} -eq 0 ]] ; then
+      local SAM_LIST_VALUES="TRUE ${n_sam_user}"
+    else
+      local SAM_LIST_VALUES="${SAM_LIST_VALUES} FALSE ${n_sam_user}"
+    fi
+    let n=n+1
+  done
+
+  echo $(zenity ${ZENITY_COMMON_OPTIONS}  \
+	--list  \
+	--text "${text_to_ask}" \
+	--radiolist  \
+	--column "${SELECT_STR}" \
+	--column "${SAM_USER_STR}" \
+	${SAM_LIST_VALUES}); 
+
+} # function rtux_Choose_Hard_Disk ()
+
+
 # Reset windows password
 # 1 parametre = Selected partition
 function rtux_winpass_reset () {
@@ -57,8 +85,9 @@ function rtux_winpass_reset () {
 	| samdump2 ${SAM_FILE} /dev/stdin \
 	| awk -F ":" '{print "\42"$1"\42"}'
 
-  # Ask the user which password to reset
-     # TODO - Loop SAM_USERS array
+  # Ask the user which password to reset	
+      CHOOSEN_USER=$(rtux_Choose_Sam_User \
+      "Choose Windows user to reset its password")
   # Run chntpw -L sam-file security-file
 	chntpw -u "${CHOOSEN_USER}" -L ${SAM_FILE} ${SECURITY_FILE};
   # Umount the partition
@@ -76,6 +105,8 @@ function rtux_winpass_reset () {
 
 # TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
 
+
+SAM_USER_STR="Windows user"
 
 WINPASS_RESET_OK_STR="Windows password was reset OK! :)"
 WINPASS_NOT_RESET_STR="Windows password was not reset. Something went wrong! :("
