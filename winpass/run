@@ -15,7 +15,8 @@ function rtux_Choose_Sam_User () {
   local text_to_ask="$@"
   local n=0
   local SAM_LIST_VALUES=""
-  local DETECTED_SAM_USERS=${SAM_USERS}; # TODO: Pass as a parametre
+  local DETECTED_SAM_USERS=() # Array
+  DETECTED_SAM_USERS=${SAM_USERS}; # TODO: Pass as a parametre
   for n_sam_user in ${DETECTED_SAM_USERS}; do
     if [[ ${n} -eq 0 ]] ; then
       local SAM_LIST_VALUES="TRUE ${n_sam_user}"
@@ -79,11 +80,11 @@ function rtux_winpass_reset () {
   # Backup of the files in a temporal folder
     # TODO
   # Define SAM_USERS as a bash array
-    # TODO
+      SAM_USERS=()
   # Obtain users from SAM file
       SAM_USERS=$( bkhive ${SYSTEM_FILE} /dev/stdout\
 	| samdump2 ${SAM_FILE} /dev/stdin \
-	| awk -F ":" '{print "\42"$1"\42"}'
+	| awk -F ":" '{print "\42"$1"\42"}' )
 
   # Ask the user which password to reset	
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
@@ -116,9 +117,7 @@ SELECTED_PARTITION=$(rtux_Get_Windows_Os_Partitions);
 
 
 
-SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
-
-if rtux_winpass_reset ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ; then
+if rtux_winpass_reset ${SELECTED_PARTITION} ; then
   rtux_Message_Success ${WINPASS_RESET_OK_STR}
 else
   rtux_Message_Failure ${WINPASS_NOT_RESET_STR}

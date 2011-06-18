@@ -97,9 +97,9 @@ function rtux_Get_Windows_Os_Partitions() {
     then
       for n_windir in ${TMP_MNT_PARTITION}/* ; do
 	  if [[ -e ${n_windir}\
-"/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
-/[Ss][Aa][Mm]"\
+/[Ss][Aa][Mm]\
 	  ]] ; then
 	    SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
 	  fi
