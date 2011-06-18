@@ -59,7 +59,7 @@ function rtux_winpass_reset () {
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Aa][Mm]\
 	] ; then
-	  SAM_FILE=${TMP_MNT_PARTITION}/${n_windir}\
+	  SAM_FILE=${n_windir}\
 /[Ss][Yy][Ss][Tt][Ee][Mm]32\
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Aa][Mm]
@@ -71,7 +71,7 @@ function rtux_winpass_reset () {
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]\
 	] ; then
-	  SECURITY_FILE=${TMP_MNT_PARTITION}/${n_windir}\
+	  SECURITY_FILE=${n_windir}\
 /[Ss][Yy][Ss][Tt][Ee][Mm]32\
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]
