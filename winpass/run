@@ -82,9 +82,17 @@ function rtux_winpass_reset () {
   # Define SAM_USERS as a bash array
       SAM_USERS=()
   # Obtain users from SAM file
-      SAM_USERS=$( bkhive ${SYSTEM_FILE} /dev/stdout\
+  # Define SAM_USERS as a bash array
+      SAM_USERS=()
+  # Obtain users from SAM file
+      sam_line_count=0
+      bkhive ${SYSTEM_FILE} /dev/stdout\
 	| samdump2 ${SAM_FILE} /dev/stdin \
-	| awk -F ":" '{print "\42"$1"\42"}' )
+	| awk -F ":" '{print $1}' \
+      | while read -r sam_line ; do
+	SAM_USERS[${sam_line_count}]="${sam_line}"
+      sam_line_count=$((sam_line_count+1))
+      done
 
   # Ask the user which password to reset	
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
