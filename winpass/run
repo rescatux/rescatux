@@ -113,7 +113,7 @@ WINPASS_RESET_OK_STR="Windows password was reset OK! :)"
 WINPASS_NOT_RESET_STR="Windows password was not reset. Something went wrong! :("
 
 
-SELECTED_PARTITION=$(rtux_Get_Windows_Os_Partitions);
+SELECTED_PARTITION=$(rtux_Choose_Windows_partition);
 
 
 

@@ -222,6 +222,12 @@ function rtux_Choose_Linux_partition () {
   rtux_Abstract_Choose_Partition $(rtux_Get_Linux_Os_Partitions)
 } # function rtux_Choose_Linux_partition ()
 
+# Let the user choose his main Windows partition
+# It outputs choosen partition
+function rtux_Choose_Windows_partition () {
+  rtux_Abstract_Choose_Partition $(rtux_Get_Windows_Os_Partitions)
+} # function rtux_Choose_Windows_partition ()
+
 # Let the user rename hard disks if they want to
 # Returns the new target partitions
 function rtux_Choose_HardDisk_Renaming () {
