@@ -13,17 +13,24 @@ set -v
 # Every parametre is treated as the question to be asked to the user.
 function rtux_Choose_Sam_User () {
   local text_to_ask="$@"
-  local n=0
-  local SAM_LIST_VALUES=""
-  local DETECTED_SAM_USERS=() # Array
-  DETECTED_SAM_USERS=${SAM_USERS}; # TODO: Pass as a parametre
-  for n_sam_user in ${DETECTED_SAM_USERS}; do
-    if [[ ${n} -eq 0 ]] ; then
-      local SAM_LIST_VALUES="TRUE ${n_sam_user}"
+
+  local SAM_LIST_VALUES=()
+  local SAM_LIST_VALUE_N=0
+  local sam_line_count=0
+  while [ ! ${sam_line_count} -eq ${sam_line_total} ] ; do
+    if [[ ${sam_line_count} -eq 0 ]] ; then
+      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="TRUE"
+      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
+      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="${SAM_USERS[${sam_line_count}]}"
+      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
+      sam_line_count=$((sam_line_count+1))
     else
-      local SAM_LIST_VALUES="${SAM_LIST_VALUES} FALSE ${n_sam_user}"
-    fi
-    let n=n+1
+      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="FALSE"
+      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
+      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="${SAM_USERS[${sam_line_count}]}"
+      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
+      sam_line_count=$((sam_line_count+1))
+    fi     
   done
 
   echo $(zenity ${ZENITY_COMMON_OPTIONS}  \
@@ -32,7 +39,7 @@ function rtux_Choose_Sam_User () {
 	--radiolist  \
 	--column "${SELECT_STR}" \
 	--column "${SAM_USER_STR}" \
-	${SAM_LIST_VALUES}); 
+	"${SAM_LIST_VALUES[@]}"); 
 
 } # function rtux_Choose_Hard_Disk ()
 
@@ -82,23 +89,24 @@ function rtux_winpass_reset () {
   # Define SAM_USERS as a bash array
       SAM_USERS=()
   # Obtain users from SAM file
-  # Define SAM_USERS as a bash array
-      SAM_USERS=()
-  # Obtain users from SAM file
       sam_line_count=0
+      mkfifo /tmp/sampipe
       bkhive ${SYSTEM_FILE} /dev/stdout\
 	| samdump2 ${SAM_FILE} /dev/stdin \
-	| awk -F ":" '{print $1}' \
-      | while read -r sam_line ; do
+	| awk -F ":" '{print $1}' > /tmp/sampipe &
+      while read -r sam_line ; do
 	SAM_USERS[${sam_line_count}]="${sam_line}"
       sam_line_count=$((sam_line_count+1))
-      done
+      done < /tmp/sampipe
+      sam_line_total=${sam_line_count}
+
 
   # Ask the user which password to reset	
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
       "Choose Windows user to reset its password")
   # Run chntpw -L sam-file security-file
 	chntpw -u "${CHOOSEN_USER}" -L ${SAM_FILE} ${SECURITY_FILE};
+	EXIT_VALUE=$?
   # Umount the partition
 
     umount ${TMP_MNT_PARTITION};
@@ -130,5 +138,4 @@ if rtux_winpass_reset ${SELECTED_PARTITION} ; then
 else
   rtux_Message_Failure ${WINPASS_NOT_RESET_STR}
 fi
-
 
