@@ -58,6 +58,7 @@ cd $TEMP_FOLDER
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list"
 
 lh config \
+  --apt-recommends false \
   --syslinux-menu true \
   --linux-flavours "${LINUX_FLAVOURS}" \
   ${DISTRIBUTION_OPTION} \
