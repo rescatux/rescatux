@@ -103,7 +103,7 @@ function show_item() {
 
 
 # Main program
-DEFAULT_PATH="${HOME}/Desktop/"
+DEFAULT_PATH="${HOME}/Desktop/rescapp/"
 
 RESCATUX_PATH=${DEFAULT_PATH}
 export RESCATUX_PATH # Make it available to run scripts

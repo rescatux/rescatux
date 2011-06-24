@@ -50,7 +50,8 @@ mkdir --parents $TEMP_FOLDER
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
-cp -r ${RESCATUX_FILES} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
+mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp
+cp -r ${RESCATUX_FILES} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp setbackground.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cd $TEMP_FOLDER
