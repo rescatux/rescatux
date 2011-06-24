@@ -422,7 +422,7 @@ EXIT_STR="Exit"
 RUN_STR="Run"
 
 FIREFOX_COMMAND="iceweasel"
-GEDIT_COMMAND="gedit"
+GEDIT_COMMAND="leafpad"
 XCHAT_COMMAND="xchat"
 FDISK_COMMAND="/sbin/fdisk"
 FILEMANAGER_COMMAND="nautilus"

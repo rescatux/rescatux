@@ -1,0 +1,108 @@
+#!/bin/bash
+source ${RESCATUX_LIB_FILE}
+
+LOG_CHOOSE_STR="Please choose a log file"
+LOG_STR="log"
+PASTEBIN_HINT="Right-click and select copy please. You will be able to paste it later at the chat option"
+
+SHARE_FORUM_SYSTEM_HINT="Describe your system a bit. (Not your problem)"
+SHARE_FORUM_DEFAULT_SYSTEM_DESCRIPTION="My system has YOUROPERATINGSYSTEMHERE operating system with NUMBEROFHARDDISKSHERE hard disks"
+
+SHARE_FORUM_DEFAULT_PROBLEM_HINT="Describe as much exactly as you can what your problem is. Maybe what you have right now and what you want to have after having solved your problem"
+SHARE_FORUM_DEFAULT_PROBLEM_DESCRIPTION="I am unable to do something as easy as..."
+
+SHARE_FORUM_DEFAULT_THANK_HINT="It is usually polite to say thank you to the people who are going to help you on the forum."
+SHARE_FORUM_DEFAULT_THANKS_DESCRIPTION="Thank you very much for your help!"
+
+SHARE_FORUM_DEFAULT_SIGNATURE_HINT="Just an optional signature to let your helpers who you are."
+SHARE_FORUM_DEFAULT_SIGNATURE_DESCRIPTION="The ultimate noob! (You are supposed to change this)"
+
+
+RANDOM_SHARE_FORUM_FILE="${TMP_FOLDER}/$$.text"
+
+m=1
+for ffile in ${RESCATUX_PATH}${LOG_DIRECTORY}/* ; do
+
+  BFILE=$(basename $ffile)
+  if [[ m -eq 1 ]] ; then
+    LOG_LIST_VALUES="TRUE ${BFILE}"
+  else
+    LOG_LIST_VALUES="${LOG_LIST_VALUES} FALSE ${BFILE}"
+  fi
+  let m=m+1
+done
+
+SELECTED_FILE=$(zenity ${ZENITY_COMMON_OPTIONS} \
+	  --list  \
+	  --text "${LOG_CHOOSE_STR}" \
+	  --radiolist  \
+	  --column "${SELECT_STR}" \
+	  --column "${LOG_STR}" \
+	  ${LOG_LIST_VALUES});
+
+echo "" > ${RANDOM_SHARE_FORUM_FILE} # Initiate the file
+
+# Header
+cat << EOF
+This is a semi-automated message generated from [url="http://www.supergrubdisk.org"]Rescatux live cd[/url].
+>> ${RANDOM_SHARE_FORUM_FILE}
+
+# Description of your system as far as you know (Operating system, hard disks,...)
+RANDOM_SHARE_FORUM_SYSTEM_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
+	--entry \
+	--text "${SHARE_FORUM_SYSTEM_HINT}" \
+	--entry-text="${SHARE_FORUM_DEFAULT_SYSTEM_DESCRIPTION}")"
+
+cat << EOF
+My description of my system is:
+${SHARE_FORUM_SYSTEM_DESCRIPTION}
+>> ${RANDOM_SHARE_FORUM_FILE}
+
+# My problem is:
+SHARE_FORUM_PROBLEM_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
+	--entry \
+	--text "${SHARE_FORUM_PROBLEM_HINT}" \
+	--entry-text="${SHARE_FORUM_DEFAULT_PROBLEM_DESCRIPTION}")"
+
+cat << EOF
+My problem is:
+${SHARE_FORUM_PROBLEM_DESCRIPTION}
+>> ${RANDOM_SHARE_FORUM_FILE}
+
+# Here there is the log from this Rescatux option
+I join the Rescatux output for ${SELECTED_FILE} :
+<CODE>
+$(cat ${RESCATUX_PATH}${LOG_DIRECTORY}\
+/${SELECTED_FILE})
+</CODE>
+# Thank you
+SHARE_FORUM_THANKS_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
+	--entry \
+	--text "${SHARE_FORUM_THANKS_HINT}" \
+	--entry-text="${SHARE_FORUM_DEFAULT_THANKS_DESCRIPTION}")"
+
+cat << EOF
+${SHARE_FORUM_THANKS_DESCRIPTION}
+>> ${RANDOM_SHARE_FORUM_FILE}
+# Signature
+SHARE_FORUM_SIGNATURE_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
+	--entry \
+	--text "${SHARE_FORUM_SIGNATURE_HINT}" \
+	--entry-text="${SHARE_FORUM_DEFAULT_SIGNATURE_DESCRIPTION}")"
+
+cat << EOF
+${SHARE_FORUM_SIGNATURE_DESCRIPTION}
+>> ${RANDOM_SHARE_FORUM_FILE}
+
+${GEDIT_COMMAND} ${RANDOM_SHARE_FORUM_FILE} &disown
+
+${FIREFOX_COMMAND} $(zenity ${ZENITY_COMMON_OPTIONS} --list  \
+  --text "Is linux.byexamples.com helpful?" \
+  --radiolist  \
+  --column "Choose" \
+  --column "Url" \
+  --column "Description" \
+TRUE "http://www.ubuntuforums.org" "Ubuntu forums" \
+FALSE "http://www.google.com" "Google" \
+)
+
