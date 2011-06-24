@@ -45,6 +45,7 @@ echo "" > ${RANDOM_SHARE_FORUM_FILE} # Initiate the file
 # Header
 cat << EOF
 This is a semi-automated message generated from [url="http://www.supergrubdisk.org"]Rescatux live cd[/url].
+EOF
 >> ${RANDOM_SHARE_FORUM_FILE}
 
 # Description of your system as far as you know (Operating system, hard disks,...)
@@ -56,6 +57,7 @@ RANDOM_SHARE_FORUM_SYSTEM_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 cat << EOF
 My description of my system is:
 ${SHARE_FORUM_SYSTEM_DESCRIPTION}
+EOF
 >> ${RANDOM_SHARE_FORUM_FILE}
 
 # My problem is:
@@ -67,14 +69,22 @@ SHARE_FORUM_PROBLEM_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 cat << EOF
 My problem is:
 ${SHARE_FORUM_PROBLEM_DESCRIPTION}
+EOF
 >> ${RANDOM_SHARE_FORUM_FILE}
 
 # Here there is the log from this Rescatux option
+cat << EOF
 I join the Rescatux output for ${SELECTED_FILE} :
 <CODE>
-$(cat ${RESCATUX_PATH}${LOG_DIRECTORY}\
-/${SELECTED_FILE})
+EOF
+>> ${RANDOM_SHARE_FORUM_FILE}
+
+cat ${RESCATUX_PATH}${LOG_DIRECTORY}\
+/${SELECTED_FILE} >> ${RANDOM_SHARE_FORUM_FILE}
+
+cat << EOF
 </CODE>
+EOF
 # Thank you
 SHARE_FORUM_THANKS_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 	--entry \
@@ -83,6 +93,7 @@ SHARE_FORUM_THANKS_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 
 cat << EOF
 ${SHARE_FORUM_THANKS_DESCRIPTION}
+EOF
 >> ${RANDOM_SHARE_FORUM_FILE}
 # Signature
 SHARE_FORUM_SIGNATURE_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
@@ -92,6 +103,7 @@ SHARE_FORUM_SIGNATURE_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 
 cat << EOF
 ${SHARE_FORUM_SIGNATURE_DESCRIPTION}
+EOF
 >> ${RANDOM_SHARE_FORUM_FILE}
 
 ${GEDIT_COMMAND} ${RANDOM_SHARE_FORUM_FILE} &disown
