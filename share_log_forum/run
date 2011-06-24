@@ -43,22 +43,22 @@ SELECTED_FILE=$(zenity ${ZENITY_COMMON_OPTIONS} \
 echo "" > ${RANDOM_SHARE_FORUM_FILE} # Initiate the file
 
 # Header
-cat << EOF
+cat << EOF >> ${RANDOM_SHARE_FORUM_FILE}
 This is a semi-automated message generated from [url="http://www.supergrubdisk.org"]Rescatux live cd[/url].
 EOF
->> ${RANDOM_SHARE_FORUM_FILE}
+
 
 # Description of your system as far as you know (Operating system, hard disks,...)
-RANDOM_SHARE_FORUM_SYSTEM_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
+SHARE_FORUM_SYSTEM_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 	--entry \
 	--text "${SHARE_FORUM_SYSTEM_HINT}" \
 	--entry-text="${SHARE_FORUM_DEFAULT_SYSTEM_DESCRIPTION}")"
 
-cat << EOF
+cat << EOF >> ${RANDOM_SHARE_FORUM_FILE}
 My description of my system is:
 ${SHARE_FORUM_SYSTEM_DESCRIPTION}
 EOF
->> ${RANDOM_SHARE_FORUM_FILE}
+
 
 # My problem is:
 SHARE_FORUM_PROBLEM_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
@@ -66,24 +66,24 @@ SHARE_FORUM_PROBLEM_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 	--text "${SHARE_FORUM_PROBLEM_HINT}" \
 	--entry-text="${SHARE_FORUM_DEFAULT_PROBLEM_DESCRIPTION}")"
 
-cat << EOF
+cat << EOF >> ${RANDOM_SHARE_FORUM_FILE}
 My problem is:
 ${SHARE_FORUM_PROBLEM_DESCRIPTION}
 EOF
->> ${RANDOM_SHARE_FORUM_FILE}
+
 
 # Here there is the log from this Rescatux option
-cat << EOF
+cat << EOF >> ${RANDOM_SHARE_FORUM_FILE}
 I join the Rescatux output for ${SELECTED_FILE} :
-<CODE>
+[CODE]
 EOF
->> ${RANDOM_SHARE_FORUM_FILE}
+
 
 cat ${RESCATUX_PATH}${LOG_DIRECTORY}\
 /${SELECTED_FILE} >> ${RANDOM_SHARE_FORUM_FILE}
 
-cat << EOF
-</CODE>
+cat << EOF >> ${RANDOM_SHARE_FORUM_FILE}
+[/CODE]
 EOF
 # Thank you
 SHARE_FORUM_THANKS_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
@@ -91,20 +91,20 @@ SHARE_FORUM_THANKS_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 	--text "${SHARE_FORUM_THANKS_HINT}" \
 	--entry-text="${SHARE_FORUM_DEFAULT_THANKS_DESCRIPTION}")"
 
-cat << EOF
+cat << EOF >> ${RANDOM_SHARE_FORUM_FILE}
 ${SHARE_FORUM_THANKS_DESCRIPTION}
 EOF
->> ${RANDOM_SHARE_FORUM_FILE}
+
 # Signature
 SHARE_FORUM_SIGNATURE_DESCRIPTION="$(zenity ${ZENITY_COMMON_OPTIONS} \
 	--entry \
 	--text "${SHARE_FORUM_SIGNATURE_HINT}" \
 	--entry-text="${SHARE_FORUM_DEFAULT_SIGNATURE_DESCRIPTION}")"
 
-cat << EOF
+cat << EOF >> ${RANDOM_SHARE_FORUM_FILE}
 ${SHARE_FORUM_SIGNATURE_DESCRIPTION}
 EOF
->> ${RANDOM_SHARE_FORUM_FILE}
+
 
 ${GEDIT_COMMAND} ${RANDOM_SHARE_FORUM_FILE} &disown
 
