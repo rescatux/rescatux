@@ -3082,8 +3082,8 @@ echo >> "${Log}";
 
 
 ## Copy the log file to RESULTS file and make the user the owner of RESULTS file. ##
-
-cp "${Log}" "${LogFile}";
+# Rescatux hack
+cat "${Log}";
 
 if [ "${SUDO_UID}:${SUDO_GID}" != ':' ] ; then
    chown "${SUDO_UID}:${SUDO_GID}" "${LogFile}";
@@ -3115,8 +3115,8 @@ fi
 #   exec 6>&-;
 
 
-
-printf '\nFinished. The results are in the file "%s"\nlocated in "%s".\n\n' "$(basename "${LogFile}")" "${Dir}/";
+# Rescatux hack
+#printf '\nFinished. The results are in the file "%s"\nlocated in "%s".\n\n' "$(basename "${LogFile}")" "${Dir}/";
 
 exit 0;
 
