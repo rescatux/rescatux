@@ -1,0 +1,42 @@
+#!/bin/bash
+# Rescapp Grub-install run script
+# Copyright Adrian Gibanel Lopez
+# Licensed under the GNU PUBLIC LICENSE 3.0
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+# Run Boot Info script
+function rtux_Boot_Info_Script () {
+  
+  if  ./${BOOT_INFO_SCRIPT_BINARY} /dev/stdout; then    
+    return 0; # Ok
+  else
+    return 1; # Error
+  fi
+
+} # rtux_Boot_Info_Script ()
+
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+# MAIN PROGRAM
+
+
+BOOT_INFO_SCRIPT_BINARY="boot_info_script.sh"
+
+BOOT_INFO_SCRIPT_OK_STR="Boot Info Script was run OK! :)"
+BOOT_INFO_SCRIPT_KO_STR="Boot Info Script had a problem. Something went wrong! :("
+
+BOOT_INFO_SCRIPT_EXPLANATION="Check the Support menu in order to see how you can show, share, share on forums, etc. the Boot Info Script log."
+
+
+if rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ; then
+  rtux_Message_Success ${BOOT_INFO_SCRIPT_OK_STR}
+  rtux_Message_Success ${BOOT_INFO_SCRIPT_EXPLANATION}
+else
+  rtux_Message_Failure ${BOOT_INFO_SCRIPT_OK_STR}
+fi
+
+
