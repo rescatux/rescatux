@@ -8,13 +8,13 @@ PASTEBIN_HINT="Right-click and select copy please. You will be able to paste it 
 SHARE_FORUM_SYSTEM_HINT="Describe your system a bit. (Not your problem)"
 SHARE_FORUM_DEFAULT_SYSTEM_DESCRIPTION="My system has YOUROPERATINGSYSTEMHERE operating system with NUMBEROFHARDDISKSHERE hard disks"
 
-SHARE_FORUM_DEFAULT_PROBLEM_HINT="Describe as much exactly as you can what your problem is. Maybe what you have right now and what you want to have after having solved your problem"
+SHARE_FORUM_PROBLEM_HINT="Describe as much exactly as you can what your problem is."
 SHARE_FORUM_DEFAULT_PROBLEM_DESCRIPTION="I am unable to do something as easy as..."
 
-SHARE_FORUM_DEFAULT_THANK_HINT="It is usually polite to say thank you to the people who are going to help you on the forum."
+SHARE_FORUM_THANKS_HINT="It is usually polite to say thank you to the people who are going to help you on the forum."
 SHARE_FORUM_DEFAULT_THANKS_DESCRIPTION="Thank you very much for your help!"
 
-SHARE_FORUM_DEFAULT_SIGNATURE_HINT="Just an optional signature to let your helpers who you are."
+SHARE_FORUM_SIGNATURE_HINT="Just an optional signature to let your helpers who you are."
 SHARE_FORUM_DEFAULT_SIGNATURE_DESCRIPTION="The ultimate noob! (You are supposed to change this)"
 
 
