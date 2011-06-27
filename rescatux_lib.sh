@@ -30,33 +30,8 @@ function rtux_Get_System_Partitions () {
 # Return partitions which are primary partitions
 function rtux_Get_Primary_Partitions() {
   local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
-  local TMP_PRIMARY=""
-  local SBIN_GRUB_PARTITIONS=""
 
-# TODO: Improve with a single regular expression maybe inside another function
-  for n_partition in ${TARGET_PARTITIONS}; do
-      TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]1$")
-      if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
-        SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-      else
-	TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]2$")
-	if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
-	  SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-	else
-	  TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]3$")
-	  if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
-	    SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-	  else
-	    TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]4$")
-	    if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
-	      SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-	    fi
-	  fi
-	fi
-      fi
-  done
-
-  echo "${SBIN_GRUB_PARTITIONS}"
+  echo "${TARGET_PARTITIONS}" | awk '$1 ~ "[[:alpha:]][1-4]$" { printf $1 " " }'
 } # function rtux_Get_Primary_Partitions ()
 
 
