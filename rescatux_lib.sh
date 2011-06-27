@@ -24,8 +24,7 @@ function rtux_Get_Etc_Issue_Content() {
 
 # Return partitions detected on the system
 function rtux_Get_System_Partitions () {
-  awk '{print $4}' ${PROC_PARTITIONS_FILE} \
-  | sed -e '/name/d' -e '/^$/d' -e '/[1-9]/!d'
+  awk '{ if ( ( NR>2 ) && ( $4 ~ "[1-9]$" ) ) {print $4} }' ${PROC_PARTITIONS_FILE}
 } # function rtux_Get_System_Partitions ()
 
 # Return partitions which are primary partitions
