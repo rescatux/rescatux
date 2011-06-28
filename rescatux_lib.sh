@@ -24,40 +24,14 @@ function rtux_Get_Etc_Issue_Content() {
 
 # Return partitions detected on the system
 function rtux_Get_System_Partitions () {
-  awk '{print $4}' ${PROC_PARTITIONS_FILE} \
-  | sed -e '/name/d' -e '/^$/d' -e '/[1-9]/!d'
+  awk '{ if ( ( NR>2 ) && ( $4 ~ "[1-9]$" ) ) {print $4} }' ${PROC_PARTITIONS_FILE}
 } # function rtux_Get_System_Partitions ()
 
 # Return partitions which are primary partitions
 function rtux_Get_Primary_Partitions() {
   local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
-  local TMP_PRIMARY=""
-  local SBIN_GRUB_PARTITIONS=""
 
-# TODO: Improve with a single regular expression maybe inside another function
-  for n_partition in ${TARGET_PARTITIONS}; do
-      TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]1$")
-      if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
-        SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-      else
-	TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]2$")
-	if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
-	  SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-	else
-	  TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]3$")
-	  if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
-	    SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-	  else
-	    TMP_PRIMARY=$(echo "${n_partition}" | grep "[:alpha:]4$")
-	    if [[ "${n_partition}" -eq "${TMP_PRIMARY}" ]] ; then
-	      SBIN_GRUB_PARTITIONS="${SBIN_GRUB_PARTITIONS} ${n_partition}"
-	    fi
-	  fi
-	fi
-      fi
-  done
-
-  echo "${SBIN_GRUB_PARTITIONS}"
+  echo "${TARGET_PARTITIONS}" | awk '$1 ~ "[[:alpha:]][1-4]$" { printf $1 " " }'
 } # function rtux_Get_Primary_Partitions ()
 
 
@@ -115,11 +89,8 @@ function rtux_Get_Windows_Os_Partitions() {
 # Return hard disks detected on the system
 function rtux_Get_System_HardDisks () {
   local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
-  echo $(echo ${TARGET_PARTITIONS} \
-	  | sed 's/[0-9][0-9]*//g' \
-	  | tr ' ' '\n' \
-	  | uniq \
-	  | tr '\n' ' ');
+
+  echo ${TARGET_PARTITIONS}  | awk '$1 ~ "[[:alpha:]]$" { printf $1 " " }'
 } # function rtux_Get_System_HardDisks ()
 
 # Informs the user about an operation that has been successful
