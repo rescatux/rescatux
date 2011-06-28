@@ -88,9 +88,7 @@ function rtux_Get_Windows_Os_Partitions() {
 
 # Return hard disks detected on the system
 function rtux_Get_System_HardDisks () {
-  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
-
-  echo ${TARGET_PARTITIONS}  | awk '$1 ~ "[[:alpha:]]$" { printf $1 " " }'
+  awk '{ if ( ( NR>2 ) && ( $4 ~ "[[:alpha:]]$" ) ) {print $4} }' ${PROC_PARTITIONS_FILE}
 } # function rtux_Get_System_HardDisks ()
 
 # Informs the user about an operation that has been successful
