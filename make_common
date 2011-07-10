@@ -39,6 +39,8 @@ LIVE_HELPER_LISTS_FOLDER="/usr/share/live/build/lists"
 RLE_FOLDER="config/binary_syslinux"
 RLE_FILE="${RLE_FOLDER}/${RESCATUX_STR}.rle"
 
+CHNTPWNG_BINARY="../TRINITY/chntpwsource/chntpw-NG/chntpw"
+
 mkdir --parents $TEMP_FOLDER/${RLE_FOLDER}
 # Generate logo - Begin
 cd logo
@@ -52,6 +54,7 @@ mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp
 cp -r ${RESCATUX_FILES} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
+cp ${CHNTPWNG_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp setbackground.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
