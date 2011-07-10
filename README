@@ -4,3 +4,4 @@ live-helper
 imagemagick # Needed for logo generation
 syslinux # Needed for logo generation
 
+You will find chntpw-ng source code at: http://developer.berlios.de/project/showfiles.php?group_id=11211 .
