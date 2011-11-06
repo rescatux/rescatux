@@ -110,7 +110,7 @@ class MainWindow(QtGui.QWidget):
 	
     def runRescue(self):
 	print "DEBUG: Running option (code) [BEGIN]: " + self.selected_option_code
-	run_status = subprocess.call(["./rescapp_launcher.sh",self.selected_option_code])
+	run_status = subprocess.call([current_pwd + "/" + "rescapp_launcher.sh",self.selected_option_code])
 	print "DEBUG: Running option (code) [FINISH]: " + self.selected_option_code + " with code: " + str(run_status);
 
     def setLayout(self, layout):
