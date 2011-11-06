@@ -87,7 +87,7 @@ class MainWindow(QtGui.QWidget):
 	global description_filename
 	global run_filename
 	global offlinedoc_filename
-	self.selected_option_v.setText("<font size=+1><b>"+n_option.getName()+"</b></font>")
+	self.selected_option_v.setText("<font size=+0><b>"+n_option.getName()+"</b></font>")
 	self.selected_option_code = n_option.getCode()
 	self.rescue_btn.show()
 	
@@ -176,7 +176,7 @@ class MainWindow(QtGui.QWidget):
 	self.rescue_btn.hide()
 	
 	
-	self.support_options_l = QtGui.QLabel("<b>Support:</b>")
+	#self.support_options_l = QtGui.QLabel("<b>Support:</b>")
 	self.chat_btn = QtGui.QPushButton('Chat', self)
 	self.chat_btn.clicked.connect(partial(self.selectSupportOption,chat_support_option))
 	self.share_log_btn = QtGui.QPushButton('Share log', self)
@@ -186,8 +186,8 @@ class MainWindow(QtGui.QWidget):
 	
 	
 	
-	self.selected_option_l = QtGui.QLabel("<b>Selected option:</b>")
-	self.selected_option_v = QtGui.QLabel("<NONE>");
+	#self.selected_option_l = QtGui.QLabel("<b>Selected option:</b>")
+	self.selected_option_v = QtGui.QLabel("<No selected option>");
 	self.selected_option_v.setWordWrap(True)
 
 	self.wb=QtWebKit.QWebView()
@@ -210,13 +210,13 @@ class MainWindow(QtGui.QWidget):
 	#grid.addWidget(self.rescapp_title_l,0,4,1+rows_per_option-1,10)
 	grid.addWidget(mainmenu_btn,title_offset,0,title_offset+rows_per_option-1,1)
 	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
-	grid.addWidget(self.selected_option_l,title_offset,2,title_offset+rows_per_option-1,1)
-	grid.addWidget(self.selected_option_v,title_offset,3,title_offset+rows_per_option-1,4)
+	#grid.addWidget(self.selected_option_l,title_offset,2,title_offset+rows_per_option-1,1)
+	grid.addWidget(self.selected_option_v,title_offset,2,title_offset+rows_per_option-1,4)
 	
-	grid.addWidget(self.support_options_l,0,0,1,2)
-	grid.addWidget(self.chat_btn,0,1,1,1)
-	grid.addWidget(self.share_log_btn,0,2,1,1)
-	grid.addWidget(self.share_log_forum_btn,0,3,1,1)
+	#grid.addWidget(self.support_options_l,0,0,1,2)
+	grid.addWidget(self.chat_btn,0,0,1,1)
+	grid.addWidget(self.share_log_btn,0,1,1,1)
+	grid.addWidget(self.share_log_forum_btn,0,2,1,1)
 
 	options_offset = 1 + title_offset
 	  
@@ -269,7 +269,7 @@ class MainWindow(QtGui.QWidget):
         
 	self.setLayout(grid)
 	#self.setMaximumWidth(600 - 5)
-	self.setMaximumHeight(480 - 25)
+	self.setMaximumHeight(400 - 25)
     def __init__(self, url):
         QtGui.QMainWindow.__init__(self)
 	self.parserescappmenues(mainmenu_filename)
