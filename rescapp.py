@@ -161,13 +161,14 @@ class MainWindow(QtGui.QWidget):
     def drawMainWindows(self):
       
 	global mainmenu_filename
+	global maximum_option_columns
       
-	rows_per_option = 4
-	title_offset = 6
+	rows_per_option = 1
+	title_offset = 1
 	options_offset = 0
 	
 	
-	self.rescapp_title_l = QtGui.QLabel("<font size=+4><b><i>Rescatux "+ rescapp_version + " 's Rescapp</i></b></font>")
+	self.rescapp_title_l = QtGui.QLabel("<font size=+2><b><i>Rescatux "+ rescapp_version + " 's Rescapp</i></b></font>")
         mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
 	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
 	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
@@ -175,7 +176,7 @@ class MainWindow(QtGui.QWidget):
 	self.rescue_btn.hide()
 	
 	
-	self.support_options_l = QtGui.QLabel("<b>Support options:</b>")
+	self.support_options_l = QtGui.QLabel("<b>Support:</b>")
 	self.chat_btn = QtGui.QPushButton('Chat', self)
 	self.chat_btn.clicked.connect(partial(self.selectSupportOption,chat_support_option))
 	self.share_log_btn = QtGui.QPushButton('Share log', self)
@@ -192,10 +193,6 @@ class MainWindow(QtGui.QWidget):
 	self.wb=QtWebKit.QWebView()
 	self.wb.load(url)
 	
-	code_title_label = QtGui.QLabel("<b>Code</b>")
-	name_title_label = QtGui.QLabel("<b>Name</b>")
-	description_title_label = QtGui.QLabel("<b>Description</b>")
-	
 	code_label_list = list ()
 	name_button_list = list ()
 	description_label_list = list ()
@@ -210,36 +207,32 @@ class MainWindow(QtGui.QWidget):
         grid.setSpacing(10)
 
 
-	grid.addWidget(self.rescapp_title_l,1,0,1+rows_per_option-1,10)
+	grid.addWidget(self.rescapp_title_l,0,4,1+rows_per_option-1,10)
 	grid.addWidget(mainmenu_btn,title_offset,0,title_offset+rows_per_option-1,1)
+	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
 	grid.addWidget(self.selected_option_l,title_offset,2,title_offset+rows_per_option-1,1)
-	grid.addWidget(self.selected_option_v,title_offset,3,title_offset+rows_per_option-1,1)
-	grid.addWidget(self.rescue_btn,title_offset,10,title_offset+rows_per_option-1,1)
+	grid.addWidget(self.selected_option_v,title_offset,3,title_offset+rows_per_option-1,4)
 	
-	grid.addWidget(self.support_options_l,title_offset+rows_per_option*(0),70,title_offset+rows_per_option*(0)+rows_per_option-1,2)
-	grid.addWidget(self.chat_btn,title_offset+rows_per_option*(1),70,title_offset+rows_per_option*(1)+rows_per_option-1,2)
-	grid.addWidget(self.share_log_btn,title_offset+rows_per_option*(2),70,title_offset+rows_per_option*(2)+rows_per_option-1,2)
-	grid.addWidget(self.share_log_forum_btn,title_offset+rows_per_option*(3),70,title_offset+rows_per_option*(3)+rows_per_option-1,2)
-	grid.addWidget(code_title_label,5+title_offset,0,5+1+title_offset,1)
-	grid.addWidget(name_title_label,5+title_offset,2,5+1+title_offset,1)
-	grid.addWidget(description_title_label,5+title_offset,3,5+1+title_offset,1)
-	options_offset = 5 + title_offset + 2 * (1)
-	
-	x_grid_position = 1
-	current_n_code_label_n = 1
-	for n_code_label_list in code_label_list:
-	  n_code_label_list.setWordWrap(True)
-	  grid.addWidget(n_code_label_list,options_offset+x_grid_position,0,options_offset+x_grid_position+rows_per_option - 1,1)
-	  x_grid_position = x_grid_position + rows_per_option
-	  current_n_code_label_n = current_n_code_label_n + 1
+	grid.addWidget(self.support_options_l,0,0,1,2)
+	grid.addWidget(self.chat_btn,0,1,1,1)
+	grid.addWidget(self.share_log_btn,0,2,1,1)
+	grid.addWidget(self.share_log_forum_btn,0,3,1,1)
+
+	options_offset = 1 + title_offset
 	  
 	options_slot_list = list ()
 	x_grid_position = 1
 	current_n_name_button_n = 1
+	
+	name_pos_x = 1
+	name_pos_y = 0
+
 	for n_name_button_list in name_button_list:
+	  
 	  
 	  for n_option in option_list:
 	    if (n_option.getCode() == code_list[current_n_name_button_n - 1]):
+	      # TODO: Options that neither menues not executables but can show documentation
 	      if (n_option.getExecutable() == True):
 		print "DEBUG: Option " + n_option.getCode() + " is executable"
 		options_slot_list.append(partial(self.selectOption,code_list[current_n_name_button_n - 1]))
@@ -254,26 +247,23 @@ class MainWindow(QtGui.QWidget):
 		options_slot_list.append(partial(self.parserescappmenues,code_list[current_n_name_button_n - 1] + '.lis'))
 		n_name_button_list.clicked.connect(options_slot_list[current_n_name_button_n - 1])
 		
-	  grid.addWidget(n_name_button_list,options_offset+x_grid_position,2,options_offset+x_grid_position+rows_per_option-1,1)
-	  x_grid_position = x_grid_position + rows_per_option
-	  current_n_name_button_n = current_n_name_button_n + 1
-
-	x_grid_position = 1
-	current_n_description_label_n = 1
-	for n_description_label_list in description_label_list:
-	  n_description_label_list.setWordWrap(True)
-	  grid.addWidget(n_description_label_list,options_offset+x_grid_position,3,options_offset+x_grid_position+rows_per_option-1,50)
-	  #print "a: " +str(x_grid_position) + "b: " +"2" +"c: " + str(x_grid_position+rows_per_option-1)+"d: " + "50"
-	  x_grid_position = x_grid_position + rows_per_option
-	  current_n_description_label_n = current_n_description_label_n + 1
+	      grid.addWidget(n_name_button_list,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
+	    
+	      print "DEBUG: "+n_option.getCode()+" x1: "+ str(options_offset+name_pos_x) + " y1: " + str(name_pos_y) + " xs: " + str(rows_per_option) + " ys: " + "1"
+	      
+	      name_pos_y=name_pos_y + 1
+	      if ((name_pos_y % maximum_option_columns) == 0):
+		name_pos_x=name_pos_x + 1
+		x_grid_position = x_grid_position + rows_per_option
+		name_pos_y=0
+	    
+	      
+	      
+	  current_n_name_button_n = current_n_name_button_n + 1 
 	  
 	  
-	  bottom_start = options_offset + (current_n_description_label_n * rows_per_option) + 8
-
-
-	
-	
-        grid.addWidget(self.wb, bottom_start + 5, 0, 30, 60)
+	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
+	grid.addWidget(self.wb, bottom_start + 5, 0, 30, 14)
         
         
         
@@ -303,6 +293,8 @@ if __name__ == "__main__":
     run_filename='run'
     offlinedoc_filename='local_doc.html'
     version_filename='VERSION'
+    
+    maximum_option_columns=5
     
     if (os.path.isfile(current_pwd + '/' + version_filename)): 
       rescapp_version = linecache.getline(current_pwd + '/' + version_filename, 1)
