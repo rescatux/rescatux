@@ -7,5 +7,5 @@ Name=No Name
 Name[en_US]=Rescapp
 Comment[en_US]=Rescapp - Rescue Tool
 Comment=Rescapp - Rescue Tool
-Exec=/home/user/Desktop/rescapp/rescapp.sh
+Exec=/home/user/Desktop/rescapp/rescapp.py
 X-GNOME-Autostart-enabled=true

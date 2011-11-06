@@ -289,7 +289,7 @@ class MainWindow(QtGui.QWidget):
 if __name__ == "__main__":
   
   
-    current_pwd=os.getcwd()
+    current_pwd="/home/user/Desktop/rescapp"
     mainmenu_filename = 'rescatux.lis'
     code_list = list ()
     name_list = list ()
