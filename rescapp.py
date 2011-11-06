@@ -168,7 +168,7 @@ class MainWindow(QtGui.QWidget):
 	options_offset = 0
 	
 	
-	self.rescapp_title_l = QtGui.QLabel("<font size=+2><b><i>Rescatux "+ rescapp_version + " 's Rescapp</i></b></font>")
+	self.rescapp_title_l = QtGui.QLabel("<font size=+2><b><i>Rescapp "+ rescapp_version+"</b></font>")
         mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
 	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
 	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
@@ -263,7 +263,7 @@ class MainWindow(QtGui.QWidget):
 	  
 	  
 	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
-	grid.addWidget(self.wb, bottom_start + 5, 0, 30, 14)
+	grid.addWidget(self.wb, bottom_start + 5, 0, 3, 14)
         
         
         
