@@ -1,0 +1,334 @@
+#!/usr/bin/env python
+#"A web browser that will never exceed 128 lines of code. (not counting blanks)"
+
+import sys, subprocess, os, time, linecache, sip
+from PyQt4 import QtGui,QtCore,QtWebKit
+from functools import partial
+
+
+class RescappOption():
+
+    def __init__(self):
+      self.code=""
+      self.name=""
+      self.description=""
+      self.isOption=False
+      self.hasOfflineDoc=False
+      self.executable=False
+      
+    def isMenu(self):
+      return (self.isOption == "false")
+    def isOption(self):
+      return ((self.isMenu(self)) == False)
+    def setCode(self,code):
+      self.code=code
+    def setName(self,name):
+      self.name=name
+    def setDescription(self,description):
+      self.description=description
+    def getCode(self):
+      return self.code
+    def getName(self):
+      return self.name
+    def getDescription(self):
+      return self.description
+    def setAsMenu(self):
+      self.isOption = False
+    def setAsOption(self):
+      self.isOption = True
+    def setHasOfflineDoc(self, mybool):
+      self.hasOfflineDoc=mybool
+    def getHasOfflineDoc(self):
+      return self.hasOfflineDoc
+    def setExecutable(self, mybool):
+      self.executable=mybool
+    def getExecutable(self):
+      return self.executable
+    def setFromDir(self, dir_to_check, ndir):
+      global current_pwd
+      global name_filename
+      global description_filename
+      global run_filename
+      global offlinedoc_filename
+
+      
+      name_tmp = linecache.getline(current_pwd + '/' + ndir + '/' + name_filename,1)
+      name_tmp = name_tmp.rstrip('\r\n');
+      
+      
+      description_tmp = linecache.getline(current_pwd + '/' + ndir + '/' + description_filename,1)
+      description_tmp = description_tmp.rstrip('\r\n');
+      
+      
+      print 'DEBUG: Directory (code) found: ' + ndir
+      code_list.append(ndir)
+      self.setCode(ndir)
+      print 'DEBUG: Name found: ' + name_tmp
+      self.setName(name_tmp)
+      name_list.append(name_tmp)
+      print 'DEBUG: Description found: ' + description_tmp
+      self.setDescription(description_tmp)
+      description_list.append(description_tmp)
+      
+      if (os.path.isfile(current_pwd + '/' + ndir + '/' + run_filename)):
+	self.setAsOption()
+	self.setExecutable(True)
+      if (os.path.isfile(current_pwd + '/' + ndir + '/' + offlinedoc_filename)):
+	self.setAsOption()
+	self.setHasOfflineDoc(True)
+
+
+class MainWindow(QtGui.QWidget):	
+
+
+    def selectOptionCommon (self, n_option):
+	global current_pwd
+      	global name_filename
+	global description_filename
+	global run_filename
+	global offlinedoc_filename
+	self.selected_option_v.setText("<font size=+1><b>"+n_option.getName()+"</b></font>")
+	self.selected_option_code = n_option.getCode()
+	self.rescue_btn.show()
+	
+	if (n_option.getHasOfflineDoc()):
+	  self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + n_option.getCode() + '/' + offlinedoc_filename))
+    def selectOption(self, option_code):
+	global option_list
+	
+	print "DEBUG: Selecting option (code): " + option_code
+	for n_option in option_list:	    
+	    if (n_option.getCode() == option_code):
+	      self.selectOptionCommon(n_option)
+
+    def selectSupportOption(self, support_RescappOption):
+	print "DEBUG: Selecting Support option (code): " + support_RescappOption.getCode()
+	self.selectOptionCommon(support_RescappOption)
+	
+	
+	
+    def runRescue(self):
+	print "DEBUG: Running option (code): " + self.selected_option_code
+
+    def setLayout(self, layout):
+	self.clearLayout()
+	QtGui.QWidget.setLayout(self, layout)
+
+    def clearLayout(self):
+	if self.layout() is not None:
+	    old_layout = self.layout()
+	    for i in reversed(range(old_layout.count())):
+		old_layout.itemAt(i).widget().setParent(None)
+	    sip.delete(old_layout)
+
+    def parserescappmenues(self, menu_base):
+      
+      global code_list
+      global name_list
+      global description_list
+      global option_list
+      global current_pwd
+      
+      global chat_support_option
+      
+      self.selected_option_code = ""
+      
+      code_list = list ()
+      name_list = list ()
+      description_list = list()
+      option_list = list()
+      
+
+
+
+      
+      f=open(current_pwd + '/' + menu_base)
+      for mydir in f:
+	ndir = mydir.rstrip('\r\n');
+	dir_to_check = os.path.join(current_pwd, ndir)
+	print dir_to_check
+	if os.path.isdir(dir_to_check):
+	  
+	  new_option = RescappOption()
+	  new_option.setFromDir(dir_to_check, ndir)
+	  option_list.append(new_option)
+	  
+	  
+	else:
+	  print "DEBUG: Warning: " + dir_to_check + " was ignored because it was not a directory!"
+      self.drawMainWindows()
+
+    def drawMainWindows(self):
+      
+	global mainmenu_filename
+      
+	rows_per_option = 4
+	title_offset = 6
+	options_offset = 0
+	
+	
+	self.rescapp_title_l = QtGui.QLabel("<font size=+4><b><i>Rescatux "+ rescapp_version + " 's Rescapp</i></b></font>")
+        mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
+	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
+	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
+	self.rescue_btn.clicked.connect(self.runRescue)
+	self.rescue_btn.hide()
+	
+	
+	self.support_options_l = QtGui.QLabel("<b>Support options:</b>")
+	self.chat_btn = QtGui.QPushButton('Chat', self)
+	self.chat_btn.clicked.connect(partial(self.selectSupportOption,chat_support_option))
+	self.share_log_btn = QtGui.QPushButton('Share log', self)
+	self.share_log_btn.clicked.connect(partial(self.selectSupportOption,share_log_support_option))
+	self.share_log_forum_btn = QtGui.QPushButton('Share log on forum', self)
+	self.share_log_forum_btn.clicked.connect(partial(self.selectSupportOption,share_log_forum_support_option))
+	
+	
+	
+	self.selected_option_l = QtGui.QLabel("<b>Selected option:</b>")
+	self.selected_option_v = QtGui.QLabel("<NONE>");
+	self.selected_option_v.setWordWrap(True)
+
+	self.wb=QtWebKit.QWebView()
+	self.wb.load(url)
+	
+	code_title_label = QtGui.QLabel("<b>Code</b>")
+	name_title_label = QtGui.QLabel("<b>Name</b>")
+	description_title_label = QtGui.QLabel("<b>Description</b>")
+	
+	code_label_list = list ()
+	name_button_list = list ()
+	description_label_list = list ()
+	
+	for n_option in option_list:
+	  print "DEBUG: Option code: "+ n_option.getCode() +" was found"
+	  code_label_list.append(QtGui.QLabel(n_option.getCode()))
+	  name_button_list.append(QtGui.QPushButton(n_option.getName(), self))
+	  description_label_list.append(QtGui.QLabel(n_option.getDescription()))
+
+        grid = QtGui.QGridLayout()
+        grid.setSpacing(10)
+
+
+	grid.addWidget(self.rescapp_title_l,1,0,1+rows_per_option-1,10)
+	grid.addWidget(mainmenu_btn,title_offset,0,title_offset+rows_per_option-1,1)
+	grid.addWidget(self.selected_option_l,title_offset,2,title_offset+rows_per_option-1,1)
+	grid.addWidget(self.selected_option_v,title_offset,3,title_offset+rows_per_option-1,1)
+	grid.addWidget(self.rescue_btn,title_offset,10,title_offset+rows_per_option-1,1)
+	
+	grid.addWidget(self.support_options_l,title_offset+rows_per_option*(0),70,title_offset+rows_per_option*(0)+rows_per_option-1,2)
+	grid.addWidget(self.chat_btn,title_offset+rows_per_option*(1),70,title_offset+rows_per_option*(1)+rows_per_option-1,2)
+	grid.addWidget(self.share_log_btn,title_offset+rows_per_option*(2),70,title_offset+rows_per_option*(2)+rows_per_option-1,2)
+	grid.addWidget(self.share_log_forum_btn,title_offset+rows_per_option*(3),70,title_offset+rows_per_option*(3)+rows_per_option-1,2)
+	grid.addWidget(code_title_label,5+title_offset,0,5+1+title_offset,1)
+	grid.addWidget(name_title_label,5+title_offset,2,5+1+title_offset,1)
+	grid.addWidget(description_title_label,5+title_offset,3,5+1+title_offset,1)
+	options_offset = 5 + title_offset + 2 * (1)
+	
+	x_grid_position = 1
+	current_n_code_label_n = 1
+	for n_code_label_list in code_label_list:
+	  n_code_label_list.setWordWrap(True)
+	  grid.addWidget(n_code_label_list,options_offset+x_grid_position,0,options_offset+x_grid_position+rows_per_option - 1,1)
+	  x_grid_position = x_grid_position + rows_per_option
+	  current_n_code_label_n = current_n_code_label_n + 1
+	  
+	options_slot_list = list ()
+	x_grid_position = 1
+	current_n_name_button_n = 1
+	for n_name_button_list in name_button_list:
+	  
+	  for n_option in option_list:
+	    if (n_option.getCode() == code_list[current_n_name_button_n - 1]):
+	      if (n_option.getExecutable() == True):
+		print "DEBUG: Option " + n_option.getCode() + " is executable"
+		options_slot_list.append(partial(self.selectOption,code_list[current_n_name_button_n - 1]))
+		n_name_button_list.clicked.connect(options_slot_list[current_n_name_button_n - 1])
+		
+		# Button has a different format
+		# Appears as SelectedCommand QLabel if run
+		# Shows local doc at integrated webbrowser if run
+	      else:
+		# It acts as a menu button
+		print "DEBUG: Option " + n_option.getCode() + " is a menu"
+		options_slot_list.append(partial(self.parserescappmenues,code_list[current_n_name_button_n - 1] + '.lis'))
+		n_name_button_list.clicked.connect(options_slot_list[current_n_name_button_n - 1])
+		
+	  grid.addWidget(n_name_button_list,options_offset+x_grid_position,2,options_offset+x_grid_position+rows_per_option-1,1)
+	  x_grid_position = x_grid_position + rows_per_option
+	  current_n_name_button_n = current_n_name_button_n + 1
+
+	x_grid_position = 1
+	current_n_description_label_n = 1
+	for n_description_label_list in description_label_list:
+	  n_description_label_list.setWordWrap(True)
+	  grid.addWidget(n_description_label_list,options_offset+x_grid_position,3,options_offset+x_grid_position+rows_per_option-1,50)
+	  #print "a: " +str(x_grid_position) + "b: " +"2" +"c: " + str(x_grid_position+rows_per_option-1)+"d: " + "50"
+	  x_grid_position = x_grid_position + rows_per_option
+	  current_n_description_label_n = current_n_description_label_n + 1
+	  
+	  
+	  bottom_start = options_offset + (current_n_description_label_n * rows_per_option) + 8
+
+
+	
+	
+        grid.addWidget(self.wb, bottom_start + 5, 0, 30, 60)
+        
+        
+        
+	self.setLayout(grid)
+	#self.setMaximumWidth(800)
+	#self.setMaximumHeight(600)
+    def __init__(self, url):
+        QtGui.QMainWindow.__init__(self)
+	self.parserescappmenues(mainmenu_filename)
+
+        
+
+
+if __name__ == "__main__":
+  
+  
+    current_pwd=os.getcwd()
+    mainmenu_filename = 'rescatux.lis'
+    code_list = list ()
+    name_list = list ()
+    description_list = list()
+    option_list = list()
+    support_option_list = list ()
+    
+    name_filename='name'
+    description_filename='description'
+    run_filename='run'
+    offlinedoc_filename='local_doc.html'
+    version_filename='VERSION'
+    
+    if (os.path.isfile(current_pwd + '/' + version_filename)): 
+      rescapp_version = linecache.getline(current_pwd + '/' + version_filename, 1)
+      print "DEBUG: Version " + rescapp_version + " found."
+    else:
+      rescapp_version = "Unknown"
+      print "DEBUG: Warning! Version not found. Using 'Unknown' instead"
+      
+    chat_support_option= RescappOption()
+    chat_support_option.setFromDir(os.path.join(current_pwd, 'chat'), 'chat')
+    share_log_support_option= RescappOption()
+    share_log_support_option.setFromDir(os.path.join(current_pwd, 'share_log'), 'share_log')
+    share_log_forum_support_option= RescappOption()
+    share_log_forum_support_option.setFromDir(os.path.join(current_pwd, 'share_log_forum'), 'share_log_forum')
+
+    #To be renamed into help_support_option
+    #chat_support_option= RescappOption()
+    #chat_support_option.setFromDir(os.path.join(current_pwd, 'chat'), 'chat')
+    
+
+    
+    app=QtGui.QApplication(sys.argv)
+    url = QtCore.QUrl('http://localhost/')
+    mw=MainWindow(url)
+    mw.setWindowTitle('Rescapp')
+    # To be renamed into help support option
+    mw.selectSupportOption(chat_support_option)
+    mw.show()
+    sys.exit(app.exec_())
