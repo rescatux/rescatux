@@ -168,7 +168,7 @@ class MainWindow(QtGui.QWidget):
 	options_offset = 0
 	
 	
-	self.rescapp_title_l = QtGui.QLabel("<font size=+2><b><i>Rescapp "+ rescapp_version+"</b></font>")
+	#self.rescapp_title_l = QtGui.QLabel("<font size=+2><b><i>Rescapp "+ rescapp_version+"</b></font>")
         mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
 	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
 	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
@@ -204,10 +204,10 @@ class MainWindow(QtGui.QWidget):
 	  description_label_list.append(QtGui.QLabel(n_option.getDescription()))
 
         grid = QtGui.QGridLayout()
-        grid.setSpacing(10)
+        grid.setSpacing(0)
 
 
-	grid.addWidget(self.rescapp_title_l,0,4,1+rows_per_option-1,10)
+	#grid.addWidget(self.rescapp_title_l,0,4,1+rows_per_option-1,10)
 	grid.addWidget(mainmenu_btn,title_offset,0,title_offset+rows_per_option-1,1)
 	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
 	grid.addWidget(self.selected_option_l,title_offset,2,title_offset+rows_per_option-1,1)
@@ -263,13 +263,13 @@ class MainWindow(QtGui.QWidget):
 	  
 	  
 	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
-	grid.addWidget(self.wb, bottom_start + 5, 0, 3, 14)
+	grid.addWidget(self.wb, bottom_start + 5, 0, 5, 3)
         
         
         
 	self.setLayout(grid)
-	#self.setMaximumWidth(800)
-	#self.setMaximumHeight(600)
+	#self.setMaximumWidth(600 - 5)
+	self.setMaximumHeight(480 - 25)
     def __init__(self, url):
         QtGui.QMainWindow.__init__(self)
 	self.parserescappmenues(mainmenu_filename)
@@ -294,7 +294,7 @@ if __name__ == "__main__":
     offlinedoc_filename='local_doc.html'
     version_filename='VERSION'
     
-    maximum_option_columns=5
+    maximum_option_columns=3
     
     if (os.path.isfile(current_pwd + '/' + version_filename)): 
       rescapp_version = linecache.getline(current_pwd + '/' + version_filename, 1)
@@ -319,7 +319,7 @@ if __name__ == "__main__":
     app=QtGui.QApplication(sys.argv)
     url = QtCore.QUrl('http://localhost/')
     mw=MainWindow(url)
-    mw.setWindowTitle('Rescapp')
+    mw.setWindowTitle("Rescatux " + rescapp_version +"'s Rescapp")
     # To be renamed into help support option
     mw.selectSupportOption(chat_support_option)
     mw.show()
