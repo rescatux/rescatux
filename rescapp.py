@@ -204,7 +204,7 @@ class MainWindow(QtGui.QWidget):
 	  description_label_list.append(QtGui.QLabel(n_option.getDescription()))
 
         grid = QtGui.QGridLayout()
-        grid.setSpacing(0)
+        grid.setSpacing(10)
 
 
 	#grid.addWidget(self.rescapp_title_l,0,4,1+rows_per_option-1,10)
@@ -263,13 +263,13 @@ class MainWindow(QtGui.QWidget):
 	  
 	  
 	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
-	grid.addWidget(self.wb, bottom_start + 5, 0, 5, 3)
+	grid.addWidget(self.wb, bottom_start + 5, 0, 5, 5)
         
         
         
 	self.setLayout(grid)
 	#self.setMaximumWidth(600 - 5)
-	self.setMaximumHeight(400 - 25)
+	self.setMaximumHeight(570)
     def __init__(self, url):
         QtGui.QMainWindow.__init__(self)
 	self.parserescappmenues(mainmenu_filename)
