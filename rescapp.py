@@ -308,6 +308,7 @@ if __name__ == "__main__":
     
     if (os.path.isfile(current_pwd + '/' + version_filename)): 
       rescapp_version = linecache.getline(current_pwd + '/' + version_filename, 1)
+      rescapp_version = rescapp_version.rstrip('\r\n'); 
       print "DEBUG: Version " + rescapp_version + " found."
     else:
       rescapp_version = "Unknown"
