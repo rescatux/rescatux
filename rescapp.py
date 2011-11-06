@@ -173,7 +173,9 @@ class MainWindow(QtGui.QWidget):
 	#self.rescapp_title_l = QtGui.QLabel("<font size=+2><b><i>Rescapp "+ rescapp_version+"</b></font>")
         mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
 	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
+	mainmenu_btn.setToolTip("Go back to the Main Menu")
 	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
+	self.rescue_btn.setToolTip("Run selected option!")
 	self.rescue_btn.clicked.connect(self.runRescue)
 	self.rescue_btn.hide()
 	
@@ -181,10 +183,13 @@ class MainWindow(QtGui.QWidget):
 	#self.support_options_l = QtGui.QLabel("<b>Support:</b>")
 	self.chat_btn = QtGui.QPushButton('Chat', self)
 	self.chat_btn.clicked.connect(partial(self.selectSupportOption,chat_support_option))
+	self.chat_btn.setToolTip(chat_support_option.getDescription())
 	self.share_log_btn = QtGui.QPushButton('Share log', self)
 	self.share_log_btn.clicked.connect(partial(self.selectSupportOption,share_log_support_option))
+	self.share_log_btn.setToolTip(share_log_support_option.getDescription())
 	self.share_log_forum_btn = QtGui.QPushButton('Share log on forum', self)
 	self.share_log_forum_btn.clicked.connect(partial(self.selectSupportOption,share_log_forum_support_option))
+	self.share_log_forum_btn.setToolTip(share_log_forum_support_option.getDescription())
 	
 	
 	
@@ -202,7 +207,9 @@ class MainWindow(QtGui.QWidget):
 	for n_option in option_list:
 	  print "DEBUG: Option code: "+ n_option.getCode() +" was found"
 	  code_label_list.append(QtGui.QLabel(n_option.getCode()))
-	  name_button_list.append(QtGui.QPushButton(n_option.getName(), self))
+	  tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
+	  tmp_name_button.setToolTip(n_option.getDescription())
+	  name_button_list.append(tmp_name_button)
 	  description_label_list.append(QtGui.QLabel(n_option.getDescription()))
 
         grid = QtGui.QGridLayout()
