@@ -328,7 +328,7 @@ if __name__ == "__main__":
     app=QtGui.QApplication(sys.argv)
     url = QtCore.QUrl('http://localhost/')
     mw=MainWindow(url)
-    mw.setWindowTitle("Rescatux " + rescapp_version +"'s Rescapp")
+    mw.setWindowTitle("Rescatux " + rescapp_version +" Rescapp")
     # To be renamed into help support option
     mw.selectSupportOption(chat_support_option)
     mw.show()
