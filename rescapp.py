@@ -89,7 +89,8 @@ class MainWindow(QtGui.QWidget):
 	global offlinedoc_filename
 	self.selected_option_v.setText("<font size=+0><b>"+n_option.getName()+"</b></font>")
 	self.selected_option_code = n_option.getCode()
-	self.rescue_btn.show()
+	if (n_option.getExecutable() == True):
+	  self.rescue_btn.show()
 	
 	if (n_option.getHasOfflineDoc()):
 	  self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + n_option.getCode() + '/' + offlinedoc_filename))
@@ -242,8 +243,8 @@ class MainWindow(QtGui.QWidget):
 	  for n_option in option_list:
 	    if (n_option.getCode() == code_list[current_n_name_button_n - 1]):
 	      # TODO: Options that neither menues not executables but can show documentation
-	      if (n_option.getExecutable() == True):
-		print "DEBUG: Option " + n_option.getCode() + " is executable"
+	      if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
+		print "DEBUG: Option " + n_option.getCode() + " has offlinedoc and it is executable"
 		options_slot_list.append(partial(self.selectOption,code_list[current_n_name_button_n - 1]))
 		n_name_button_list.clicked.connect(options_slot_list[current_n_name_button_n - 1])
 		
@@ -258,7 +259,7 @@ class MainWindow(QtGui.QWidget):
 		
 	      grid.addWidget(n_name_button_list,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
 	    
-	      print "DEBUG: "+n_option.getCode()+" x1: "+ str(options_offset+name_pos_x) + " y1: " + str(name_pos_y) + " xs: " + str(rows_per_option) + " ys: " + "1"
+	      #print "DEBUG: "+n_option.getCode()+" x1: "+ str(options_offset+name_pos_x) + " y1: " + str(name_pos_y) + " xs: " + str(rows_per_option) + " ys: " + "1"
 	      
 	      name_pos_y=name_pos_y + 1
 	      if ((name_pos_y % maximum_option_columns) == 0):
