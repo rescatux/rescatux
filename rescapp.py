@@ -320,16 +320,16 @@ if __name__ == "__main__":
     share_log_forum_support_option.setFromDir(os.path.join(current_pwd, 'share_log_forum'), 'share_log_forum')
 
     #To be renamed into help_support_option
-    #chat_support_option= RescappOption()
-    #chat_support_option.setFromDir(os.path.join(current_pwd, 'chat'), 'chat')
+    help_support_option= RescappOption()
+    help_support_option.setFromDir(os.path.join(current_pwd, 'help-rescapp'), 'help-rescapp')
     
 
     
     app=QtGui.QApplication(sys.argv)
-    url = QtCore.QUrl('http://localhost/')
+    url = QtCore.QUrl('file:///' + current_pwd + '/' + help_support_option.getCode() + '/' + offlinedoc_filename)
     mw=MainWindow(url)
     mw.setWindowTitle("Rescatux " + rescapp_version +" Rescapp")
     # To be renamed into help support option
-    mw.selectSupportOption(chat_support_option)
+    mw.selectSupportOption(help_support_option)
     mw.show()
     sys.exit(app.exec_())
