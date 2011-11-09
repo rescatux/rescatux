@@ -87,10 +87,11 @@ class MainWindow(QtGui.QWidget):
 	global description_filename
 	global run_filename
 	global offlinedoc_filename
-	self.selected_option_v.setText("<font size=+0><b>"+n_option.getName()+"</b></font>")
+	#self.selected_option_v.setText("<font size=+0><b>"+n_option.getName()+"</b></font>")
 	self.selected_option_code = n_option.getCode()
 	if (n_option.getExecutable() == True):
 	  self.rescue_btn.show()
+	  self.rescue_btn.setText("Run: " +n_option.getName()+ "!")
 	
 	if (n_option.getHasOfflineDoc()):
 	  self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + n_option.getCode() + '/' + offlinedoc_filename))
@@ -195,8 +196,8 @@ class MainWindow(QtGui.QWidget):
 	
 	
 	#self.selected_option_l = QtGui.QLabel("<b>Selected option:</b>")
-	self.selected_option_v = QtGui.QLabel("<No selected option>");
-	self.selected_option_v.setWordWrap(True)
+	#self.selected_option_v = QtGui.QLabel("<No selected option>");
+	#self.selected_option_v.setWordWrap(True)
 
 	self.wb=QtWebKit.QWebView()
 	self.wb.load(url)
@@ -221,7 +222,7 @@ class MainWindow(QtGui.QWidget):
 	
 	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
 	#grid.addWidget(self.selected_option_l,title_offset,2,title_offset+rows_per_option-1,1)
-	grid.addWidget(self.selected_option_v,title_offset,2,title_offset+rows_per_option-1,4)
+	#grid.addWidget(self.selected_option_v,title_offset,2,title_offset+rows_per_option-1,4)
 	
 	#grid.addWidget(self.support_options_l,0,0,1,2)
 	grid.addWidget(mainmenu_btn,0,0,1,1)
