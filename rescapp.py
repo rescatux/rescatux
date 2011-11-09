@@ -218,15 +218,16 @@ class MainWindow(QtGui.QWidget):
 
 
 	#grid.addWidget(self.rescapp_title_l,0,4,1+rows_per_option-1,10)
-	grid.addWidget(mainmenu_btn,title_offset,0,title_offset+rows_per_option-1,1)
+	
 	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
 	#grid.addWidget(self.selected_option_l,title_offset,2,title_offset+rows_per_option-1,1)
 	grid.addWidget(self.selected_option_v,title_offset,2,title_offset+rows_per_option-1,4)
 	
 	#grid.addWidget(self.support_options_l,0,0,1,2)
-	grid.addWidget(self.chat_btn,0,0,1,1)
-	grid.addWidget(self.share_log_btn,0,1,1,1)
-	grid.addWidget(self.share_log_forum_btn,0,2,1,1)
+	grid.addWidget(mainmenu_btn,0,0,1,1)
+	grid.addWidget(self.chat_btn,0,1,1,1)
+	grid.addWidget(self.share_log_btn,0,2,1,1)
+	grid.addWidget(self.share_log_forum_btn,0,3,1,1)
 
 	options_offset = 1 + title_offset
 	  
