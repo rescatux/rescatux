@@ -92,6 +92,7 @@ class MainWindow(QtGui.QWidget):
 	if (n_option.getExecutable() == True):
 	  self.rescue_btn.show()
 	  self.rescue_btn.setText("Run: " +n_option.getName()+ "!")
+	  self.rescue_btn.setToolTip(n_option.getDescription())
 	
 	if (n_option.getHasOfflineDoc()):
 	  self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + n_option.getCode() + '/' + offlinedoc_filename))
