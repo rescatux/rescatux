@@ -88,16 +88,10 @@ class MainWindow(QtGui.QWidget):
 	global run_filename
 	global offlinedoc_filename
 
+	self.selected_option = n_option
 	self.selected_option_code = n_option.getCode()
-	if (n_option.getExecutable() == True):
-	  self.rescue_btn.show()
-	  self.rescue_btn.setText("Run: " +n_option.getName()+ "!")
-	  self.rescue_btn.setToolTip(n_option.getDescription())
-	else:
-	  self.rescue_btn.hide()
+	self.drawMainWindows()
 	
-	if (n_option.getHasOfflineDoc()):
-	  self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + n_option.getCode() + '/' + offlinedoc_filename))
     def selectOption(self, option_code):
 	global option_list
 	
@@ -139,6 +133,8 @@ class MainWindow(QtGui.QWidget):
       global chat_support_option
       
       self.selected_option_code = ""
+      #if (hasattr(self, 'selected_option') == False ):
+	#self.selected_option = help_support_option
       
       code_list = list ()
       name_list = list ()
@@ -159,8 +155,11 @@ class MainWindow(QtGui.QWidget):
 	  
 	else:
 	  print "DEBUG: Warning: " + dir_to_check + " was ignored because it was not a directory!"
+      print "DEBUG: menu_base: " + menu_base
+      if (menu_base == "rescatux.lis"):
+	self.selected_option = help_support_option
       self.drawMainWindows()
-
+      
     def drawMainWindows(self):
       
 	global mainmenu_filename
@@ -176,7 +175,17 @@ class MainWindow(QtGui.QWidget):
 	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
 	self.rescue_btn.setToolTip("Run selected option!")
 	self.rescue_btn.clicked.connect(self.runRescue)
-	self.rescue_btn.hide()
+	
+	if (self.selected_option.getExecutable() == True):
+	  self.rescue_btn.show()
+	  self.rescue_btn.setText("Run: " +self.selected_option.getName()+ "!")
+	  self.rescue_btn.setToolTip(self.selected_option.getDescription())
+	else:
+	  if (hasattr(self, 'rescue_btn') == True ):
+	    self.rescue_btn.hide()
+
+
+	
 	
 	self.chat_btn = QtGui.QPushButton(chat_support_option.getName(), self)
 	self.chat_btn.clicked.connect(partial(self.selectSupportOption,chat_support_option))
@@ -205,37 +214,37 @@ class MainWindow(QtGui.QWidget):
 	  
 	options_slot_list = list ()
 	x_grid_position = 1
-	current_n_name_button_n = 1
 	
 	name_pos_x = 1
 	name_pos_y = 0
-
-	for n_option in option_list:
-	  print "DEBUG: Option code: "+ n_option.getCode() +" was found"
-	  tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
-	  tmp_name_button.setToolTip(n_option.getDescription())
-	  
-	  if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
-	    print "DEBUG: Option " + n_option.getCode() + " has offlinedoc and it is executable"
-	    tmp_option_slot_list = partial(self.selectOption,n_option.getCode())
-	    tmp_name_button.clicked.connect(tmp_option_slot_list)
-	  else:
-	    print "DEBUG: Option " + n_option.getCode() + " is a menu"
-	    tmp_option_slot_list = partial(self.parserescappmenues,n_option.getCode() + '.lis')
-	    tmp_name_button.clicked.connect(tmp_option_slot_list)
+	print "DEBUG: selected option code: " + self.selected_option.getCode()
+	if ((self.selected_option.isMenu() == True ) or (self.selected_option.getCode() == "help-rescapp")):
+	  for n_option in option_list:
+	    print "DEBUG: Option code: "+ n_option.getCode() +" was found"
+	    tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
+	    tmp_name_button.setToolTip(n_option.getDescription())
 	    
-	  grid.addWidget(tmp_name_button,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
-	  name_pos_y=name_pos_y + 1
-	  if ((name_pos_y % maximum_option_columns) == 0):
-	    name_pos_x=name_pos_x + 1
-	    x_grid_position = x_grid_position + rows_per_option
-	    name_pos_y=0
-	  
-	current_n_name_button_n = current_n_name_button_n + 1 
+	    if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
+	      print "DEBUG: Option " + n_option.getCode() + " has offlinedoc and it is executable"
+	      tmp_option_slot_list = partial(self.selectOption,n_option.getCode())
+	      tmp_name_button.clicked.connect(tmp_option_slot_list)
+	    else:
+	      print "DEBUG: Option " + n_option.getCode() + " is a menu"
+	      tmp_option_slot_list = partial(self.parserescappmenues,n_option.getCode() + '.lis')
+	      tmp_name_button.clicked.connect(tmp_option_slot_list)
+	      
+	    grid.addWidget(tmp_name_button,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
+	    name_pos_y=name_pos_y + 1
+	    if ((name_pos_y % maximum_option_columns) == 0):
+	      name_pos_x=name_pos_x + 1
+	      x_grid_position = x_grid_position + rows_per_option
+	      name_pos_y=0
 	  
 	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
 	grid.addWidget(self.wb, bottom_start + 5, 0, 5, 5)
-        
+	
+	if (self.selected_option.getHasOfflineDoc()):
+	  self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + self.selected_option.getCode() + '/' + offlinedoc_filename))        
         
         
 	self.setLayout(grid)
