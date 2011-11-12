@@ -145,10 +145,6 @@ class MainWindow(QtGui.QWidget):
       description_list = list()
       option_list = list()
       
-
-
-
-      
       f=open(current_pwd + '/' + menu_base)
       for mydir in f:
 	ndir = mydir.rstrip('\r\n');
@@ -197,7 +193,6 @@ class MainWindow(QtGui.QWidget):
 	
 	code_label_list = list ()
 	name_button_list = list ()
-	description_label_list = list ()
 	
 	for n_option in option_list:
 	  print "DEBUG: Option code: "+ n_option.getCode() +" was found"
@@ -205,7 +200,6 @@ class MainWindow(QtGui.QWidget):
 	  tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
 	  tmp_name_button.setToolTip(n_option.getDescription())
 	  name_button_list.append(tmp_name_button)
-	  description_label_list.append(QtGui.QLabel(n_option.getDescription()))
 
         grid = QtGui.QGridLayout()
         grid.setSpacing(10)
