@@ -17,7 +17,7 @@ class RescappOption():
       self.executable=False
       
     def isMenu(self):
-      return (self.isOption == "false")
+      return (self.isOption == False)
     def isOption(self):
       return ((self.isMenu(self)) == False)
     def setCode(self,code):
