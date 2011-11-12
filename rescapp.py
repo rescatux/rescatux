@@ -191,12 +191,10 @@ class MainWindow(QtGui.QWidget):
 	self.wb=QtWebKit.QWebView()
 	self.wb.load(url)
 	
-	code_label_list = list ()
 	name_button_list = list ()
 	
 	for n_option in option_list:
 	  print "DEBUG: Option code: "+ n_option.getCode() +" was found"
-	  code_label_list.append(QtGui.QLabel(n_option.getCode()))
 	  tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
 	  tmp_name_button.setToolTip(n_option.getDescription())
 	  name_button_list.append(tmp_name_button)
