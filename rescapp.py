@@ -91,10 +91,10 @@ class MainWindow(QtGui.QWidget):
 
 	self.selected_option = n_option
 	self.selected_option_code = n_option.getCode()
-	if (self.selected_option_code != "rescatux.lis"):
-	  option_history_list.append(n_option)
-	else:
-	  del option_history_list[:]
+	print "DEBUG: selected_option_code in selectOptionCommon: " + self.selected_option_code
+	option_history_list.append(n_option)
+	if (self.selected_option_code == "help-rescapp"):
+	  self.parserescappmenues('rescatux.lis')
 	self.drawMainWindows()
 	
     def selectOption(self, option_code):
@@ -104,19 +104,25 @@ class MainWindow(QtGui.QWidget):
 	for n_option in option_list:	    
 	    if (n_option.getCode() == option_code):
 	      self.selectOptionCommon(n_option)
-	      
+
     def selectPreviousOption(self):
 	global option_history_list
-	
+	print "DEBUG: option_history_list contents: "
+	for debug_option in (option_history_list):
+	  print "Debug content: " + debug_option.getCode()
+	n_option = option_history_list.pop()
 	n_option = option_history_list.pop()
 	print "DEBUG: Selecting previous option (code): " + n_option.getCode()
-	self.selectOption(n_option.getCode())
+	self.selectSupportOption(n_option)
 	      
     def selectSupportOption(self, support_RescappOption):
 	print "DEBUG: Selecting Support option (code): " + support_RescappOption.getCode()
 	self.selectOptionCommon(support_RescappOption)
 	
-	
+    def selectMenu(self, menuOption):
+	print "DEBUG: Selecting Menu option (code): " + menuOption.getCode()
+	self.selectOptionCommon(menuOption)
+	self.parserescappmenues(menuOption.getCode() + '.lis')
 	
     def runRescue(self):
 	print "DEBUG: Running option (code) [BEGIN]: " + self.selected_option_code
@@ -145,8 +151,6 @@ class MainWindow(QtGui.QWidget):
       global chat_support_option
       
       self.selected_option_code = ""
-      #if (hasattr(self, 'selected_option') == False ):
-	#self.selected_option = help_support_option
       
       code_list = list ()
       name_list = list ()
@@ -248,12 +252,12 @@ class MainWindow(QtGui.QWidget):
 	    
 	    if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
 	      print "DEBUG: Option " + n_option.getCode() + " has offlinedoc and it is executable"
-	      tmp_option_slot_list = partial(self.selectOption,n_option.getCode())
-	      tmp_name_button.clicked.connect(tmp_option_slot_list)
+	      tmp_option_slot = partial(self.selectOption,n_option.getCode())
+	      tmp_name_button.clicked.connect(tmp_option_slot)
 	    else:
 	      print "DEBUG: Option " + n_option.getCode() + " is a menu"
-	      tmp_option_slot_list = partial(self.parserescappmenues,n_option.getCode() + '.lis')
-	      tmp_name_button.clicked.connect(tmp_option_slot_list)
+	      tmp_option_slot = partial(self.selectMenu,n_option)
+	      tmp_name_button.clicked.connect(tmp_option_slot)
 	      
 	    grid.addWidget(tmp_name_button,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
 	    name_pos_y=name_pos_y + 1
