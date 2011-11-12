@@ -239,6 +239,11 @@ class MainWindow(QtGui.QWidget):
 	      name_pos_x=name_pos_x + 1
 	      x_grid_position = x_grid_position + rows_per_option
 	      name_pos_y=0
+	else:
+	  tmp_description_label = QtGui.QLabel("<b>" + self.selected_option.getDescription()+"</b>")
+	  tmp_description_label.setWordWrap(True)
+	  grid.addWidget(tmp_description_label,options_offset+name_pos_x,name_pos_y,rows_per_option,4)
+	  name_pos_x=name_pos_x + 1
 	  
 	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
 	grid.addWidget(self.wb, bottom_start + 5, 0, 5, 5)
