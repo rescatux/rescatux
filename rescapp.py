@@ -190,14 +190,6 @@ class MainWindow(QtGui.QWidget):
 
 	self.wb=QtWebKit.QWebView()
 	self.wb.load(url)
-	
-	name_button_list = list ()
-	
-	for n_option in option_list:
-	  print "DEBUG: Option code: "+ n_option.getCode() +" was found"
-	  tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
-	  tmp_name_button.setToolTip(n_option.getDescription())
-	  name_button_list.append(tmp_name_button)
 
         grid = QtGui.QGridLayout()
         grid.setSpacing(10)
@@ -218,31 +210,28 @@ class MainWindow(QtGui.QWidget):
 	name_pos_x = 1
 	name_pos_y = 0
 
-	for n_name_button_list in name_button_list:
+	for n_option in option_list:
+	  print "DEBUG: Option code: "+ n_option.getCode() +" was found"
+	  tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
+	  tmp_name_button.setToolTip(n_option.getDescription())
 	  
-	  
-	  for n_option in option_list:
-	    if (n_option.getCode() == code_list[current_n_name_button_n - 1]):
-	      if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
-		print "DEBUG: Option " + n_option.getCode() + " has offlinedoc and it is executable"
-		options_slot_list.append(partial(self.selectOption,code_list[current_n_name_button_n - 1]))
-		n_name_button_list.clicked.connect(options_slot_list[current_n_name_button_n - 1])
-	      else:
-		print "DEBUG: Option " + n_option.getCode() + " is a menu"
-		options_slot_list.append(partial(self.parserescappmenues,code_list[current_n_name_button_n - 1] + '.lis'))
-		n_name_button_list.clicked.connect(options_slot_list[current_n_name_button_n - 1])
-		
-	      grid.addWidget(n_name_button_list,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
-	      name_pos_y=name_pos_y + 1
-	      if ((name_pos_y % maximum_option_columns) == 0):
-		name_pos_x=name_pos_x + 1
-		x_grid_position = x_grid_position + rows_per_option
-		name_pos_y=0
+	  if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
+	    print "DEBUG: Option " + n_option.getCode() + " has offlinedoc and it is executable"
+	    tmp_option_slot_list = partial(self.selectOption,n_option.getCode())
+	    tmp_name_button.clicked.connect(tmp_option_slot_list)
+	  else:
+	    print "DEBUG: Option " + n_option.getCode() + " is a menu"
+	    tmp_option_slot_list = partial(self.parserescappmenues,n_option.getCode() + '.lis')
+	    tmp_name_button.clicked.connect(tmp_option_slot_list)
 	    
-	      
-	      
-	  current_n_name_button_n = current_n_name_button_n + 1 
+	  grid.addWidget(tmp_name_button,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
+	  name_pos_y=name_pos_y + 1
+	  if ((name_pos_y % maximum_option_columns) == 0):
+	    name_pos_x=name_pos_x + 1
+	    x_grid_position = x_grid_position + rows_per_option
+	    name_pos_y=0
 	  
+	current_n_name_button_n = current_n_name_button_n + 1 
 	  
 	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
 	grid.addWidget(self.wb, bottom_start + 5, 0, 5, 5)
