@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#"A web browser that will never exceed 128 lines of code. (not counting blanks)"
+# Rescapp
 
 import sys, subprocess, os, time, linecache, sip
 from PyQt4 import QtGui,QtCore,QtWebKit
@@ -87,7 +87,7 @@ class MainWindow(QtGui.QWidget):
 	global description_filename
 	global run_filename
 	global offlinedoc_filename
-	#self.selected_option_v.setText("<font size=+0><b>"+n_option.getName()+"</b></font>")
+
 	self.selected_option_code = n_option.getCode()
 	if (n_option.getExecutable() == True):
 	  self.rescue_btn.show()
@@ -174,8 +174,6 @@ class MainWindow(QtGui.QWidget):
 	title_offset = 1
 	options_offset = 0
 	
-	
-	#self.rescapp_title_l = QtGui.QLabel("<font size=+2><b><i>Rescapp "+ rescapp_version+"</b></font>")
         mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
 	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
 	mainmenu_btn.setToolTip("Go back to the Main Menu")
@@ -184,8 +182,6 @@ class MainWindow(QtGui.QWidget):
 	self.rescue_btn.clicked.connect(self.runRescue)
 	self.rescue_btn.hide()
 	
-	
-	#self.support_options_l = QtGui.QLabel("<b>Support:</b>")
 	self.chat_btn = QtGui.QPushButton(chat_support_option.getName(), self)
 	self.chat_btn.clicked.connect(partial(self.selectSupportOption,chat_support_option))
 	self.chat_btn.setToolTip(chat_support_option.getDescription())
@@ -195,12 +191,6 @@ class MainWindow(QtGui.QWidget):
 	self.help_btn = QtGui.QPushButton(help_support_option.getName(), self)
 	self.help_btn.clicked.connect(partial(self.selectSupportOption,help_support_option))
 	self.help_btn.setToolTip(help_support_option.getDescription())
-	
-	
-	
-	#self.selected_option_l = QtGui.QLabel("<b>Selected option:</b>")
-	#self.selected_option_v = QtGui.QLabel("<No selected option>");
-	#self.selected_option_v.setWordWrap(True)
 
 	self.wb=QtWebKit.QWebView()
 	self.wb.load(url)
@@ -219,19 +209,13 @@ class MainWindow(QtGui.QWidget):
 
         grid = QtGui.QGridLayout()
         grid.setSpacing(10)
-
-
-	#grid.addWidget(self.rescapp_title_l,0,4,1+rows_per_option-1,10)
 	
-	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
-	#grid.addWidget(self.selected_option_l,title_offset,2,title_offset+rows_per_option-1,1)
-	#grid.addWidget(self.selected_option_v,title_offset,2,title_offset+rows_per_option-1,4)
-	
-	#grid.addWidget(self.support_options_l,0,0,1,2)
+
 	grid.addWidget(mainmenu_btn,0,0,1,1)
 	grid.addWidget(self.chat_btn,0,1,1,1)
 	grid.addWidget(self.share_log_btn,0,2,1,1)
 	grid.addWidget(self.help_btn,0,3,1,1)
+	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
 
 	options_offset = 1 + title_offset
 	  
@@ -247,25 +231,16 @@ class MainWindow(QtGui.QWidget):
 	  
 	  for n_option in option_list:
 	    if (n_option.getCode() == code_list[current_n_name_button_n - 1]):
-	      # TODO: Options that neither menues not executables but can show documentation
 	      if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
 		print "DEBUG: Option " + n_option.getCode() + " has offlinedoc and it is executable"
 		options_slot_list.append(partial(self.selectOption,code_list[current_n_name_button_n - 1]))
 		n_name_button_list.clicked.connect(options_slot_list[current_n_name_button_n - 1])
-		
-		# Button has a different format
-		# Appears as SelectedCommand QLabel if run
-		# Shows local doc at integrated webbrowser if run
 	      else:
-		# It acts as a menu button
 		print "DEBUG: Option " + n_option.getCode() + " is a menu"
 		options_slot_list.append(partial(self.parserescappmenues,code_list[current_n_name_button_n - 1] + '.lis'))
 		n_name_button_list.clicked.connect(options_slot_list[current_n_name_button_n - 1])
 		
 	      grid.addWidget(n_name_button_list,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
-	    
-	      #print "DEBUG: "+n_option.getCode()+" x1: "+ str(options_offset+name_pos_x) + " y1: " + str(name_pos_y) + " xs: " + str(rows_per_option) + " ys: " + "1"
-	      
 	      name_pos_y=name_pos_y + 1
 	      if ((name_pos_y % maximum_option_columns) == 0):
 		name_pos_x=name_pos_x + 1
@@ -283,7 +258,6 @@ class MainWindow(QtGui.QWidget):
         
         
 	self.setLayout(grid)
-	#self.setMaximumWidth(600 - 5)
 	self.setMaximumHeight(570)
     def __init__(self, url):
         QtGui.QMainWindow.__init__(self)
@@ -324,17 +298,14 @@ if __name__ == "__main__":
     share_log_support_option= RescappOption()
     share_log_support_option.setFromDir(os.path.join(current_pwd, 'share_log'), 'share_log')
 
-    #To be renamed into help_support_option
     help_support_option= RescappOption()
     help_support_option.setFromDir(os.path.join(current_pwd, 'help-rescapp'), 'help-rescapp')
-    
-
     
     app=QtGui.QApplication(sys.argv)
     url = QtCore.QUrl('file:///' + current_pwd + '/' + help_support_option.getCode() + '/' + offlinedoc_filename)
     mw=MainWindow(url)
     mw.setWindowTitle("Rescatux " + rescapp_version +" Rescapp")
-    # To be renamed into help support option
+
     mw.selectSupportOption(help_support_option)
     mw.show()
     sys.exit(app.exec_())
