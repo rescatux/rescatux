@@ -87,9 +87,14 @@ class MainWindow(QtGui.QWidget):
 	global description_filename
 	global run_filename
 	global offlinedoc_filename
+	global option_history_list
 
 	self.selected_option = n_option
 	self.selected_option_code = n_option.getCode()
+	if (self.selected_option_code != "rescatux.lis"):
+	  option_history_list.append(n_option)
+	else:
+	  del option_history_list[:]
 	self.drawMainWindows()
 	
     def selectOption(self, option_code):
@@ -99,7 +104,14 @@ class MainWindow(QtGui.QWidget):
 	for n_option in option_list:	    
 	    if (n_option.getCode() == option_code):
 	      self.selectOptionCommon(n_option)
-
+	      
+    def selectPreviousOption(self):
+	global option_history_list
+	
+	n_option = option_history_list.pop()
+	print "DEBUG: Selecting previous option (code): " + n_option.getCode()
+	self.selectOption(n_option.getCode())
+	      
     def selectSupportOption(self, support_RescappOption):
 	print "DEBUG: Selecting Support option (code): " + support_RescappOption.getCode()
 	self.selectOptionCommon(support_RescappOption)
@@ -172,6 +184,11 @@ class MainWindow(QtGui.QWidget):
         mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
 	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
 	mainmenu_btn.setToolTip("Go back to the Main Menu")
+	
+        back_btn = QtGui.QPushButton('BACK', self)
+	back_btn.clicked.connect(self.selectPreviousOption)
+	back_btn.setToolTip("Go back to the previous option")	
+	
 	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
 	self.rescue_btn.setToolTip("Run selected option!")
 	self.rescue_btn.clicked.connect(self.runRescue)
@@ -205,9 +222,14 @@ class MainWindow(QtGui.QWidget):
 	
 
 	grid.addWidget(mainmenu_btn,0,0,1,1)
-	grid.addWidget(self.chat_btn,0,1,1,1)
-	grid.addWidget(self.share_log_btn,0,2,1,1)
-	grid.addWidget(self.help_btn,0,3,1,1)
+	if (len (option_history_list) > 1):
+	  grid.addWidget(back_btn,0,1,1,1)
+	else:
+	  grid.addWidget(back_btn,0,1,1,1)
+	  back_btn.hide()
+	grid.addWidget(self.chat_btn,0,2,1,1)
+	grid.addWidget(self.share_log_btn,0,3,1,1)
+	grid.addWidget(self.help_btn,0,4,1,1)
 	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
 
 	options_offset = 1 + title_offset
@@ -271,6 +293,7 @@ if __name__ == "__main__":
     description_list = list()
     option_list = list()
     support_option_list = list ()
+    option_history_list = list ()
     
     name_filename='name'
     description_filename='description'
