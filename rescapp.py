@@ -184,15 +184,15 @@ class MainWindow(QtGui.QWidget):
 	
 	
 	#self.support_options_l = QtGui.QLabel("<b>Support:</b>")
-	self.chat_btn = QtGui.QPushButton('Chat', self)
+	self.chat_btn = QtGui.QPushButton(chat_support_option.getName(), self)
 	self.chat_btn.clicked.connect(partial(self.selectSupportOption,chat_support_option))
 	self.chat_btn.setToolTip(chat_support_option.getDescription())
-	self.share_log_btn = QtGui.QPushButton('Share log', self)
+	self.share_log_btn = QtGui.QPushButton(share_log_support_option.getName(), self)
 	self.share_log_btn.clicked.connect(partial(self.selectSupportOption,share_log_support_option))
 	self.share_log_btn.setToolTip(share_log_support_option.getDescription())
-	self.share_log_forum_btn = QtGui.QPushButton('Share log on forum', self)
-	self.share_log_forum_btn.clicked.connect(partial(self.selectSupportOption,share_log_forum_support_option))
-	self.share_log_forum_btn.setToolTip(share_log_forum_support_option.getDescription())
+	self.help_btn = QtGui.QPushButton(help_support_option.getName(), self)
+	self.help_btn.clicked.connect(partial(self.selectSupportOption,help_support_option))
+	self.help_btn.setToolTip(help_support_option.getDescription())
 	
 	
 	
@@ -229,7 +229,7 @@ class MainWindow(QtGui.QWidget):
 	grid.addWidget(mainmenu_btn,0,0,1,1)
 	grid.addWidget(self.chat_btn,0,1,1,1)
 	grid.addWidget(self.share_log_btn,0,2,1,1)
-	grid.addWidget(self.share_log_forum_btn,0,3,1,1)
+	grid.addWidget(self.help_btn,0,3,1,1)
 
 	options_offset = 1 + title_offset
 	  
@@ -321,8 +321,6 @@ if __name__ == "__main__":
     chat_support_option.setFromDir(os.path.join(current_pwd, 'chat'), 'chat')
     share_log_support_option= RescappOption()
     share_log_support_option.setFromDir(os.path.join(current_pwd, 'share_log'), 'share_log')
-    share_log_forum_support_option= RescappOption()
-    share_log_forum_support_option.setFromDir(os.path.join(current_pwd, 'share_log_forum'), 'share_log_forum')
 
     #To be renamed into help_support_option
     help_support_option= RescappOption()
