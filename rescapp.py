@@ -188,18 +188,21 @@ class MainWindow(QtGui.QWidget):
         mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
 	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
 	mainmenu_btn.setToolTip("Go back to the Main Menu")
+	mainmenu_btn.setIcon(QtGui.QIcon(mainmenu_icon_path))
 	
         back_btn = QtGui.QPushButton('BACK', self)
 	back_btn.clicked.connect(self.selectPreviousOption)
-	back_btn.setToolTip("Go back to the previous option")	
+	back_btn.setToolTip("Go back to the previous option")
+	back_btn.setIcon(QtGui.QIcon(back_icon_path))
 	
 	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
 	self.rescue_btn.setToolTip("Run selected option!")
 	self.rescue_btn.clicked.connect(self.runRescue)
+	self.rescue_btn.setIcon(QtGui.QIcon(rescue_icon_path))
 	
 	if (self.selected_option.getExecutable() == True):
 	  self.rescue_btn.show()
-	  self.rescue_btn.setText("Run: " +self.selected_option.getName()+ "!")
+	  self.rescue_btn.setText(self.selected_option.getName()+ "!!!")
 	  self.rescue_btn.setToolTip(self.selected_option.getDescription())
 	else:
 	  if (hasattr(self, 'rescue_btn') == True ):
@@ -211,12 +214,17 @@ class MainWindow(QtGui.QWidget):
 	self.chat_btn = QtGui.QPushButton(chat_support_option.getName(), self)
 	self.chat_btn.clicked.connect(partial(self.selectSupportOption,chat_support_option))
 	self.chat_btn.setToolTip(chat_support_option.getDescription())
+	self.chat_btn.setIcon(QtGui.QIcon(support_icon_path))
+	
 	self.share_log_btn = QtGui.QPushButton(share_log_support_option.getName(), self)
 	self.share_log_btn.clicked.connect(partial(self.selectSupportOption,share_log_support_option))
 	self.share_log_btn.setToolTip(share_log_support_option.getDescription())
+	self.share_log_btn.setIcon(QtGui.QIcon(support_icon_path))
+	
 	self.help_btn = QtGui.QPushButton(help_support_option.getName(), self)
 	self.help_btn.clicked.connect(partial(self.selectSupportOption,help_support_option))
 	self.help_btn.setToolTip(help_support_option.getDescription())
+	self.help_btn.setIcon(QtGui.QIcon(support_icon_path))
 
 	self.wb=QtWebKit.QWebView()
 	self.wb.load(url)
@@ -258,6 +266,7 @@ class MainWindow(QtGui.QWidget):
 	      print "DEBUG: Option " + n_option.getCode() + " is a menu"
 	      tmp_option_slot = partial(self.selectMenu,n_option)
 	      tmp_name_button.clicked.connect(tmp_option_slot)
+	      tmp_name_button.setIcon(QtGui.QIcon(menu_icon_path))
 	      
 	    grid.addWidget(tmp_name_button,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
 	    name_pos_y=name_pos_y + 1
@@ -314,7 +323,14 @@ if __name__ == "__main__":
     else:
       rescapp_version = "Unknown"
       print "DEBUG: Warning! Version not found. Using 'Unknown' instead"
-      
+    
+    images_path = current_pwd + '/' + "images"
+    mainmenu_icon_path = images_path + "/" + "go-home.png"
+    back_icon_path = images_path + "/" + "go-previous.png"
+    menu_icon_path = images_path + "/" + "folder.png"
+    support_icon_path = images_path + "/" + "help-browser.png"
+    rescue_icon_path = images_path + "/" + "text-x-script.png"
+    
     chat_support_option= RescappOption()
     chat_support_option.setFromDir(os.path.join(current_pwd, 'chat'), 'chat')
     share_log_support_option= RescappOption()
