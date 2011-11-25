@@ -45,8 +45,10 @@ function rtux_Grub_Install () {
       rtux_File_Chroot_Script_Device_Map \
       "if ${GRUB_INSTALL_BINARY}.unsupported --version ; then " \
       "${GRUB_INSTALL_BINARY}.unsupported ${SELECTED_HARD_DISK_DEV} ;"\
-      " else " \
+      " elif " \
       "${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV} ;" \
+      " else " \
+      "grub2-install ${SELECTED_HARD_DISK_DEV} ;" \
       "fi" \
       > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
       
