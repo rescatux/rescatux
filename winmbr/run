@@ -31,7 +31,7 @@ function rtux_Winmbr_Install () {
   else
     local OTHER_HARD_DISK_PARAMETRE="-d 0x${BIOS_HARD_DISK}"
   fi
-  install-mbr ${OTHER_HARD_DISK_PARAMETRE} -e ${SELECTED_PARTITION_NUMBER} /dev/${SELECTED_HARD_DISK}
+  install-mbr ${OTHER_HARD_DISK_PARAMETRE} -i n -e =${SELECTED_PARTITION_NUMBER} /dev/${SELECTED_HARD_DISK}
   EXIT_VALUE=$?
   return ${EXIT_VALUE}
 
