@@ -38,7 +38,12 @@ function rtux_Grub_Update_Config () {
       local TMP_SCRIPT="/tmp/$$.sh"
       local TMP_MNT_PARTITION_SCRIPT="${TMP_MNT_PARTITION}${TMP_SCRIPT}"
 
-      rtux_File_Chroot_Script_Device_Map ${UPDATE_GRUB_BINARY} \
+      rtux_File_Chroot_Script_Device_Map \
+      "if ${UPDATE_GRUB_BINARY} --version ; then " \
+      "${UPDATE_GRUB_BINARY} ;"\
+      " else " \
+      "update-grub2 ;" \
+      "fi" \
       > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
 
       chmod +x ${TMP_MNT_PARTITION_SCRIPT}
