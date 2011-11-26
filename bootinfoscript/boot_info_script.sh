@@ -1,10 +1,12 @@
 #!/bin/bash
 VERSION='0.60';
-DATE='17 May 2011';
+RELEASE_DATE='17 May 2011';
+LAST_GIT_COMMIT='';
+RETRIEVAL_DATE='';
 ################################################################################
 #                                                                              #
 # Copyright (c) 2009-2010      Ulrich Meierfrankenfeld                         #
-# Copyright (c) 2011           Gert Hulslemans                                 #
+# Copyright (c) 2011           Gert Hulselmans                                 #
 #                                                                              #
 # Permission is hereby granted, free of charge, to any person obtaining a copy #
 # of this software and associated documentation files (the "Software"), to     #
@@ -33,178 +35,185 @@ DATE='17 May 2011';
 #                                                                              #
 # Hosted at:     http://sourceforge.net/projects/bootinfoscript/               #
 #                                                                              #
-# The birth of the boot info script:                                           #
+# The birth of the Boot Info Script:                                           #
 #                http://ubuntuforums.org/showthread.php?t=837791               #
 #                                                                              #
 # Tab width:     8 spaces                                                      #
 #                                                                              #
 ################################################################################
-#                                                                              #
-# Usage:                                                                       #
-# ------                                                                       #
-#                                                                              #
-#   Run the script as sudoer:                                                  #
-#                                                                              #
-#     sudo bash ./boot_info_script.sh <outputfile>                             #
-#                                                                              #
-#   or if your operating system does not use sudo:                             #
-#                                                                              #
-#     su -                                                                     #
-#     bash ./boot_info_script.sh <outputfile>                                  #
-#                                                                              #
-#   To get version number and last editing date of this script, use:           #
-#     (no root rights needed)                                                  #
-#                                                                              #
-#     bash ./boot_info_script.sh -v                                            #
-#     bash ./boot_info_script.sh -V                                            #
-#     bash ./boot_info_script.sh --version                                     #
-#                                                                              #
-#   To get help running this script, use (no root rights needed):              #
-#                                                                              #
-#     bash ./boot_info_script.sh -h                                            #
-#     bash ./boot_info_script.sh -help                                         #
-#     bash ./boot_info_script.sh --help                                        #
-#                                                                              #
-#   To automatically gzip a copy of the output file, use (root rights needed): #
-#                                                                              #
-#     bash ./boot_info_script.sh -g <outputfile>                               #
-#     bash ./boot_info_script.sh --gzip <outputfile>                           #
-#                                                                              #
-#  If multiple versions of boot_info_script are detected in the same           #
-#  directory, boot_info_script will list all versions found.                   #
-#  In that case you need to force boot_info_script to run a certain version,   #
-#  by adding "--this" as first argument (root rights needed):                  #
-#                                                                              #
-#     bash ./boot_info_script.sh --this <outputfile>                           #
-#                                                                              #
-################################################################################
-#                                                                              #
-# Features:                                                                    #
-# ---------                                                                    #
-#                                                                              #
-# * Look at each MBR and identify its boot loader:                             #
-#     - For GRUB and SuperGRUB: display the controlling partition.             #
-#     - If the MBR is unknown, display the whole MBR.                          #
-#                                                                              #
-# * Look at all partitions:                                                    #
-#     - Determine their type.                                                  #
-#     - Identify their boot sectors.                                           #
-#         ° For GRUB: display the controlling partition and the offset of      #
-#                     the stage2 file as recorded in the boot sector.          #
-#         ° For Syslinux: display the full version name, check if internal     #
-#                         checksum matches, display installation directory,    #
-#                         display offset of the ldlinux.sys file.              #
-#         ° For NTFS and FAT: examine the Boot Parameter Block for errors.     #
-#     - Identify the operating system installed on that partition.             #
-#     - List boot programs.                                                    #
-#     - Display the partition table.                                           #
-#     - Display the output of "blkid".                                         #
-#     - Look in "/" and "NST" for bootpart codes and display the offset and    #
-#       boot drive, it is trying to chainload.                                 #
-#     - Look on "/" and "/NST" for stage1 files and display the offset and     #
-#       bootdrive of the stage 2 files it is trying to chainload.              #
-#     - Display boot configuration files.                                      #
-#     - Is able to search LVM partitions if the LVM2 package is installed      #
-#       ("apt-get install lvm2" in debian based distros).                      #
-#     - Is able to search Linux Software RAID partitions (MD RAIDs) if the     #
-#       "mdadm" package is installed.                                          #
-#     - If dmraid is installed, search all RAID drives, detected by dmraid.    #
-#                                                                              #
-# * When running the script, without specifying an output file, all the output #
-#   is written to the file "RESULTS.txt" in the same folder as the script.     #
-#                                                                              #
-#   But when run from /bin, /sbin, /usr/bin, or another system folder, the     #
-#   file "RESULTS.txt" is written to the home directory of the user.           #
-#                                                                              #
-#   When the file "RESULTS.txt" already exists, the results will be written to #
-#   "RESULTS1.txt". If "RESULTS1.txt" exists, the results will be written to   #
-#   "RESULTS2.txt", ...                                                        #
-#                                                                              #
-################################################################################
 
 
 
-## Display version and last modification date of the script when asked: ##
-#
-#   bash ./boot_info_script.sh -v
-#   bash ./boot_info_script.sh -V
-#   bash ./boot_info_script.sh --version 
+## Check if the script is run with bash as shell interpreter.
 
-version () {
-  printf '\nboot_info_script version: %s\nLast modification date:   %s\n\n' "${VERSION}" "${DATE}";
-  exit 0;
-}
+if [ -z "$BASH_VERSION" ] ; then
+   echo 'Boot Info Script needs to be run with bash as shell interpreter.' >&2;
+   exit 1;
+fi
 
 
 
 ## Display help text ##
 #
-#   bash ./boot_info_script.sh -h
-#   bash ./boot_info_script.sh -help
-#   bash ./boot_info_script.sh --help
+#   ./bootinfoscript -h
+#   ./bootinfoscript -help
+#   ./bootinfoscript --help
  
 help () {
-   echo '';
-   echo 'Usage boot_info_script:';
-   echo '-----------------------';
-   echo '';
-   echo '  Run the script as sudoer:';
-   echo ''
-   echo "    sudo bash $0 <outputfile>";
-   echo '';
-   echo '  or if your operating system does not use sudo:';
-   echo '';
-   echo '    su -';
-   echo "    bash $0 <outputfile>";
-   echo '';
-   echo '';
-   echo '  When running the script, without specifying an output file, all the output';
-   echo '  is written to the file "RESULTS.txt" in the same folder as the script.';
-   echo '';
-   echo '  But when run from /bin, /sbin, /usr/bin, or another system folder, the file';
-   echo '  "RESULTS.txt" is written to the home directory of the user.';
-   echo '';
-   echo '  When the file "RESULTS.txt" already exists, the results will be written to';
-   echo '  "RESULTS1.txt". If "RESULTS1.txt" exists, the results will be written to';
-   echo '  "RESULTS2.txt", ...';
-   echo '';
-   echo '';
-   echo '  To get version number and last editing date of this script, use:';
-   echo '    (no root rights needed)';
-   echo '';
-   echo "    bash $0 -v";
-   echo "    bash $0 -V";
-   echo "    bash $0 --version";
-   echo '';
-   echo '  To get this help text, use (no root rights needed):';
-   echo '';
-   echo "    bash $0 -h";
-   echo "    bash $0 -help";
-   echo "    bash $0 --help";
-   echo '';
-   echo '  To automatically gzip a copy of the output file, use (root rights needed):';
-   echo '';
-   echo "    bash $0 -g <outputfile>";
-   echo "    bash $0 --gzip <outputfile>";
-   echo '';
-   echo '  If multiple versions of boot_info_script are detected in the same directory,';
-   echo '  boot_info_script will list all versions found.';
-   echo '  In that case you need to force boot_info_script to run a certain version,';
-   echo '  by adding "--this" as first argument (root rights needed):';
-   echo '';
-   echo "    bash $0 --this <outputfile>";
-   echo '';
+   cat <<- HELP
+	
+	Usage Boot Info Script:
+	-----------------------
+	
+	  Run the script as sudoer:
+	
+	    sudo ${0} <outputfile>
+	
+	  or if your operating system does not use sudo:
+	
+	    su -
+	    ${0} <outputfile>
+	
+	
+	  When running the script, without specifying an output file, all the output
+	  is written to the file "RESULTS.txt" in the same folder as the script.
+	
+	  But when run from /bin, /sbin, /usr/bin, or another system folder, the file
+	  "RESULTS.txt" is written to the home directory of the user.
+	
+	  When the file "RESULTS.txt" already exists, the results will be written to
+	  "RESULTS1.txt". If "RESULTS1.txt" exists, the results will be written to
+	  "RESULTS2.txt", ...
+	
+	
+	  To get version number, release date, last git commit and git retrieval date
+	  of this script, use (no root rights needed):
+	
+	    ${0} -v
+	    ${0} -V
+	    ${0} --version
+	
+	
+	  To get this help text, use (no root rights needed):
+	
+	    ${0} -h
+	    ${0} -help
+	    ${0} --help
+	
+		
+	  To automatically gzip a copy of the output file, use (root rights needed):
+	
+	    ${0} -g <outputfile>
+	    ${0} --gzip <outputfile>
+	
+		
+	  To write the output to stdout instead of a file, use (root rights needed):
+	
+	    ${0} --stdout
+	
+	
+	  The last development version of Boot Info Script can be downloaded, with:
+	    (no root rights needed)
+	
+	    ${0} --update <filename>
+	
+	  If no filename is specified, the file will be saved in the home dir as
+	  "bootinfoscript_YYYY-MM-DD_hh:mm:ss".
+	
+	
+	  If multiple versions of Boot Info Script are detected in the same directory,
+	  Boot Info Script will list all versions found.
+	  In that case you need to force Boot Info Script to run a certain version,
+	  by adding "--this" as first argument (root rights needed):
+	
+	    ${0} --this <outputfile>
+	
+	HELP
 
    exit 0;
 }
 
 
 
+## Download the last development version of BIS from git: ##
+#
+#   ./bootinfoscript --update <filename>
+#
+#   If no filename is specified, the file will be saved in the home dir as
+#   "bootinfoscript_YYYY-MM-DD_hh:mm:ss".
+
+update () {
+  local git_bis_url='http://bootinfoscript.git.sourceforge.net/git/gitweb.cgi?p=bootinfoscript/bootinfoscript;a=blob_plain;f=bootinfoscript;hb=HEAD';
+  local git_commit_url='http://bootinfoscript.sourceforge.net/bis-last-commit.txt'
+
+  # Check if date is available.
+  if [ $(type date > /dev/null 2>&1 ; echo $?) -ne 0 ] ; then
+     echo '"date" could not be found.' >&2;
+     exit 1;
+  fi
+
+  # Get current UTC time in YYYY-MM-DD-hh:mm:ss format.
+  UTC_TIME=$(date --utc "+%Y-%m-%d %T");
+
+  if [ ! -z "$1" ] ; then
+     GIT_BIS_FILENAME="$1";
+  else
+     GIT_BIS_FILENAME="${HOME}/bootinfoscript_${UTC_TIME/ /_}"
+  fi
+
+  # Check if wget or curl is available
+  if [ $(type wget > /dev/null 2>&1 ; echo $?) -eq 0 ] ; then
+     printf '\nDownloading last development version of Boot Info Script from git:\n\n';
+     wget -O "${GIT_BIS_FILENAME}" "${git_bis_url}";
+     LAST_GIT_COMMIT=$(wget -O - "${git_commit_url}" 2> /dev/null);
+  elif [ $(type curl > /dev/null 2>&1 ; echo $?) -eq 0 ] ; then
+     printf 'Downloading last development version of Boot Info Script from git:\n\n';
+     curl -o "${GIT_BIS_FILENAME}" "${git_bis_url}";
+     LAST_GIT_COMMIT=$(curl "${git_commit_url}");
+  else
+     printf '"wget" or "curl" could not be found.\nInstall at least one of them and try again.\n' >&2;
+     exit 1;
+  fi
+
+  # Set the retrieval date in just downloaded script.
+  sed -i -e "4,0 s@LAST_GIT_COMMIT='';@LAST_GIT_COMMIT='${LAST_GIT_COMMIT}';@" \
+	 -e "5,0 s/RETRIEVAL_DATE='';/RETRIEVAL_DATE='${UTC_TIME}';/" \
+	 "${GIT_BIS_FILENAME}";
+
+  printf '\nThe development version of Boot Info Script is saved as:\n"%s"\n\n' "${GIT_BIS_FILENAME}";
+  exit 0;
+}
+
+
+
+## Display version, release, last git commit and git retrieval date of the script when asked: ##
+#
+#   ./bootinfoscript -v
+#   ./bootinfoscript -V
+#   ./bootinfoscript --version 
+
+version () {
+  printf '\nBoot Info Script version: %s\nRelease date:             %s' "${VERSION}" "${RELEASE_DATE}";
+
+  if [ ! -z "${LAST_GIT_COMMIT}" ] ; then
+     printf '\nLast git commit:          %s\nRetrieved from git on:    %s' "${LAST_GIT_COMMIT}" "${RETRIEVAL_DATE}";
+  fi
+
+  printf '\n\n';
+
+  exit 0;
+}
+
+
+
 ## Run this version of BIS even when multiple versions are detected in the same directory?
-this_BIS=0;	# no=0
+this_BIS=0;	 # no=0
 
 ## Gzip a copy of the output file? ##
-gzip_output=0;	# off=0
+gzip_output=0;	 # off=0
+
+## Write the output to the standard output instead of to a file? ##
+stdout_output=0; # off=0
 
 
 
@@ -229,6 +238,8 @@ process_args () {
 	-h	  ) help;;
 	-help	  ) help;;
 	--help	  ) help;;
+	--stdout  ) stdout_output=1;;
+	--update  ) update "$2";;
 	-v	  ) version;;
 	-V	  ) version;;
 	--version ) version;;
@@ -247,29 +258,60 @@ process_args ${@};
 
 
 
-## Display version number and last modification date. ##
+## Display version number, release and git retrieval date. ##
 
-printf '\nboot_info_script version: %s        [%s]\n\n' "${VERSION}" "${DATE}";
+printf '\nBoot Info Script %s      [%s]' "${VERSION}" "${RELEASE_DATE}";
+
+if [ ! -z "${LAST_GIT_COMMIT}" ] ; then
+   printf '\n  Last git commit:         %s\n  Retrieved from git on:   %s' "${LAST_GIT_COMMIT}" "${RETRIEVAL_DATE}";
+fi
+
+printf '\n\n';
+
+
+
+## Check whether Boot Info Script is run with root rights or not. ##
+
+if [ $(type whoami > /dev/null 2>&1 ; echo $?) -ne 0 ] ; then
+   echo 'Please install "whoami" and run Boot Info Script again.' >&2;
+   exit 1;
+elif [ $(whoami) != 'root' ] ; then
+   cat <<- EOF >&2
+	Please use "sudo" or become "root" to run this script.
+	
+	  Run the script as sudoer:
+	
+	    sudo ${0} <outputfile>
+	
+	  or if your operating system does not use sudo:
+	
+	    su -
+	    ${0} <outputfile>
+
+	For more info, see the help:
+
+	    ${0} --help
+	
+	EOF
+   exit 1;
+fi
 
 
 
 ## Check if all necessary programs are available. ##
 
+# Programs that are in /bin or /usr/bin.
 Programs='
 	basename
-	blkid
 	cat
 	chown
 	dd
 	dirname
 	expr
-	fdisk
-	filefrag
 	fold
 	grep
 	gzip
 	hexdump
-	losetup
 	ls
 	mkdir
 	mount
@@ -279,12 +321,19 @@ Programs='
 	sed
 	sort
 	umount
-	wc
-	whoami'
+	wc'
+
+# Programs that are in /usr/sbin or /sbin.
+Programs_SBIN='
+	blkid
+	fdisk
+	filefrag
+	losetup'
+
 
 Check_Prog=1;
 
-for Program in ${Programs} ; do
+for Program in ${Programs} ${Programs_SBIN}; do
   if [ $(type ${Program} > /dev/null 2>&1 ; echo $?) -ne 0 ] ; then
      echo "\"${Program}\" could not be found." >&2;
      Check_Prog=0;
@@ -328,50 +377,41 @@ fi
 
 
 if [ ${Check_Prog} -eq 0 ] ; then
-   printf '\nPlease install the missing program(s) and run boot_info_script again.\n' >&2;
+   printf '\nPlease install the missing program(s) and run Boot Info Script again.\n' >&2;
    exit 1;
 fi
 
 
 
-## Check if there are other boot_info_script.sh files in the same directory. ##
+## Check if there are other bootinfoscript files in the same directory. ##
 #
 #   This can be useful when BIS was downloaded multiple times with Firefox, Chromium, ...
 #   Those browsers will add a suffix to the filename, when there was already
 #   a file with the same name:
 #
-#     boot_info_script(<number>).sh
+#     bootinfoscript(<number>)
 #
 #   To force BIS to run a certain version, add "--this" as first argument:
 #
-#     bash ./boot_info_script.sh --this <outputfile>
+#     ./bootinfoscript --this <outputfile>
 #
 
 if [ ${this_BIS} -eq 0 ] ; then
    declare -a BIS_files;
 
-   BIS_files=( $(ls "$(dirname "$0")/boot_info_script.sh" "$(dirname \"$0\")"/boot_info_script\(*\).sh 2> /dev/null) );
+   BIS_files=( $(ls "$(dirname "$0")/bootinfoscript" "$(dirname \"$0\")"/bootinfoscript\(*\) 2> /dev/null) );
 
    if [ "${#BIS_files[*]}" -ge 2 ] ; then
-      printf 'Multiple boot_info_script files where found:\n\n';
+      printf 'Multiple bootinfoscript files where found:\n\n';
 
       for i in ${!BIS_files[@]} ; do
 	eval $(echo 'BIS_'$(grep -m1 '^VERSION' "${BIS_files[$i]}") );
 	printf "  - ${BIS_files[$i]}:\tversion ${BIS_VERSION}\n";
       done
 
-      printf '\nAre you sure you want to run this version? If so, run:\n\n  bash %s --this %s\n\n' "$0" "$*";
+      printf '\nAre you sure you want to run this version? If so, run:\n\n  %s --this %s\n\n' "$0" "$*";
       exit 1;
    fi
-fi
-
-
-
-## Check whether script is run with root rights or not. ##
-
-if [ $(whoami) != 'root' ] ; then
-   echo 'Please use "sudo" or become "root" to run this script.' >&2;
-   exit 1;
 fi
 
 
@@ -450,9 +490,9 @@ Boot_Prog_Fat='
 
 Boot_Files_Normal='
 	/menu.lst	/grub/menu.lst	/boot/grub/menu.lst	/NST/menu.lst	
-	/grub.cfg	/grub/grub.cfg	/boot/grub/grub.cfg
+	/grub.cfg	/grub/grub.cfg	/boot/grub/grub.cfg	/grub2/grub.cfg	/boot/grub2/grub.cfg
 	/burg.cfg	/burg/burg.cfg	/boot/burg/burg.cfg
-	/grub.conf	/grub/grub.conf	/boot/grub/grub.conf
+	/grub.conf	/grub/grub.conf	/boot/grub/grub.conf	/grub2/grub.conf	/boot/grub2/grub.conf
 	/ubuntu/disks/boot/grub/menu.lst	/ubuntu/disks/install/boot/grub/menu.lst	/ubuntu/winboot/menu.lst
 	/boot.ini	/BOOT.INI
 	/etc/fstab
@@ -464,9 +504,9 @@ Boot_Files_Normal='
 
 Boot_Files_Fat='
 	/menu.lst	/grub/menu.lst	/boot/grub/menu.lst	/NST/menu.lst
-	/grub.cfg	/grub/grub.cfg	/boot/grub/grub.cfg
+	/grub.cfg	/grub/grub.cfg	/boot/grub/grub.cfg	/grub2/grub.cfg	/boot/grub2/grub.cfg
 	/burg.cfg	/burg/burg.cfg	/boot/burg/burg.cfg
-	/grub.conf	/grub/grub.conf	/boot/grub/grub.conf
+	/grub.conf	/grub/grub.conf	/boot/grub/grub.conf	/grub2/grub.conf	/boot/grub2/grub.conf
 	/ubuntu/disks/boot/grub/menu.lst	/ubuntu/disks/install/boot/grub/menu.lst	/ubuntu/winboot/menu.lst
 	/boot.ini
 	/freeldr.ini
@@ -483,10 +523,10 @@ Boot_Files_Fat='
 GrubError18_Files='
 	menu.lst	grub/menu.lst	boot/grub/menu.lst	NST/menu.lst
 	ubuntu/disks/boot/grub/menu.lst
-	grub.conf	grub/grub.conf	boot/grub/grub.conf
-	grub.cfg	grub/grub.cfg	boot/grub/grub.cfg
+	grub.conf	grub/grub.conf	boot/grub/grub.conf	grub2/grub.conf	boot/grub2/grub.conf
+	grub.cfg	grub/grub.cfg	boot/grub/grub.cfg	grub2/grub.cfg	boot/grub2/grub.cfg
 	burg.cfg	burg/burg.cfg	boot/burg/burg.cfg
-	core.img	grub/core.img	boot/grub/core.img
+	core.img	grub/core.img	boot/grub/core.img	grub2/core.img	boot/grub2/core.img
 	burg/core.img	boot/burg/core.img
 	stage2		grub/stage2	boot/grub/stage2
 	boot/vmlinuz*	vmlinuz*	ubuntu/disks/boot/vmlinuz*
@@ -508,7 +548,10 @@ SyslinuxError_Files='
 
 ## Set output filename ##
 
-if ( [ ! -z "${LogFile_cmd}" ]) ; then
+if [ ${stdout_output} -eq 1 ] ; then
+  # The LogFile name is not used when --stdout is specified.
+  LogFile="";
+elif ( [ ! -z "${LogFile_cmd}" ]) ; then
   # The RESULTS filename is specified on the commandline.
   LogFile=$(basename "${LogFile_cmd}");
 
@@ -684,9 +727,11 @@ fdisks () {
 
 ##  A function which checks whether a file is on a mounted partition. ##
 
-# list of mountpoints for devices: also allow mount points with spaces.
+# List of mount points for devices: also allow mount points with spaces.
 
-MountPoints=$(mount | ${AWK} -F "${TAB}" '{ if (($1 ~ "/dev") && ($3 != "/")) print $3 }');
+MountPoints=$(mount \
+	      | ${AWK} -F "${TAB}" '{ if ( ($1 ~ "^/dev") && ($3 != "/") ) { sub(" on ", "\t", $0); sub(" type ", "\t", $0); print $2 } }' \
+	      | sort -u);
 
 
 FileNotMounted () {	
@@ -908,6 +953,7 @@ UUIDToSystem () {
     
     ## Windows GUIDs ##
     16e3c9e35c0bb84d817df92df00215ae)  system='Microsoft Reserved Partition (Windows)';;
+    # Same GUID as old GUID for "Basic data partition (Linux)"
   # a2a0d0ebe5b9334487c068b6b72699c7)  system='Basic data partition (Windows)';;
     aac808588f7ee04285d2e1e90434cfb3)  system='Logical Disk Manager metadata partition (Windows)';;
     a0609baf3114624fbc683311714a69ad)  system='Logical Disk Manager data partition (Windows)';;
@@ -919,7 +965,10 @@ UUIDToSystem () {
     28e7a1e2e332d611a6827b03a0000000)  system='Service Partition (HP-UX)';;
 
     ## Linux GUIDs ##
+    # Same GUID as "Basic data partition (Windows)" GUID
   # a2a0d0ebe5b9334487c068b6b72699c7)  system='Data partition (Linux)';;
+    # New GUID to avoid that Linux partitions show up as unformatted partitions in Windows.
+    af3dc60f838472478e793d69d8477de4)  system='Data partition (Linux)';;  
     0f889da1fc053b4da006743f0f84911e)  system='RAID partition (Linux)';;
     6dfd5706aba4c44384e50933c84b4f4f)  system='Swap partition (Linux)';;
     79d3d6e607f5c244a23c238f2a3df928)  system='Logical Volume Manager (LVM) partition (Linux)';;
@@ -965,6 +1014,11 @@ UUIDToSystem () {
     aa8df4490eb1dc11b99b0019d1879648)  system='RAID partition (NetBSD)';;
     c419b52d0fb1dc11b99b0019d1879648)  system='Concatenated partition (NetBSD)';;
     ec19b52d0fb1dc11b99b0019d1879648)  system='Encrypted partition (NetBSD)';;
+
+    ## ChromeOS GUIDs ##
+    5d2a3afe324fa741b725accc3285a309)  system="ChromeOS kernel";;
+    02e2b83c7e3bdd478a3c7ff2a13cfcec)  system="ChromeOS rootfs";;
+    3d750a2e489eb0438337b15192cb1b5e)  system="ChromeOS future use";;
 
 				   *)  system='-';
 				       echo 'Unknown GPT Partiton Type' >> ${Unknown_MBR};
@@ -1361,6 +1415,8 @@ syslinux_info () {
   local ADVoffset ADV_calculated_checksum ADV_read_checksum ADVentry_offset;
   local tag='999' tag_len label;
 
+  local csum;
+
 
 
   # Clear previous Syslinux message string.
@@ -1498,9 +1554,14 @@ syslinux_info () {
        #  - add each dword to the checksum value.
        #  - the value of the checksum after adding all dwords of ldlinux.sys should be 0.
 
-       if [ $(hexdump -v -n $(( ${pa_data_sectors} * 512)) -e '/4 "%u\n"' ${Tmp_Log} \
-	    | ${AWK} 'BEGIN { csum=4294967296-1051853566 } { csum=(csum + $1)%4294967296 } END {print csum}' ) -ne 0 ] ; then
+       csum=$(hexdump -v -n $(( ${pa_data_sectors} * 512)) -e '/4 "%u\n"' ${Tmp_Log} \
+	    | ${AWK} 'BEGIN { csum=4294967296-1051853566 } { csum=(csum + $1)%4294967296 } END {print csum}' );
 
+       if [ $(expr index "${csum}" 'e') -ne 0 ] ; then
+	  # Check if the ${csum} variable contains an 'e'.
+	  # "busybox awk" gives values like 3.20611e+09 instead of normal integer numbers.
+	  Syslinux_Msg="${Syslinux_Msg} The integrity of Syslinux couldn't be verified (install gawk).";
+       elif [ ${csum} -ne 0 ] ; then
 	  Syslinux_Msg="${Syslinux_Msg} The integrity check of Syslinux failed.";
 	  return;
        fi
@@ -1765,6 +1826,11 @@ grub2_info () {
 		if [ $(type unlzma > /dev/null 2>&1 ; echo $?) -eq 0 ] ; then
 		   if [ ${offset_lzma} -ne 0 ] ; then
 
+		      # Correct the offset to the lzma stream, when 8 subsequent bytes of zeros are at the start of this offset, 
+		      if [ $(hexdump -v -s ${offset_lzma} -n 8 -e '1/1 "%02x"'  ${core_img_file}) = '0000000000000000' ] ; then
+			 offset_lzma=$(( ${offset_lzma} + 8 ));
+		      fi
+
 		      # Calculate the uncompressed size to which the compressed lzma stream needs to be expanded. 
 		      lzma_uncompressed_size=$(( ${total_module_size} + ${kernel_image_size} - ${offset_lzma} + 512 ));
 
@@ -1857,7 +1923,7 @@ grub2_info () {
      else
 	# Embedded config file found.
 
-	Grub2_Msg=$(printf "${Grub2_Msg} and uses an embedded config file:\n\n--------------------------------------------------------------------------------\n${embedded_config}--------------------------------------------------------------------------------\n");
+	Grub2_Msg=$(printf "${Grub2_Msg} and uses an embedded config file:\n\n--------------------------------------------------------------------------------\n${embedded_config}\n--------------------------------------------------------------------------------\n");
 
      fi
   fi
@@ -2263,13 +2329,13 @@ Get_Partition_Info() {
 
   ## Display boot sector info. ##
 
-  printf '    Boot sector info:  ' >> "${Log}";
+  printf '    Boot sector info: ' >> "${Log}";
   printf "${BSI}\n" | fold -s -w 55 | sed -e '/^-------------------------$/ d' -e '2~1s/.*/                       &/' >> "${Log}";
 
 
 
 
-  ## Exclude partitions which contain no information, or which we (currently) don't know how to  accces. ##
+  ## Exclude partitions which contain no information, or which we (currently) don't know how to accces. ##
 
   case "${type}" in
 	'BIOS Boot partition'	) part_no_mount=1;;
@@ -2282,7 +2348,10 @@ Get_Partition_Info() {
   esac
 
   if [ "${part_no_mount}" -eq 0 ] ; then
-     CheckMount=$(mount | ${AWK} -F "${TAB}" '$0 ~ "^'${part}' " { sub(" on ", "\t", $0); sub(" type ", "\t", $0); print $2 }');
+
+     # Look for a mount point of the current partition.
+     # If multiple mount points are found, use the one with the shortest pathname.
+     CheckMount=$(mount | ${AWK} -F "${TAB}" '$0 ~ "^'${part}' " { sub(" on ", "\t", $0); sub(" type ", "\t", $0); print $2 }' | sort | ${AWK} '{ print $0; exit}');
 
      # Check whether partition is already mounted.
      if [ x"${CheckMount}" != x'' ] ; then 
@@ -2384,6 +2453,17 @@ Get_Partition_Info() {
 	#   If found displays their names.
 
 	if [ "${type}" = 'vfat' ] ; then
+	   # Check FAT filesystems for EFI boot files.
+	   for file in "${mountname}"/efi/*/*.efi ; do
+	     # Remove "${mountname}" part of the filename.
+	     file="${file#${mountname}}";
+
+	     if [ -f "${mountname}${file}" ] && [ -s "${mountname}${file}" ] && FileNotMounted "${mountname}${file}" "${mountname}" ; then 
+		BootFiles="${BootFiles}  ${file}";          
+	     fi
+	   done
+
+	   # Other boot program files.
 	   Boot_Prog=${Boot_Prog_Fat};
 	else
 	   Boot_Prog=${Boot_Prog_Normal};  
@@ -2566,11 +2646,19 @@ titlebar_gen () {
 ## Start ##
 
 
-# Center title.
-BIS_title="Boot Info Script ${VERSION}    from ${DATE}";
-printf -v BIS_title_space "%$(( ( 80 - ${#BIS_title} ) / 2 - 1 ))s";
 
-printf '%s\n\n\n============================= Boot Info Summary: ===============================\n\n' "${BIS_title_space}${BIS_title}" >> "${Log}";
+# Center title.
+BIS_title=$(printf 'Boot Info Script %s      [%s]' "${VERSION}" "${RELEASE_DATE}");
+printf -v BIS_title_space "%$(( ( 80 - ${#BIS_title} ) / 2 - 1 ))s";
+printf "${BIS_title_space}${BIS_title}\n" > "${Log}";
+
+if [ ! -z "${LAST_GIT_COMMIT}" ] ; then
+   printf '\nLast git commit:       %s\nRetrieved from git on: %s\n' "${LAST_GIT_COMMIT}" "${RETRIEVAL_DATE}" >> "${Log}";
+fi
+
+printf '\n\n============================= Boot Info Summary: ===============================\n\n' >> "${Log}";
+
+
 
 # Search for hard drives which don't exist, have a corrupted partition table
 # or don't have a parition table (whole drive is a filesystem).
@@ -3081,42 +3169,47 @@ echo >> "${Log}";
 
 
 
-## Copy the log file to RESULTS file and make the user the owner of RESULTS file. ##
-# Rescatux hack
-cat "${Log}";
+if [ ${stdout_output} -eq 1 ] ; then
+   ## If --stdout is specified, show the output.
+   cat "${Log}";
+else
+   ## Copy the log file to RESULTS file and make the user the owner of RESULTS file. ##
 
-if [ "${SUDO_UID}:${SUDO_GID}" != ':' ] ; then
-   chown "${SUDO_UID}:${SUDO_GID}" "${LogFile}";
-fi
-
-
-
-## gzip the RESULTS file, for easy uploading. ##
-#
-#   gzip a copy of the RESULTS file only when -g or --gzip is passed on the command line.
-#
-#   bash ./boot_info_script.sh -g <outputfile> 
-#   bash ./boot_info_script.sh --gzip <outputfile> 
-
-if [ ${gzip_output} -eq 1 ] ; then
-   cat "${LogFile}" | gzip -9 > "${LogFile}.gz";
+   cp "${Log}" "${LogFile}";
 
    if [ "${SUDO_UID}:${SUDO_GID}" != ':' ] ; then
-      chown "${SUDO_UID}:${SUDO_GID}" "${LogFile}.gz";
+      chown "${SUDO_UID}:${SUDO_GID}" "${LogFile}";
    fi
+
+
+
+   ## gzip the RESULTS file, for easy uploading. ##
+   #
+   #   gzip a copy of the RESULTS file only when -g or --gzip is passed on the command line. 
+   #
+   #   ./bootinfoscript -g <outputfile> 
+   #   ./bootinfoscript --gzip <outputfile> 
+
+   if [ ${gzip_output} -eq 1 ] ; then
+      cat "${LogFile}" | gzip -9 > "${LogFile}.gz";
+
+      if [ "${SUDO_UID}:${SUDO_GID}" != ':' ] ; then
+	 chown "${SUDO_UID}:${SUDO_GID}" "${LogFile}.gz";
+      fi
+   fi
+
+
+
+   ## Reset the Standard Output to the Terminal. ##
+   #
+   #   exec 1>&-;
+   #   exec 1>&6;
+   #   exec 6>&-;
+
+
+
+   printf '\nFinished. The results are in the file "%s"\nlocated in "%s".\n\n' "$(basename "${LogFile}")" "${Dir}/";
 fi
-
-
-
-## Reset the Standard Output to the Terminal. ##
-#
-#   exec 1>&-;
-#   exec 1>&6;
-#   exec 6>&-;
-
-
-# Rescatux hack
-#printf '\nFinished. The results are in the file "%s"\nlocated in "%s".\n\n' "$(basename "${LogFile}")" "${Dir}/";
 
 exit 0;
 
