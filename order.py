@@ -8,24 +8,6 @@ from PyQt4.QtCore import QStringList
 
 class MainWindow(QtGui.QWidget):
 
-    def get_qicon(self,name):
-      if not name:
-	  return QIcon()
-      
-      if os.path.isabs(name):
-	  return QIcon(name)
-      
-      icon = QIcon.fromTheme(name)
-      if not icon.isNull():
-	  return icon
-	  
-      for i in os.listdir("/usr/share/pixmaps")[::-1]:
-	  if i.startswith(name):
-	      path = os.path.join("/usr/share/pixmaps", i)
-	      return QIcon(path)
-    
-      return QIcon()
-
     def setLayout(self, layout):
 	self.clearLayout()
 	QtGui.QWidget.setLayout(self, layout)
@@ -115,13 +97,13 @@ class MainWindow(QtGui.QWidget):
 	# Initialize hard disk stuff - END
 	# Move up button - BEGIN
 	self.move_up_button = QtGui.QToolButton();
-	self.move_up_button.setIcon(self.get_qicon("go-up"))
+	self.move_down_button.setIcon(QtGui.QIcon(go-up_icon_path)
 	self.move_up_button.clicked.connect(self.move_up_button_clicked)
 	# Move up button - END
 	
 	# Move down button - BEGIN
 	self.move_down_button = QtGui.QToolButton();
-	self.move_down_button.setIcon(self.get_qicon("go-down"))
+	self.move_down_button.setIcon(QtGui.QIcon(go-down_icon_path))
 	self.move_down_button.clicked.connect(self.move_down_button_clicked)
 	# Move down button - END
 	self.refresh_harddisks()
@@ -157,6 +139,12 @@ class MainWindow(QtGui.QWidget):
 if __name__ == "__main__":
  
     app=QtGui.QApplication(sys.argv)
+    
+    # TODO: rescapp.py an order.py take images_path from the same included py file
+    current_pwd="/home/user/Desktop/rescapp"
+    images_path = current_pwd + '/' + "images"
+    go-down_icon_path = images_path + "/" + "go-down.png"
+    go-up_icon_path = images_path + "/" + "go-up.png"
     
     harddisks = []
     label_list = QStringList()
