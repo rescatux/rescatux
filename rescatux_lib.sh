@@ -332,7 +332,7 @@ function rtux_File_Reordered_Device_Map() {
 
 
   local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
-  local column_number=2 # Hard disk column and Size column
+  local COLUMN_NUMBER=2 # Hard disk column and Size column
   ARGS_ARRAY_INDEX=0
   ARGS_ARRAY[ARGS_ARRAY_INDEX]=${COLUMN_NUMBER}
   let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
@@ -353,11 +353,11 @@ function rtux_File_Reordered_Device_Map() {
     let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
   done
 
-  DESIRED_ORDER=`${RESCATUX_PATH}/order.py "${ARGS_ARRAY[@]}"`
+  DESIRED_ORDER=`${RESCATUX_PATH}order.py "${ARGS_ARRAY[@]}"`
 
   local n=0
-  for n_hard_disk in "${DESIRED_ORDER}" ; do
-    echo -e -n "(hd${n} /dev/${n_hard_disk}\n"
+  for n_hard_disk in ${DESIRED_ORDER} ; do
+    echo -e -n "(hd${n}) /dev/${n_hard_disk}\n"
     let n=n+1
   done
 
