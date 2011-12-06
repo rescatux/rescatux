@@ -4,6 +4,7 @@
 import sys, subprocess, os, time, linecache, sip, getopt
 from PyQt4 import QtGui,QtCore,QtWebKit
 from PyQt4.QtGui import QIcon
+from PyQt4.QtCore import QStringList
 
 class MainWindow(QtGui.QWidget):
 
@@ -157,7 +158,7 @@ if __name__ == "__main__":
     app=QtGui.QApplication(sys.argv)
     
     harddisks = []
-    label_list = []
+    label_list = QStringList()
     mw=MainWindow()
     
     
@@ -201,6 +202,7 @@ if __name__ == "__main__":
       mw.refresh_harddisks()
       row+=1
     #print harddisks
+    mw.harddisks_tablewidget.setHorizontalHeaderLabels(label_list)
     mw.setWindowTitle(window_title)
     
     mw.show()
