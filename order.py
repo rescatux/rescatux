@@ -143,7 +143,8 @@ class MainWindow(QtGui.QWidget):
         #grid.setContentsMargins(0,0,0,0)
 	self.setLayout(grid)
 
-	self.setMaximumHeight(570)
+	self.setMinimumHeight(600)
+	self.setMinimumWidth(600)
 
     def __init__(self):
         QtGui.QMainWindow.__init__(self)

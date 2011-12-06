@@ -330,46 +330,36 @@ function rtux_Choose_Hard_Disk_Position() {
 # Outputs device.map file with ordered devices
 function rtux_File_Reordered_Device_Map() {
 
+
   local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
-  rtux_Choose_Hard_Disk ${PREPARE_ORDER_HDS_STR} > /dev/null
-
-  # LOOP - Show hard disk and ask position - TODO - BEGIN
-  local n=1
-  local HD_LIST_VALUES=""
+  local column_number=2 # Hard disk column and Size column
+  ARGS_ARRAY_INDEX=0
+  ARGS_ARRAY[ARGS_ARRAY_INDEX]=${COLUMN_NUMBER}
+  let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+  ARGS_ARRAY[ARGS_ARRAY_INDEX]="${ORDER_HDS_WTITLE}"
+  let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+  ARGS_ARRAY[ARGS_ARRAY_INDEX]="${ORDER_HDS_STR}"
+  let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+  ARGS_ARRAY[ARGS_ARRAY_INDEX]="Hard disk"
+  let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+  ARGS_ARRAY[ARGS_ARRAY_INDEX]="Size"
+  let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
   for n_hard_disk in ${DETECTED_HARD_DISKS}; do
-    m=1
-    for m_hard_disk in ${DETECTED_HARD_DISKS}; do			      
-      if [[ m -eq 1 ]] ; then
-	HD_LIST_VALUES="TRUE ${m} ${n_hard_disk} \
-	  `/sbin/fdisk -l /dev/${n_hard_disk} \
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="${n_hard_disk}"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="`/sbin/fdisk -l /dev/${n_hard_disk} \
 		  | egrep 'Disk.*bytes' \
 		  | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
-      else
-	HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${m} ${n_hard_disk} \
-	`/sbin/fdisk -l /dev/${n_hard_disk} \
-		  | egrep 'Disk.*bytes' \
-		  | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
-      fi
-      let m=m+1
-    done
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+  done
 
-    # Ask position - BEGIN
-    local SELECTED_POSITION=$(zenity ${ZENITY_COMMON_OPTIONS} \
-	  --list  \
-	  --text "${RIGHT_HD_POSITION_STR}" \
-	  --radiolist  \
-	  --column "${SELECT_STR}" \
-	  --column "${POSITION_STR}" \
-	  --column "${HARDDISK_STR}" \
-	  --column "${SIZE_STR}" \
-	  ${HD_LIST_VALUES}); 
+  DESIRED_ORDER=`${RESCATUX_PATH}/order.py "${ARGS_ARRAY[@]}"`
 
-    # Ask position - END
-    # Generate temporal file with order - TODO - BEGIN
-    echo -e -n "${SELECTED_POSITION} (hd$(( ${SELECTED_POSITION} - 1 ))) /dev/${n_hard_disk}\n"
-    # Generate temporal file with order - TODO - END
+  local n=0
+  for n_hard_disk in "${DESIRED_ORDER}" ; do
+    echo -e -n "(hd${n} /dev/${n_hard_disk}\n"
     let n=n+1
-  done | sort | awk '{printf("%s\t%s\n",$2,$3);}' 
+  done
 
 } # rtux_File_Reordered_Device_Map()
 
@@ -409,7 +399,8 @@ POSITION_STR="Position"
 HARDDISK_STR="Hard Disk"
 SIZE_STR="Size"
 
-PREPARE_ORDER_HDS_STR="These are detected hard disks. Prepare to order them according to boot order. Press OK to continue."
+ORDER_HDS_WTITLE="Order hard disks"
+ORDER_HDS_STR="Order hard disks according to boot order. Press OK to continue."
 RIGHT_HD_POSITION_STR="Which is the right position for this hard disk?"
 SUCCESS_STR="Success!"
 FAILURE_STR="Failure!"
