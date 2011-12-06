@@ -97,13 +97,13 @@ class MainWindow(QtGui.QWidget):
 	# Initialize hard disk stuff - END
 	# Move up button - BEGIN
 	self.move_up_button = QtGui.QToolButton();
-	self.move_down_button.setIcon(QtGui.QIcon(go-up_icon_path)
+	self.move_up_button.setIcon(QtGui.QIcon(go_up_icon_path))
 	self.move_up_button.clicked.connect(self.move_up_button_clicked)
 	# Move up button - END
 	
 	# Move down button - BEGIN
 	self.move_down_button = QtGui.QToolButton();
-	self.move_down_button.setIcon(QtGui.QIcon(go-down_icon_path))
+	self.move_down_button.setIcon(QtGui.QIcon(go_down_icon_path))
 	self.move_down_button.clicked.connect(self.move_down_button_clicked)
 	# Move down button - END
 	self.refresh_harddisks()
@@ -143,8 +143,8 @@ if __name__ == "__main__":
     # TODO: rescapp.py an order.py take images_path from the same included py file
     current_pwd="/home/user/Desktop/rescapp"
     images_path = current_pwd + '/' + "images"
-    go-down_icon_path = images_path + "/" + "go-down.png"
-    go-up_icon_path = images_path + "/" + "go-up.png"
+    go_down_icon_path = images_path + "/" + "go-down.png"
+    go_up_icon_path = images_path + "/" + "go-up.png"
     
     harddisks = []
     label_list = QStringList()
