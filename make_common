@@ -62,12 +62,12 @@ mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER}
 echo "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
 cat >>$TEMP_FOLDER/${APT_PREFERENCES} <<END
-   Package: live-boot live-boot-initramfs-tools live-config live-config-sysvinit
-   Pin: release n=sid
-   Pin-Priority: 600
-   Package: *
-   Pin: release n=sid
-   Pin-Priority: 1
+Package: live-boot live-boot-initramfs-tools live-config live-config-sysvinit
+Pin: release n=sid
+Pin-Priority: 600
+Package: *
+Pin: release n=sid
+Pin-Priority: 1
 END
 # Apt-pining for live-* to come from 3.x - END
 
