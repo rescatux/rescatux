@@ -16,8 +16,10 @@ RESCATUX_FILES="rescapp.py order.py setbackground.sh chat web grub-install updat
 #MIRROR_CHROOT="http://192.168.0.50/debian"
 
 #This is for squeeze
-MIRROR_BOOTSTRAP="http://127.0.0.1/squeeze_debian/"
-MIRROR_CHROOT="http://127.0.0.1/squeeze_debian"
+MIRROR_BOOTSTRAP="http://127.0.0.1:83/squeeze_debian/"
+MIRROR_CHROOT="http://127.0.0.1:83/squeeze_debian"
+SID_MIRROR="http://ftp.es.debian.org" # Only used for live-* packages on build time so that they are 3.x for loop support
+
 ARCH="i386"
 DISTRIBUTION="squeeze" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
@@ -31,6 +33,7 @@ CURRENT_FOLDER=$PWD
 
 TEMP_FOLDER="/tmp/${RESCATUX_STR}-tmp-build-$$"
 SKEL_FOLDER="config/chroot_local-includes/etc/skel"
+APT_PREFERENCES="config/chroot_apt/preferences"
 
 CUSTOM_PACKAGES_LISTS_FOLDER="config/chroot_local-packageslists"
 
@@ -49,6 +52,19 @@ cd ..
 # Generate logo - End
 
 mkdir --parents $TEMP_FOLDER
+
+# Apt-pining for live-* to come from 3.x - BEGIN
+cat >>$TEMP_FOLDER/${APT_PREFERENCES} <<END
+   Package: live-*
+   Pin: release n=sid
+   Pin-Priority: 600
+   Package: *
+   Pin: release n=sid
+   Pin-Priority: 1
+END
+
+# Apt-pining for live-* to come from 3.x - END
+
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
