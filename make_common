@@ -34,8 +34,11 @@ CURRENT_FOLDER=$PWD
 
 TEMP_FOLDER="/tmp/${RESCATUX_STR}-tmp-build-$$"
 SKEL_FOLDER="config/chroot_local-includes/etc/skel"
+CHROOT_SOURCES_FOLDER="config/chroot_sources"
 SID_CHROOT_CONFIG="config/chroot_sources/sid.chroot"
+CHROOT_APT_CONFIG_FOLDER="config/chroot_apt"
 APT_PREFERENCES="config/chroot_apt/preferences"
+
 
 CUSTOM_PACKAGES_LISTS_FOLDER="config/chroot_local-packageslists"
 
@@ -53,9 +56,10 @@ cd logo
 cd ..
 # Generate logo - End
 
-mkdir --parents $TEMP_FOLDER
-
+mkdir --parents $TEMP_FOLDER/
 # Apt-pining for live-* to come from 3.x - BEGIN
+mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
+mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER}
 echo "deb ${SID_MIRROR} sid main" > ${SID_CHROOT_CONFIG}
 cat >>$TEMP_FOLDER/${APT_PREFERENCES} <<END
    Package: live-*
@@ -65,7 +69,6 @@ cat >>$TEMP_FOLDER/${APT_PREFERENCES} <<END
    Pin: release n=sid
    Pin-Priority: 1
 END
-
 # Apt-pining for live-* to come from 3.x - END
 
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
