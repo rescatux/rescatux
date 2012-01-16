@@ -65,15 +65,19 @@ cat >>$TEMP_FOLDER/${APT_PREFERENCES} <<END
 Package: live-boot
 Pin: release n=sid
 Pin-Priority: 600
+
 Package: live-boot-initramfs-tools
 Pin: release n=sid
 Pin-Priority: 600
+
 Package: live-config
 Pin: release n=sid
 Pin-Priority: 600
+
 Package: live-config-sysvinit
 Pin: release n=sid
 Pin-Priority: 600
+
 Package: *
 Pin: release n=sid
 Pin-Priority: 1
