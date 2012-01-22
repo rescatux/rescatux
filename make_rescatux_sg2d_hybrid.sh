@@ -32,7 +32,9 @@ cp ${RESCATUX_SOURCE_PWD}/${ORIGINAL_RESCATUX_ISO} \
 ${ORIGINAL_RESCATUX_ISO}
 cd ..
 cp menus/grub.cfg ${ORIGINAL_GRUB_CFG_BACKUP}
+cp ${RESCATUX_SOURCE_PWD}/logos/background.png menus
 sed -e "s/RESCATUX_ISO_TO_REPLACE/${ORIGINAL_RESCATUX_ISO}/g" ${RESCATUX_SOURCE_PWD}/rescatux_grub.cfg > menus/grub.cfg
 ./supergrub-mkrescue -o=${RESCATUX_SOURCE_PWD}/${SG2D_RESCATUX_ISO}
 cp ${ORIGINAL_GRUB_CFG_BACKUP} menus/grub.cfg
 rm ${BOOT_ISOS_DIRECTORY}/${ORIGINAL_RESCATUX_ISO}
+rm menus/background.png
