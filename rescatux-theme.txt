@@ -1,0 +1,23 @@
+# Global Property
+title-text: "GRUB 1.99RC Oneiric"
+title-font: "Unknown Regular 16"
+title-color: "green"
+desktop-image: "/boot/grub/background.png"
+#desktop-color: "#000000"
+# Show the boot menu
++ boot_menu {
+left = 10%
+top = 15%
+width = 85%
+height = 75%
+item_font = "Unknown Regular 16"
+item_color = "lightgrey"
+selected_item_color = "yellow"
+item_height = 20
+item_padding = 10 # Vertical spacing between menuentries.
+item_spacing = 10
+item_icon_space = 20 # Horizontal spacing between the icon and it's menuentry.
+icon_width = 20
+icon_height = 20
+icon_spacing = 10
+}
