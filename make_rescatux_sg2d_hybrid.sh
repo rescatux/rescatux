@@ -43,3 +43,5 @@ rm menus/background.png
 rm menus/unicode.pf2
 rm menus/rescatux-theme.txt
 
+cd ${RESCATUX_SOURCE_PWD}
+md5sum ${SG2D_RESCATUX_ISO} > ${SG2D_RESCATUX_ISO}.md5
