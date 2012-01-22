@@ -4,6 +4,7 @@
 SG2D_SOURCE_DIRECTORY="../../sgd/git/supergrub/"
 RESCATUX_SOURCE_PWD=`pwd`
 BOOT_ISOS_DIRECTORY="boot-isos"
+ORIGINAL_GRUB_CFG_BACKUP="original_grub_cfg_backup.cfg"
 # RESCATUX STUFF
 # Fetch version from folder directory name
 VERSION=`head -1 VERSION`
@@ -30,9 +31,8 @@ cd ${BOOT_ISOS_DIRECTORY}
 cp ${RESCATUX_SOURCE_PWD}/${ORIGINAL_RESCATUX_ISO} \
 ${ORIGINAL_RESCATUX_ISO}
 cd ..
+cp menus/grub.cfg ${ORIGINAL_GRUB_CFG_BACKUP}
+sed -e "s/RESCATUX_ISO_TO_REPLACE/${ORIGINAL_RESCATUX_ISO}/g" > menus/grub.cfg
 ./supergrub-mkrescue -o=${RESCATUX_SOURCE_PWD}/${SG2D_RESCATUX_ISO}
+cp ${ORIGINAL_GRUB_CFG_BACKUP} menus/grub.cfg
 rm ${BOOT_ISOS_DIRECTORY}/${ORIGINAL_RESCATUX_ISO}
-
-
-
-
