@@ -60,7 +60,7 @@ mkdir --parents $TEMP_FOLDER/
 # Apt-pining for live-* to come from 3.x - BEGIN
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER}
-echo "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
+echo -e -n "deb ${SID_MIRROR} sid main\ndeb ${SID_MIRROR} experimental main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
 cat >>$TEMP_FOLDER/${APT_PREFERENCES} <<END
 Package: live-boot
 Pin: release n=experimental
@@ -81,6 +81,11 @@ Pin-Priority: 600
 Package: *
 Pin: release n=experimental
 Pin-Priority: 1
+
+Package: *
+Pin: release n=sid
+Pin-Priority: 1
+
 END
 # Apt-pining for live-* to come from 3.x - END
 
