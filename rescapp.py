@@ -289,8 +289,17 @@ class MainWindow(QtGui.QWidget):
         
 	self.setLayout(grid)
 	self.setMaximumHeight(570)
+
+    def initActions(self):
+        self.exitAction = QtGui.QAction('Quit', self)
+        self.exitAction.setShortcut('Ctrl+Q')
+        self.exitAction.setStatusTip('Exit application')
+        self.connect(self.exitAction, QtCore.SIGNAL('triggered()'), self.close)
+    
     def __init__(self, url):
         QtGui.QMainWindow.__init__(self)
+        self.initActions()
+        self.addAction(self.exitAction)
 	self.parserescappmenues(mainmenu_filename)
 
         
