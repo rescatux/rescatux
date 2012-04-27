@@ -333,7 +333,7 @@ function rtux_File_Reordered_Device_Map() {
 
   local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
   local COLUMN_NUMBER=0 # Determine Hard disk column and Size column
-  for n_hard_disk in "${DETECTED_HARD_DISKS}"; do
+  for n_hard_disk in ${DETECTED_HARD_DISKS}; do
     let COLUMN_NUMBER=COLUMN_NUMBER+1
   done
   ARGS_ARRAY_INDEX=0
