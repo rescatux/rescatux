@@ -404,6 +404,20 @@ function rtux_Choose_User () {
 	${LIST_VALUES})";
 } # function rtux_Choose_User ()
 
+# 1 parametre = User to change password
+# User is asked to write temp password
+# Outputs choosen password
+function rtux_Enter_Pass() {
+
+  local USER="$1"
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+	  --entry  \
+	  --text "${ENTER_PASS_STR} (${USER})" \
+	  --hide-text
+
+} # rtux_Choose_Hard_Disk_Position()
+
 
 # Rescatux lib main variables
 
@@ -436,6 +450,7 @@ DESCRIPTION_STR="Description"
 WHICH_PARTITION_STR="Which partition?"
 WHICH_USER_STR="Which user?"
 SELECT_STR="Select"
+ENTER_PASS_STR="Enter password"
 PARTITION_STR="Partition"
 USER_STR="User"
 POSITION_STR="Position"

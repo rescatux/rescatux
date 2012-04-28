@@ -55,12 +55,10 @@ WHICH_USER_PASS_STR="Which user do you want to change its password?"
 
 SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
-# TODO: Implement function that let the user write the password (for a given user) (rtux_Pass)
-
 local SYSTEM_USERS=$(rtux_User_List ${SELECTED_PARTITION})
 
 SELECTED_USER=$(rtux_Choose_User ${SYSTEM_USERS});
-CHOOSEN_PASS=$(rtux_Pass ${SELECTED_USER})
+CHOOSEN_PASS=$(rtux_Enter_Pass ${SELECTED_USER})
 
 if rtux_Chpasswd ${SELECTED_PARTITION} ${SELECTED_USER} ${CHOOSEN_PASS}; then
   rtux_Message_Success ${PASSWD_CHANGED_OK_STR}
