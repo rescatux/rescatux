@@ -55,7 +55,12 @@ WHICH_USER_PASS_STR="Which user do you want to change its password?"
 
 SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
-local SYSTEM_USERS=$(rtux_User_List ${SELECTED_PARTITION})
+TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${SELECTED_PARTITION}
+TMP_DEV_PARTITION=/dev/${SELECTED_PARTITION}
+mkdir --parents ${TMP_MNT_PARTITION}
+mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null
+  SYSTEM_USERS=$(rtux_User_List "${TMP_MNT_PARTITION}/etc/passwd")
+umount ${TMP_MNT_PARTITION};
 
 SELECTED_USER=$(rtux_Choose_User ${SYSTEM_USERS});
 CHOOSEN_PASS=$(rtux_Enter_Pass ${SELECTED_USER})
