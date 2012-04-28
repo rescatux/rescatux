@@ -371,6 +371,12 @@ function rtux_File_Reordered_Device_Map() {
 
 } # rtux_File_Reordered_Device_Map()
 
+# 1 parametre = Passwd filename
+# Return users list from passwd
+function rtux_User_List() {
+  PASSWD_FILENAME="$1"
+  awk -F : '{print $1}' "${PASSWD_FILENAME}" | tr '\n' ' '
+} # rtux_User_List()
 
 # Rescatux lib main variables
 
