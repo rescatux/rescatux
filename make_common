@@ -79,10 +79,6 @@ Pin: release n=experimental
 Pin-Priority: 600
 
 Package: *
-Pin: release n=experimental
-Pin-Priority: 1
-
-Package: *
 Pin: release n=sid
 Pin-Priority: 1
 
