@@ -378,6 +378,33 @@ function rtux_User_List() {
   awk -F : '{print $1}' "${PASSWD_FILENAME}" | tr '\n' ' '
 } # rtux_User_List()
 
+# Let the user choose an user
+# Every parametre are the users
+# It outputs choosen user
+function rtux_Choose_User () {
+  local n=0
+  local LIST_VALUES=""
+  local DESC_VALUES=""
+  local USERS_LIST="$@"
+  for n_user in ${USERS_LIST}; do
+    if [[ n -eq 0 ]] ; then
+      LIST_VALUES="TRUE ${n_user}"
+    else
+      LIST_VALUES="${LIST_VALUES} FALSE ${n_user}"
+    fi
+  let n=n+1
+  done
+
+  echo "$(zenity ${ZENITY_COMMON_OPTIONS}  \
+	--list  \
+	--text "${WHICH_USER_STR}" \
+	--radiolist  \
+	--column "${SELECT_STR}" \
+	--column "${USER_STR}" \
+	${LIST_VALUES})";
+} # function rtux_Choose_User ()
+
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://rescatux.berlios.de"
@@ -407,8 +434,10 @@ CODE_STR="Code"
 NAME_STR="Name"
 DESCRIPTION_STR="Description"
 WHICH_PARTITION_STR="Which partition?"
+WHICH_USER_STR="Which user?"
 SELECT_STR="Select"
 PARTITION_STR="Partition"
+USER_STR="User"
 POSITION_STR="Position"
 HARDDISK_STR="Hard Disk"
 SIZE_STR="Size"
