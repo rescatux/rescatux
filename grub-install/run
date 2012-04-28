@@ -75,12 +75,6 @@ function rtux_Grub_Install () {
 
 # MAIN PROGRAM
 
-# TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
-
-GRUB_INSTALL_MBR_WIDTH="${RESCAPP_WIDTH}"
-GRUB_INSTALL_MBR_HEIGHT="${RESCAPP_HEIGHT}"
-
-
 GRUB_INSTALLED_OK_STR="Grub was installed OK! :)"
 GRUB_NOT_INSTALLED_STR="Grub was not installed. Something went wrong! :("
 WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
