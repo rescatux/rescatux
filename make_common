@@ -39,7 +39,7 @@ CHROOT_SOURCES_FOLDER="config/chroot_sources"
 SID_CHROOT_CONFIG="config/chroot_sources/sid.chroot"
 CHROOT_APT_CONFIG_FOLDER="config/chroot_apt"
 APT_PREFERENCES="config/chroot_apt/preferences"
-PACKAGES_CHROOT_FOLDER="config/packages.chroot"
+PACKAGES_CHROOT_FOLDER="config/chroot_local-packages"
 
 
 CUSTOM_PACKAGES_LISTS_FOLDER="config/chroot_local-packageslists"
