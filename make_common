@@ -19,6 +19,7 @@ RESCATUX_FILES="rescapp.py order.py setbackground.sh chat web grub-install updat
 MIRROR_BOOTSTRAP="http://127.0.0.1:83/squeeze_debian/"
 MIRROR_CHROOT="http://127.0.0.1:83/squeeze_debian"
 SID_MIRROR="http://ftp.es.debian.org/debian" # Only used for live-* packages on build time so that they are 3.x for loop support
+BACKPORTED_PASSWD="/home/adrian/gnu/rescatux/pruebas_backport/passwd_4.1.5-1~bpo60+1_i386.deb"
 
 
 ARCH="i386"
@@ -38,6 +39,7 @@ CHROOT_SOURCES_FOLDER="config/chroot_sources"
 SID_CHROOT_CONFIG="config/chroot_sources/sid.chroot"
 CHROOT_APT_CONFIG_FOLDER="config/chroot_apt"
 APT_PREFERENCES="config/chroot_apt/preferences"
+PACKAGES_CHROOT_FOLDER="config/packages.chroot"
 
 
 CUSTOM_PACKAGES_LISTS_FOLDER="config/chroot_local-packageslists"
@@ -57,6 +59,10 @@ cd ..
 # Generate logo - End
 
 mkdir --parents $TEMP_FOLDER/
+# Special backported passwd package
+mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
+cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
+
 # Apt-pining for live-* to come from 3.x - BEGIN
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER}
