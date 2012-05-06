@@ -56,7 +56,7 @@ function rtux_Sudoers () {
 # MAIN PROGRAM
 
 SUDOERS_CHANGED_OK_STR="Success! Sudoers was changed OK! :)"
-PASSWD_NOT_CHANGED_STR="Failure! Sudoers was not changed. Something went wrong! :("
+SUDOERS_NOT_CHANGED_STR="Failure! Sudoers was not changed. Something went wrong! :("
 WHICH_USER_SUDOERS_STR="Which user to be the sudo admin?"
 
 SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
@@ -71,9 +71,9 @@ umount ${TMP_MNT_PARTITION};
 SELECTED_USER=$(rtux_Choose_User ${SYSTEM_USERS});
 
 if rtux_Sudoers ${SELECTED_PARTITION} ${SELECTED_USER}; then
-  rtux_Message_Success ${PASSWD_CHANGED_OK_STR}
+  rtux_Message_Success ${SUDOERS_CHANGED_OK_STR}
 else
-  rtux_Message_Failure ${PASSWD_NOT_CHANGED_STR}
+  rtux_Message_Failure ${SUDOERS_NOT_CHANGED_STR}
 fi
 
 
