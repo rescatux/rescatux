@@ -1,0 +1,77 @@
+#!/bin/bash
+# Rescapp Chpasswd run script
+# Copyright Adrian Gibanel Lopez
+# Licensed under the GNU PUBLIC LICENSE 3.0
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+# Define a default sudoers file
+# 1 parametre = Selected partition
+# 2 parametre = Selected user
+function rtux_Sudoers () {
+
+  local EXIT_VALUE=1 # Error by default
+  local SELECTED_PARTITION="$1"
+  local SELECTED_USER="$2"
+
+  local SUDOERS_BACKUP_SUFIX="$(date +%Y_%m_%d_%H_%M_%S)"
+  local DEFAULT_SUDOERS_FILE="/etc/sudoers"
+
+  local n_partition=${SELECTED_PARTITION}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  local SUDOERS_DIRECTORY="sudoers"
+  local SUDOERS_TEMPLATE_FILENAME=\
+"${RESCATUX_PATH}${SUDOERS_DIRECTORY}/sudoers_template"
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+    if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
+
+      # Backup sudoers - BEGIN
+      cp ${TMP_MNT_PARTITION}${DEFAULT_SUDOERS_FILE} \
+      ${TMP_MNT_PARTITION}${DEFAULT_SUDOERS_FILE}_${SUDOERS_BACKUP_SUFIX}
+      # Backup sudoers - END
+      
+      cp ${SUDOERS_TEMPLATE_FILENAME} ${TMP_MNT_PARTITION}${DEFAULT_SUDOERS_FILE}
+      echo -e -n "\n${SELECTED_USER}\tALL=(ALL:ALL)\tALL\n" >> \
+      ${TMP_MNT_PARTITION}${DEFAULT_SUDOERS_FILE}
+	  
+    fi # Linux detector was found
+    umount ${TMP_MNT_PARTITION};
+  fi # Partition was mounted ok
+
+  return ${EXIT_VALUE}
+
+} # function rtux_Chpasswd ()
+
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+# MAIN PROGRAM
+
+SUDOERS_CHANGED_OK_STR="Success! Sudoers was changed OK! :)"
+PASSWD_NOT_CHANGED_STR="Failure! Sudoers was not changed. Something went wrong! :("
+WHICH_USER_SUDOERS_STR="Which user to be the sudo admin?"
+
+SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
+
+TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${SELECTED_PARTITION}
+TMP_DEV_PARTITION=/dev/${SELECTED_PARTITION}
+mkdir --parents ${TMP_MNT_PARTITION}
+mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null
+  SYSTEM_USERS=$(rtux_User_List "${TMP_MNT_PARTITION}/etc/passwd")
+umount ${TMP_MNT_PARTITION};
+
+SELECTED_USER=$(rtux_Choose_User ${SYSTEM_USERS});
+
+if rtux_Sudoers ${SELECTED_PARTITION} ${SELECTED_USER}; then
+  rtux_Message_Success ${PASSWD_CHANGED_OK_STR}
+else
+  rtux_Message_Failure ${PASSWD_NOT_CHANGED_STR}
+fi
+
+
