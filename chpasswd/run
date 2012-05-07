@@ -49,7 +49,7 @@ function rtux_Chpasswd () {
 
 # MAIN PROGRAM
 
-PASSWD_CHANGED_OK_STR="Password was changed OK! :)"
+PASSWD_CHANGED_OK_STR="Password was changed OK! :). We recommend to change it once you're back in your system to use your system default encryption."
 PASSWD_NOT_CHANGED_STR="Password was not changed. Something went wrong! :("
 WHICH_USER_PASS_STR="Which user do you want to change its password?"
 
