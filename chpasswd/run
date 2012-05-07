@@ -33,6 +33,7 @@ function rtux_Chpasswd () {
     if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
 
       echo "${SELECTED_USER}:${CHOOSEN_PASS}" | chpasswd -m --root ${TMP_MNT_PARTITION}
+      EXIT_VALUE=$?
 		  
     fi # Linux detector was found
     umount ${TMP_MNT_PARTITION}/sys
