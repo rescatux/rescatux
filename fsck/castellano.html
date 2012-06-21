@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>File System Check (Forced Fix) - Rescapp - Documentation</title>
+</head>
+<body>
+<h1>Chequeo del sistema de ficheros (Arreglo forzado) - Rescapp - Documentation</h1>
+<p></p>
+<ul>
+  <li>
+  <b>Paso 1</b><p></p>Rescapp busca todas las particiones basandose en la informaci&oacute;n encontrada en el archivo: <i>/proc/partitions</i>. Si la partici&oacute;n contiene un archivo llamado: <i>/etc/issue</i> tambi&eacute;n obtendr&aacute; el nombre de la distribuci&oacute;n.
+  </li>
+  <li>
+  <b>Paso 2</b><p></p>Rescatux te presenta las particiones encontradas en el Paso 1.<p></p>Se pregunta:<p></p>
+  <i>Which partition do you want to Filesystem check with automatic fix?</i><p></p>Es decir qu&eacute; partici&oacute;n quiere chequear con arreglo autom&aacute;tico. Se supone que ha de elegir la partici&oacute;n que quiere chequear con arreglo autom&aacute;tico y pulsar el bot&oacute;n OK.<p></p>La descripci&oacute;n se detalla como:
+    <ul>
+      <li>
+	<b>Distribution name</b>: La partici&oacute;n ra&iacute;z de tu distribuci&oacute;n se ha detectado y est&aacute; viendo su nombre.
+      </li>
+      <li>
+	<b>Not detected</b>: La partici&oacute;n se ha podido montar pero no hay un fichero <i>/etc/issue</i> en ela. Probablemente no es una partici&oacute;n ra&iacute;z.
+      </li>
+      <li>
+	<b>Can't mount:</b>: La partici&oacute;n no ha podido ser montada. Puede que sea la partici&oacute;n que se quiera arreglar, otra que Rescatux no sea capaz de montar o bien una partici&oacute;n de intercambio (swap).
+      </li>
+    </ul>
+  </li>
+  <li>
+  <b>Paso 5</b><p></p>Mientras el proceso de fsck se ejecuta el siguiente mensaje se muestra:<i>Running forced filesystem check and fix</i>
+  </li>
+  <li>
+  <b>Paso 6</b><p></p>
+Se informa del proceso fsck..<p></p>El mensaje se explica a s&iacute; mismo. Puede que obtenga:<p></p><i>Success! Filesystem check with automatic fix was OK! :)</i>, que quiere decir que ha funcionado<p></p>o<p></p><i>Filesystem check with automatic fix went wrong! :(</i> que quiere decir que algo ha ido mal.
+  </li>
+  <li>
+  <b>Paso 7</b><p></p>Deber&iacute;as pulsar OK en la ventana <i>Running forced filesystem check and fix</i>.
+  </li>
+  <li>
+  <b>Paso 8</b><p></p>Un fichero de log llamado <i>fsck.log.txt</i> se puede encontrar en el directorio de <i>logs</i> del escritorio.
+  </li>
+</ul>
+<center><a href="local_doc.html"><IMG SRC="go-previous.png">
+  </a>
+</center>
+</body>
+</html>
