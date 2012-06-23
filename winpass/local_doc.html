@@ -6,36 +6,38 @@
 <h1>Reset Windows NT, 200x, XP, Vista, Seven password - Rescapp - Documentation</h1>
 <p></p>
 Choose your language.
+<center><TABLE width="176" BORDER="0">
+
+<TR>
+   <TD><a href="#english">English</a></TD>
+  <TD><a href="castellano.html">Castellano</a></TD>
+</TR>
+
+</TABLE></center>
 <ul>
   <li><a href="#english">English</a></li>
 </ul>
 
 <a name="english">Reset Windows NT, 200x, XP, Vista, Seven password - Rescapp - Documentation</a>
 
-TODO
-
 <ul>
   <li>
-  <b>Step 1</b><p></p>Rescapp searchs for primary partitions on your disk.
+  <b>Step 1</b><p></p>Rescapp searchs for partitions on your disk with system32/config/sam files.
   </li>
   <li>
   <b>Step 2</b><p></p>If such partitions have been found Rescapp presents you the partitions. At the same time you are prompted:<p></p>
-  <i>Which partition is your Windows?</i><p></p> You are supposed to choose your Windows (probably you only will see one) and press the OK button. If you have several Windows the best Windows to choose is the first one that you installed on your computer.
+  <i>Which partition?</i><p></p> You are supposed to choose your Windows (probably you only will see one) and press the OK button.
   </li>
   <li>
-  <b>Step 3</b><p></p>Rescapp searchs for hard disks present on your system based on information found on <i>/proc/partitions</i> file.
+  <b>Step 3</b><p></p>Rescapp searchs for System users based on previous information.
   </li>
   <li>
-  <b>Step 4</b><p></p>You are prompted:<p></p><i>Which hard disk to install Linux on?</i><p></p> You are supposed to take a look at hard disk sizes (to be able to identify your hard disks) and choose (usually) the one that it is set to be first one to boot at your BIOS settings.
+  <b>Step 4</b><p></p>You are prompted:<p></p><i>Choose Windows user to reset its password</i><p></p> You are supposed to select the user which password you want to reset.
+  </li>
+  <b>Step 5</b><p></p>You are informed about the windows password reset process.<p></p>Message is self explanatory. You either get:<p></p><i>Success! Windows password was reset OK! :)</i><p></p>or<p></p><i>Failure! Windows password was not reset. Something went wrong! :(</i>
   </li>
   <li>
-  <b>Step 5</b><p></p>Rescapp with all gathered information is going to set up a Windows mbr in your choosen hard disk so that the partition you have choose in booted at your machine boot.<b>Please wait</b>. Currently (Rescatux 0.23) this step is time consuming but no Please wait message has been implemented.
-  </li>
-  <li>
-  <b>Step 6</b><p></p>You are informed about the mbr installation process.<p></p>Message is self explanatory. You either get:<p></p><i>Success! Windows mbr was installed OK! :)</i><p></p>or<p></p><i>Failure! Windows mbr was not installed. Something went wrong! :(</i>
-  </li>
-  <li>
-  <b>Step 7</b><p></p>A log file called <i>winmbr.log.txt</i> can be found at Desktop <i>logs</i> folder.
+  <b>Step 6</b><p></p>A log file called <i>winpass.log.txt</i> can be found at Desktop <i>logs</i> folder.
   </li>
 </ul>
 
