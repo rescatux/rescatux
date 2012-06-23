@@ -3,48 +3,40 @@
 <title>Update GRUB Configuration File - Rescapp - Documentation</title>
 </head>
 <body>
-<h1>Ayuda para actualizar el grub</h1>
-<blockquote></blockquote>
+<h1>Actualizar fichero de configuraci&oacute;n de GRUB - Rescapp - Documentation</h1>
+<p></p>
+
 <ul>
   <li>
-  <b>Step 1</b><p></p>Rescapp busca por entre las que contenga el archivo: <i>/etc/issue</i> basandose en la informacion alojada en: <i>/proc/partitions</i>.
+  <b>Paso 1</b><p></p>Rescapp busca las particiones que tienen en ellas el archivo: <i>/etc/issue</i> basandose en la informaci&oacute;n encontrada en el archivo <i>/proc/partitions</i>.
   </li>
   <li>
-  <b>Step 2</b><p></p>Si se a encontrado la particion Rescapp presenta la particion en la que a encontrado el archivo <i>/etc/issue</i>. a la vez que te pregunta:<p></p>
-  <i>Which partition is your main GNU/Linux?</i><p></p> Se supone que se elegira la particion donde tienes la distribucion principal de GNU/Linux (Probablemente solo tengas una) i presionas ok.
+  <b>Paso 2</b><p></p>Si esas particiones se encuentran Rescapp le presenta las particiones que tienen en ellas el siguiente archivo: <i>/etc/issue</i>. Al mismo tiempo se le pregunta:<p></p>
+  <i>Which partition is your main GNU/Linux?</i><p></p>. Es decir, qu&eacute; partici&oacute;n su partici&oacute;n de Gnu/Linux principal. Se le supone elegir su distribuci&oacute;n de Gnu/Linux principal (probablemente s&oacute;lo ver&aacute; una) y pulsar el bot&oacute;n OK.
   </li>
   <li>
-  <b>Step 3</b><p></p>Rescapp busca los discos duros presentes en tu sistema basandose en la informacion del archivo <i>/proc/partitions</i>.
+  <b>Paso 3</b><p></p>Rescapp busca los discos duros presentes en su sistema basandose en la informaci&oacute;n encontrada en el archivo <i>/proc/partitions</i>.
   </li>
   <li>
-  <b>Step 4</b><p></p>Entonces te preguntara:<p></p><i>These are detected hard disks. Prepare to order them according to boot order. Press OK to continue.</i><p></p>. Mira los discos duros i su tamaño. No tendras que hacer nada. Solo presiona ok por ahora.
+  <b>Paso 4</b><p></p>Se le pregunta:<p></p><i>These are detected hard disks. Prepare to order them according to boot order. Press OK to continue.</i><p></p>.
+Eche un vistazo a sus discos duros y sus tama&ntilde;os. No tiene que hacer nada. Pulse OK por ahora.
   </li>
   <li>
-  <b>Step 5</b><p></p>Para cada uno de los discos duros encontrados en su ordenador se le pide:<p></p><i>Which is the right position for this hard disk?</i><p></p>. Echa un vistazo a nombre del disco duro y seleccionar el orden de arranque.
+  <b>Paso 5</b><p></p>Para cada uno de los discos duros encontrados en su ordenador se le pregunta:<p></p><i>Which is the right position for this hard disk?</i><p></p>. Por favor mira el nombre de los discos duros y designele un orden.
   </li>
   <li>
-  <b>Step 6</b><p></p>
-  Rescapp con toda la información recogida  va a crear un device.map temporal en la instalación de Linux (que se eliminará más adelante) y tratara de actualizar el archivo de configuración de grub en el disco duro seleccionado gracias a su propia distribución de update-grub command<b>.Porfavor espere </b></li>
-  <li>
-  <b>Step 7</b><p></p>
-  Seras informado del proceso de
-  actualizacion de la configuracion de tu grub
-  <p></p>
-El mensaje se explica por sí mismo. Usted obtiene:
-<p></p><i>Success! Grub configuration was updated ok! :)</i><p></p>
-o
-<p></p><i>Failure! Grub configuration update went wrong! :(</i>
+  <b>Paso 6</b><p></p>Rescapp con toda la informaci&oacute;n obtenida va a crear un archivo device.map en su instalaci&oacute;n de Gnu/Linux (que va a ser borrada m&aacute;s tarde) e intentar&aacute; actualizar el archivo de configuraci&oacute;n de grub en su disco duro seleccionado gracias al comando update-grub de la propia distribuci&oacute;n de Gnu/Linux.<b>Por favor espere</b>. Actualmente (Rescatux 0.23) este paso tarda alg&uacute;n tiempo pero no aparce ning&uacute;n mensaje que indique que hay que esperar.
   </li>
   <li>
-  <b>Step 8</b><p></p>A log file called <i>update-grub.log.txt</i> can be found at Desktop <i>logs</i> folder.
+  <b>Paso 7</b><p></p>Se le informa del proceso de actualizaci&oacute;n del archivo de configuraci&oacute;n de grub.<p></p>El mensaje se explica a s&iacute; mismo. Bien obtiene:<p></p><i>Success! Grub configuration was updated ok! :)</i> (Ha ido bien.)<p></p>o<p></p><i>Failure! Grub configuration update went wrong! :(</i>(Algo ha ido mal)
+  </li>
+  <li>
+  <b>Paso 8</b><p></p>Un fichero de log llamado: <i>update-grub.log.txt</i> puede encontrarse en el directorio <i>logs</i> del escritorio.
   </li>
 </ul>
-
-
-<i><u><b>Actualizacion de grub</b></i>
 <center><a href="local_doc.html"><IMG SRC="go-previous.png">
   </a>
 </center>
+
 </body>
 </html>
-
