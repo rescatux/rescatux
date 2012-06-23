@@ -25,15 +25,8 @@ Choose your language.
   <b>Step 1</b><p></p>Rescapp searchs for all the partitions based on information found in <i>/proc/partitions</i> file. If the partition contains an: <i>/etc/issue</i> file it will also obtain the distribution name.
   </li>
   <li>
-  <b>Step 2</b><p></p>Rescapp loops all the hard disks (based on information found in <i>/proc/partitions</i>. For each one of the found hard disks you are prompted:<p></p>
-  <i>Rename hard disk if needed</i><p></p> Detected: HARDDISK<p></p>If the hard disk is correct please press OK button.<p></p>If you know that the shown hard disk is called hda instead of detected sda you can write hda and press OK.
-  </li>
-  <li>
-  <b>Step 3</b><p></p>Rescatux redefines on the fly their detected hard disks.
-  </li>
-  <li>
-  <b>Step 4</b><p></p>Rescapp presents you found partitions on Step 1.<p></p>You are prompted:<p></p>
-  <i>Which partition do you want to Filesystem check with automatic fix?</i><p></p> You are supposed to choose whatever partition you want to force filesystem check and press the OK button.<p></p>Explanation of description is:
+  <b>Step 2</b><p></p>Rescapp presents you found partitions on Step 1.<p></p>You are prompted:<p></p>
+  <i>Which partition?</i><p></p> You are supposed to choose whatever partition you want to force filesystem check and press the OK button.<p></p>Explanation of description is:
     <ul>
       <li>
 	<b>Distribution name</b>: Your distribution root partition has been detected and you are seeing its name.
@@ -47,16 +40,16 @@ Choose your language.
     </ul>
   </li>
   <li>
-  <b>Step 5</b><p></p>While the fsck process is being run the following message is displayed:<i>Running forced filesystem check and fix</i>
+  <b>Step 3</b><p></p>While the fsck process is being run the following message is displayed:<i>Running forced filesystem check and fix</i>
   </li>
   <li>
-  <b>Step 6</b><p></p>You are informed about the fsck process.<p></p>Message is self explanatory. You either get:<p></p><i>Success! Filesystem check with automatic fix was OK! :)</i><p></p>or<p></p><i>Filesystem check with automatic fix went wrong! :(</i>
+  <b>Step 4</b><p></p>You are informed about the fsck process.<p></p>Message is self explanatory. You either get:<p></p><i>Success! Filesystem check with automatic fix was OK! :)</i><p></p>or<p></p><i>Filesystem check with automatic fix went wrong! :(</i>
   </li>
   <li>
-  <b>Step 7</b><p></p>You should click OK on the <i>Running forced filesystem check and fix</i> window.
+  <b>Step 5</b><p></p>You should click OK on the <i>Running forced filesystem check and fix</i> window.
   </li>
   <li>
-  <b>Step 8</b><p></p>A log file called <i>fsck.log.txt</i> can be found at Desktop <i>logs</i> folder.
+  <b>Step 6</b><p></p>A log file called <i>fsck.log.txt</i> can be found at Desktop <i>logs</i> folder.
   </li>
 </ul>
 
