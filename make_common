@@ -85,7 +85,7 @@ Pin: release n=sid
 Pin-Priority: 600
 
 Package: *
-Pin: release n=squeeze
+Pin: release n=sid
 Pin-Priority: 1
 
 END
