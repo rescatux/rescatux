@@ -63,33 +63,11 @@ mkdir --parents $TEMP_FOLDER/
 mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 
-# Apt-pining for live-* to come from 3.x - BEGIN
+# Live-* to come from 3.x - BEGIN
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER}
-echo -e -n "deb ${SID_MIRROR} sid main\ndeb ${SID_MIRROR} experimental main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
-cat >>$TEMP_FOLDER/${APT_PREFERENCES} <<END
-Package: live-boot
-Pin: release n=experimental
-Pin-Priority: 600
-
-Package: live-boot-initramfs-tools
-Pin: release n=experimental
-Pin-Priority: 600
-
-Package: live-config
-Pin: release n=experimental
-Pin-Priority: 600
-
-Package: live-config-sysvinit
-Pin: release n=experimental
-Pin-Priority: 600
-
-Package: *
-Pin: release n=sid
-Pin-Priority: 1
-
-END
-# Apt-pining for live-* to come from 3.x - END
+echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
+# Live-* to come from 3.x - END
 
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
