@@ -12,8 +12,9 @@ SYNAPTIC_PACKAGES="synaptic"
 GKSU_PACKAGES="libgtop2-common libgtop2-7 libgksu2-0 gksu"
 GPARTED_PACKAGES="libcairomm-1.0-1 libglibmm-2.4-1c2a libpangomm-1.4-1 libgtkmm-2.4-1c2a gparted"
 PASSWD_PACKAGES="libsemanage1 libsemanage-common libustr-1.0-1"
+BOOTINFO_PACKAGES="xz-lzma"
 #GNOME_MINIMAL_PACKAGES="gdm3 gedit gnome-core nautilus"
-PACKAGES="${LXDE_PACKAGES} ${PYTHON_PACKAGES} ${RAID_PACKAGES} ${LVM_PACKAGES} ${PASSWD_PACKAGES} ${SYNAPTIC_PACKAGES} ${GKSU_PACKAGES} ${GPARTED_PACKAGES} zenity iceweasel xchat syslinux pastebinit mbr ntfs-3g chntpw samdump2 bkhive gawk" # I add syslinux so that isohybrid command is recognised.
+PACKAGES="${LXDE_PACKAGES} ${PYTHON_PACKAGES} ${RAID_PACKAGES} ${LVM_PACKAGES} ${PASSWD_PACKAGES} ${SYNAPTIC_PACKAGES} ${GKSU_PACKAGES} ${GPARTED_PACKAGES} ${BOOTINFO_PACKAGES} zenity iceweasel xchat syslinux pastebinit mbr ntfs-3g chntpw samdump2 bkhive gawk" # I add syslinux so that isohybrid command is recognised.
 BOOT_OPTION="-b iso-hybrid"
 LINUX_FLAVOURS="486 amd64"
 source make_common
