@@ -12,7 +12,7 @@ set +v
 # Run Boot Info script
 function rtux_Boot_Info_Script () {
   
-  if  $(dirname ${0})/${BOOT_INFO_SCRIPT_BINARY} /dev/stdout; then    
+  if  $(dirname ${0})/${BOOT_INFO_SCRIPT_BINARY} --stdout; then    
     return 0; # Ok
   else
     return 1; # Error
@@ -25,7 +25,7 @@ function rtux_Boot_Info_Script () {
 # MAIN PROGRAM
 
 
-BOOT_INFO_SCRIPT_BINARY="boot_info_script.sh"
+BOOT_INFO_SCRIPT_BINARY="bootinfoscript"
 
 BOOT_INFO_SCRIPT_OK_STR="Boot Info Script was run OK! :)"
 BOOT_INFO_SCRIPT_KO_STR="Boot Info Script had a problem. Something went wrong! :("

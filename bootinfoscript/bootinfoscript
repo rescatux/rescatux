@@ -1,12 +1,12 @@
 #!/bin/bash
-VERSION='0.60';
-RELEASE_DATE='17 May 2011';
+VERSION='0.61';
+RELEASE_DATE='1 April 2012';
 LAST_GIT_COMMIT='';
 RETRIEVAL_DATE='';
 ################################################################################
 #                                                                              #
 # Copyright (c) 2009-2010      Ulrich Meierfrankenfeld                         #
-# Copyright (c) 2011           Gert Hulselmans                                 #
+# Copyright (c) 2011-2012      Gert Hulselmans                                 #
 #                                                                              #
 # Permission is hereby granted, free of charge, to any person obtaining a copy #
 # of this software and associated documentation files (the "Software"), to     #
@@ -28,17 +28,17 @@ RETRIEVAL_DATE='';
 #                                                                              #
 ################################################################################
 #                                                                              #
-# Developers:    Ulrich Meierfrankenfeld (aka meierfra) (ubuntuforums.org)     #
-#                Gert Hulselmans                                               #
+# Current developer:  Gert Hulselmans                                          #
 #                                                                              #
-# Contributor:   caljohnsmith (ubuntuforums.org)                               #
+# Past developer:     Ulrich Meierfrankenfeld (meierfra) (ubuntuforums.org)    #
+# Past contributor:   caljohnsmith (ubuntuforums.org)                          #
 #                                                                              #
-# Hosted at:     http://sourceforge.net/projects/bootinfoscript/               #
+# Hosted at:          http://sourceforge.net/projects/bootinfoscript/          #
 #                                                                              #
-# The birth of the Boot Info Script:                                           #
-#                http://ubuntuforums.org/showthread.php?t=837791               #
+# The birth of Boot Info Script:                                               #
+#                     http://ubuntuforums.org/showthread.php?t=837791          #
 #                                                                              #
-# Tab width:     8 spaces                                                      #
+# Tab width:          8 spaces                                                 #
 #                                                                              #
 ################################################################################
 
@@ -120,14 +120,6 @@ help () {
 	  If no filename is specified, the file will be saved in the home dir as
 	  "bootinfoscript_YYYY-MM-DD_hh:mm:ss".
 	
-	
-	  If multiple versions of Boot Info Script are detected in the same directory,
-	  Boot Info Script will list all versions found.
-	  In that case you need to force Boot Info Script to run a certain version,
-	  by adding "--this" as first argument (root rights needed):
-	
-	    ${0} --this <outputfile>
-	
 	HELP
 
    exit 0;
@@ -206,9 +198,6 @@ version () {
 
 
 
-## Run this version of BIS even when multiple versions are detected in the same directory?
-this_BIS=0;	 # no=0
-
 ## Gzip a copy of the output file? ##
 gzip_output=0;	 # off=0
 
@@ -221,17 +210,7 @@ stdout_output=0; # off=0
 
 process_args () {
   if [ ${#@} -ge 1 ] ; then
-     if [ $1 = '--this' ] ; then
-	this_BIS=1;	# run this version of BIS even if multiple versions are detected.
-
-	if [ ${#@} -ge 2 ] ; then
-	   shift;	# shift the command line parameters ($2 -> $1), so they can be processed.
-	else
-	   return 0;	# exit this function when only '--this' was passed.
-	fi
-     fi
-
-     # Process other arguments.
+     # Process arguments.
      case "$1" in
 	-g	  ) gzip_output=1; if [ ! -z "$2" ] ; then LogFile_cmd="$2"; fi;;
 	--gzip	  ) gzip_output=1; if [ ! -z "$2" ] ; then LogFile_cmd="$2"; fi;;
@@ -314,6 +293,7 @@ Programs='
 	hexdump
 	ls
 	mkdir
+	mktemp
 	mount
 	printf
 	pwd
@@ -339,6 +319,22 @@ for Program in ${Programs} ${Programs_SBIN}; do
      Check_Prog=0;
   fi
 done
+
+
+
+## Can we decompress a LZMA stream? ##
+#
+#   The Grub2 (v1.99) core_dir string is contained in a LZMA stream.
+#   See if we have xz or lzma installed to decompress the stream.
+#
+
+if [ $(type xz > /dev/null 2>&1 ; echo $?) -eq 0 ] ; then
+   UNLZMA='xz --format=lzma --decompress';
+elif [ $(type lzma > /dev/null 2>&1 ; echo $?) -eq 0 ] ; then
+   UNLZMA='lzma -cd';
+else
+   UNLZMA='none';
+fi
 
 
 
@@ -383,39 +379,6 @@ fi
 
 
 
-## Check if there are other bootinfoscript files in the same directory. ##
-#
-#   This can be useful when BIS was downloaded multiple times with Firefox, Chromium, ...
-#   Those browsers will add a suffix to the filename, when there was already
-#   a file with the same name:
-#
-#     bootinfoscript(<number>)
-#
-#   To force BIS to run a certain version, add "--this" as first argument:
-#
-#     ./bootinfoscript --this <outputfile>
-#
-
-if [ ${this_BIS} -eq 0 ] ; then
-   declare -a BIS_files;
-
-   BIS_files=( $(ls "$(dirname "$0")/bootinfoscript" "$(dirname \"$0\")"/bootinfoscript\(*\) 2> /dev/null) );
-
-   if [ "${#BIS_files[*]}" -ge 2 ] ; then
-      printf 'Multiple bootinfoscript files where found:\n\n';
-
-      for i in ${!BIS_files[@]} ; do
-	eval $(echo 'BIS_'$(grep -m1 '^VERSION' "${BIS_files[$i]}") );
-	printf "  - ${BIS_files[$i]}:\tversion ${BIS_VERSION}\n";
-      done
-
-      printf '\nAre you sure you want to run this version? If so, run:\n\n  %s --this %s\n\n' "$0" "$*";
-      exit 1;
-   fi
-fi
-
-
-
 ## List of folders which might contain files used for chainloading. ##
 
 Boot_Codes_Dir='
@@ -441,7 +404,7 @@ Boot_Prog_Normal='
 	/ubuntu/disks/root.disk
 	/ubuntu/disks/home.disk
 	/ubuntu/disks/swap.disk
-	/core.img	/grub/core.img		/boot/grub/core.img	/grub2/core.img	/boot/grub2/core.img
+	/core.img	/grub/core.img		/boot/grub/core.img	/grub2/core.img	/boot/grub2/core.img	/grub2/i386-pc/core.img	/boot/grub2/i386-pc/core.img
 	/burg/core.img	/boot/burg/core.img
 	/ldlinux.sys	/syslinux/ldlinux.sys	/boot/syslinux/ldlinux.sys
 	/extlinux.sys	/extlinux/extlinux.sys	/boot/extlinux/extlinux.sys
@@ -471,7 +434,7 @@ Boot_Prog_Fat='
 	/ubuntu/disks/root.disk
 	/ubuntu/disks/home.disk
 	/ubuntu/disks/swap.disk
-	/core.img	/grub/core.img		/boot/grub/core.img	/grub2/core.img	/boot/grub2/core.img
+	/core.img	/grub/core.img		/boot/grub/core.img	/grub2/core.img	/boot/grub2/core.img	/grub2/i386-pc/core.img	/boot/grub2/i386-pc/core.img
 	/burg/core.img	/boot/burg/core.img
 	/ldlinux.sys	/syslinux/ldlinux.sys	/boot/syslinux/ldlinux.sys
 	/extlinux.sys	/extlinux/extlinux.sys	/boot/extlinux/extlinux.sys
@@ -494,7 +457,7 @@ Boot_Files_Normal='
 	/burg.cfg	/burg/burg.cfg	/boot/burg/burg.cfg
 	/grub.conf	/grub/grub.conf	/boot/grub/grub.conf	/grub2/grub.conf	/boot/grub2/grub.conf
 	/ubuntu/disks/boot/grub/menu.lst	/ubuntu/disks/install/boot/grub/menu.lst	/ubuntu/winboot/menu.lst
-	/boot.ini	/BOOT.INI
+	/boot.ini	/BOOT.INI	/Boot.ini
 	/etc/fstab
 	/etc/lilo.conf	/lilo.conf
 	/syslinux.cfg	/syslinux/syslinux.cfg	/boot/syslinux/syslinux.cfg
@@ -609,19 +572,8 @@ fi
 
 
 ## Create temporary directory ##
-#
-#   Create previously non-existing  folder of the form of:
-#     /tmp/BootInfo0, /tmp/BootInfo1, /tmp/BootInfo2, ... 
 
-Folder=/tmp/BootInfo;
-i=0;
-
-while (! mkdir ${Folder}${i} 2>/dev/null) ; do  
-  i=$((${i}+1));
-  wait;
-done
-
-Folder=${Folder}${i};
+Folder=$(mktemp -t -d BootInfo-XXXXXXXX);
 
 
 
@@ -1802,7 +1754,7 @@ grub2_info () {
 
 	  magic=$(hexdump -v -n 4 -e '/1 "%02x"' ${core_img_file});
 
-	  if ( [ "${magic}" = '5256be1b' ] || [ "${magic}" = '52e82801' ] ) ; then
+	  if ( [ "${magic}" = '5256be1b' ] || [ "${magic}" = '5256be6f' ] || [ "${magic}" = '52e82801' ] ) ; then
 	     # core.img file was found.
 	     core_img_found=1;
 
@@ -1823,7 +1775,8 @@ grub2_info () {
 		       ${AWK} '{ found_at=match($0, "d1e9dffeffff0000" ); if (found_at == "0") { print "offset_lzma=0" } \
 			     else { print "offset_lzma=" ((found_at - 1 ) / 2 ) + 8 } }');
 
-		if [ $(type unlzma > /dev/null 2>&1 ; echo $?) -eq 0 ] ; then
+		# Do we have xz or lzma installed?
+		if [ "${UNLZMA}" != 'none' ] ; then
 		   if [ ${offset_lzma} -ne 0 ] ; then
 
 		      # Correct the offset to the lzma stream, when 8 subsequent bytes of zeros are at the start of this offset, 
@@ -1835,11 +1788,12 @@ grub2_info () {
 		      lzma_uncompressed_size=$(( ${total_module_size} + ${kernel_image_size} - ${offset_lzma} + 512 ));
 
 		      # Make lzma header (13 bytes): ${lzma_uncompressed_size} must be displayed in little endian format.
-		      printf '\x5d\x00\x00\x01\x00'$( printf '%08x' $((${total_uncompressed_size} - ${offset_lzma} + 512 ))  | awk '{printf "\\x%s\\x%s\\x%s\\x%s", substr($0,7,2), substr($0,5,2), substr($0,3,2), substr($0,1,2)}' )'\x00\x00\x00\x00' > ${Tmp_Log};
+		      printf '\x5d\x00\x00\x01\x00'$( printf '%08x' $((${lzma_uncompressed_size} - ${offset_lzma} + 512 )) \
+			 | awk '{printf "\\x%s\\x%s\\x%s\\x%s", substr($0,7,2), substr($0,5,2), substr($0,3,2), substr($0,1,2)}' )'\x00\x00\x00\x00' > ${Tmp_Log};
 
-		      # Get lzma_stream, add it after the lzma header and decompress it (unlzma).
+		      # Get lzma_stream, add it after the lzma header and decompress it.
 		      dd if=${core_img_file} bs=${offset_lzma} skip=1 count=$((${lzma_uncompressed_size} / ${offset_lzma} + 1)) 2>> ${Trash} \
-			 | cat ${Tmp_Log} - | unlzma > ${core_img_file_unlzma};
+			 | cat ${Tmp_Log} - | ${UNLZMA} 2>> ${Trash} > ${core_img_file_unlzma};
 
 		      # Get core dir.
 		      core_dir=$( hexdump -v -n 64 -e '"%_c"' ${core_img_file_unlzma} );
@@ -1880,10 +1834,10 @@ grub2_info () {
 		     fi		      
 		   fi
 		else
-		   # When unlzma isn't available, we can't get the core_dir, but we still can show the other info.
+		   # When xz or lzma isn't available, we can't get the core_dir, but we still can show the other info.
 		   core_dir='??';
 
-		   echo 'To be able to see for which directory Grub2 (v1.99) looks for, install "unlzma".' >> ${Error_Log};
+		   echo 'To be able to see for which directory Grub2 (v1.99) looks for, install "xz" or "lzma".' >&2;
 		fi
 
 	     else
@@ -1945,7 +1899,7 @@ get_embedded_menu () {
   # Check if magic bytes that go before the embedded menu, are present.
   offset_menu=$(dd if="${source}" count=4 bs=128k 2>> ${Trash} | hexdump -v -e '/1 "%02x"' | grep -b -o 'b0021ace000000000000000000000000');
 
-  if [ -n ${offset_menu} ] ; then
+  if [ -n "${offset_menu}" ] ; then
      # Magic found.
      titlebar_gen "${titlename}" " embedded menu";
      echo '--------------------------------------------------------------------------------' >> "${Log1}";
@@ -2091,7 +2045,7 @@ Get_Partition_Info() {
      # Don't display the error message from blkid for extended partition.
      cat ${Tmp_Log} >> ${Trash};
   else
-     cat ${Tmp_Log} >> ${Error_Log};
+     cat ${Tmp_Log} >&2;
   fi
 
   # Display the File System Type.
@@ -2113,10 +2067,11 @@ Get_Partition_Info() {
 	0689) BST='Syslinux 3.00-3.52';
 	      syslinux_info ${part};
 	      BSI="${BSI} ${Syslinux_Msg}";;
+	7405) BST='Windows 7: FAT32';;
 	0734) BST='Dos_1.0';;
-	0745) BST='Vista: FAT32';;
+	0745) BST='Windows Vista: FAT32';;
 	089e) BST='MSDOS5.0: FAT16';;
-	08cd) BST='Windows XP';;
+	08cd) BST='Windows XP: NTFS';;
 	0b60) BST='Dell Utility: FAT16';; 
 	0bd0) BST='MSWIN4.1: FAT32';;
 	0e00) BST='Dell Utility: FAT16';;
@@ -2133,7 +2088,7 @@ Get_Partition_Info() {
 	4445) BST='Dell Restore: FAT32';;
 	55aa) case ${Bytes80_to_83} in
 		55aa750a) BST='Grub4Dos: FAT32';;
-		55aa*   ) BST='Windows Vista/7';;	# 55aa7506 = Windows Vista
+		55aa*   ) BST='Windows Vista/7: NTFS';;	# 55aa7506 = Windows Vista
 	      esac;;
 	55cd) BST='FAT32';;
 	5626) BST='Grub4Dos: EXT2/3/4';;
@@ -2155,7 +2110,7 @@ Get_Partition_Info() {
 	7e1e) BST='Grub4Dos: FAT12/16';;
 	8a56) BST='Acronis SZ: FAT32';;
 	83e1) BST='ISOhybrid with partition support (Syslinux 4.00-4.04)';;
-	8ec0) BST='Windows XP';;
+	8ec0) BST='Windows XP: NTFS';;
 	8ed0) BST='Dell Recovery: FAT32';;
 	b106) BST='Syslinux 4.00-4.02';
 	      syslinux_info ${part};
@@ -2165,9 +2120,9 @@ Get_Partition_Info() {
 	b6d1) BST='Windows XP: FAT32';;
 	e2f7) BST='FAT32, Non Bootable';;
 	e879) BST='ISOhybrid (Syslinux 3.74-3.80)';;
-	e9d8) BST='Windows Vista/7';;
+	e9d8) BST='Windows Vista/7: NTFS';;
 	f6f6) BST='- (cleared BS by FDISK)';;
-	fa33) BST='Windows XP';;
+	fa33) BST='Windows XP: NTFS';;
 	fbc0) BST='ISOhybrid (Syslinux 3.81)';;
 
 	## If Grub or Grub 2 is in the boot sector, investigate the embedded information. ##
@@ -2442,7 +2397,7 @@ Get_Partition_Info() {
 	      # Remove Wubu loop device, if created by BIS.
 	      [[ ${WubiDev} -eq 0 ]] && losetup -d "${Wubi}";
 	   else 
-	      echo "Found Wubi on ${name}. But could not create a loop device." >> ${Error_Log};
+	      echo "Found Wubi on ${name}. But could not create a loop device." >&2;
 	   fi
 	fi
                     
