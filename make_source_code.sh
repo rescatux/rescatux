@@ -6,7 +6,7 @@ CURRENT_FOLDER=$PWD
 BASE_FILENAME="rescatux_source_code_`head -n 1 VERSION`"
 TEMP_FOLDER_PRE="/tmp/$$"
 TEMP_FOLDER="${TEMP_FOLDER_PRE}/${BASE_FILENAME}"
-SOURCE_CODE_FILE="VERSION README Makefile rescapp.py order.py rescapp.sh.desktop make_source_code.sh make_rescatux_cd.sh make_rescatux_hybrid_amd64.sh make_rescatux_hybrid_i486.sh make_rescatux_hybrid.sh make_rescatux_usb.sh make_common chat web grub-install update-grub grub.lis grub rescatux.lis log show_log support support.lis logo images setbackground.sh setbackground.sh.desktop about.lis about about-rescapp rescatux_lib.sh share_log win.lis win winmbr winpass fs fs.lis fsck bootinfoscript share_log_forum rescapp_launcher.sh help-rescapp pass.lis pass chpasswd sudoers"
+SOURCE_CODE_FILE="VERSION README COPYING Makefile rescapp.py order.py rescapp.sh.desktop make_source_code.sh make_rescatux_cd.sh make_rescatux_hybrid_amd64.sh make_rescatux_hybrid_i486.sh make_rescatux_hybrid.sh make_rescatux_usb.sh make_common chat web grub-install update-grub grub.lis grub rescatux.lis log show_log support support.lis logo images setbackground.sh setbackground.sh.desktop about.lis about about-rescapp rescatux_lib.sh share_log win.lis win winmbr winpass fs fs.lis fsck bootinfoscript share_log_forum rescapp_launcher.sh help-rescapp pass.lis pass chpasswd sudoers"
 mkdir --parents $TEMP_FOLDER
 cp -r ${SOURCE_CODE_FILE} $TEMP_FOLDER
 cd ${TEMP_FOLDER_PRE}
