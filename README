@@ -1,7 +1,131 @@
+This is Rescatux, a Debian Live CD aimed at easy rescue.
+
+Please visit the official web page of GRUB 2, for more information.
+The URL is <http://www.supergrubdisk.org/rescatux/>.
+
+
+== BUILD INSTRUCTIONS ==
+
 In order to build Rescatux in a Squeeze system or Squeeze chroot you need these packages:
 
 live-helper
 imagemagick # Needed for logo generation
 syslinux # Needed for logo generation
 
+=== Build chntpw-ng ===
+
+It doesn't matter too much if you build it from squeeze or from an unstable system.
+Probably it will work in squeeze ok.
+
 You will find chntpw-ng source code at: http://developer.berlios.de/project/showfiles.php?group_id=11211 .
+
+Just check INSTALL.txt file on the package for build instructions.
+
+Build will generate chntpw binary file.
+
+Path to this file should be set at: make_common's CHNTPWNG_BINARY variable.
+
+=== Build backported passwd package ===
+
+This needs to be done on an squeeze system or chroot.
+
+First of all we need to install dpkg-dev backported package.
+
+1)
+Edit /etc/apt/sources.list and add:
+  deb http://backports.debian.org/debian-backports squeeze-backports main
+line.
+2)
+  apt-get update
+  apt-get -t squeeze-backports install dpkg-dev
+
+3) 
+  apt-get install devscripts build-essential
+4)
+Get shadow source code (adapt to your repository and latest version on squeeze):
+  dget -x http://ftp.de.debian.org/debian/pool/main/s/shadow/shadow_4.1.5-1.dsc
+5)
+Some more dependencies...
+  apt-get install autoconf automake1.9 libtool \
+  gettext libpam0g-dev debhelper quilt dpkg-dev \
+  xsltproc docbook-xsl docbook-xml libxml2-utils \
+  cdbs libselinux1-dev libsemanage1-dev \
+  gnome-doc-utils
+
+6)
+  cd shadow-4.1.5
+  dch --bpo
+7)
+  fakeroot debian/rules binary
+8)
+  dpkg-buildpackage -us -uc
+
+This will generate a deb package file like:
+passwd_4.1.5-1~bpo60+1_i386.deb
+
+Path to this package should be set at: make_common's BACKPORTED_PASSWD variable.
+
+
+=== Isolinux based image ===
+
+Edit these variables from make_common file if needed:
+
+MIRROR_BOOTSTRAP
+MIRROR_CHROOT
+SID_MIRROR
+BACKPORTED_PASSWD
+CHNTPWNG_BINARY
+
+Using an squeeze system or chroot run at the Rescatux source code directory:
+
+  ./make_rescatux_hybrid.sh
+
+This will generate an image like:
+  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b7.iso
+
+=== SG2D based image ===
+
+You need to have installed GNU GRUB2 in your system, at least the grub-mkrescue and grub-mkfont binaries.
+You also need to have Super Grub2 Disk source code.
+
+Edit SG2D_SOURCE_DIRECTORY variable in make_rescatux_sg2d_hybrid.sh file.
+Its value should be path to your Super Grub2 Disk source code directory.
+
+Using an unstable/wheezey system or chroot run at the Rescatux source code directory:
+
+  ./make_rescatux_sg2d_hybrid.sh
+
+This will generate an image like:
+  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8_sg2d.iso
+
+=== Make source code ===
+
+Just run:
+
+  ./make_source_code.sh
+
+in order to generate a file like:
+
+  rescatux_source_code_0.30b6.tar.gz
+
+
+=== Release ===
+
+The files that usually conform a release are:
+
+Rescatux iso based on Super Grub2 Disk:
+
+  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8.iso
+
+Rescatux iso based on Super Grub2 Disk md5sum file:
+
+  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8.iso.md5
+
+Rescatux source code:
+
+  rescatux_source_code_0.30b8.tar.gz
+
+=== Other notes ===
+
+You can change Rescatux version at VERSION file.
+
