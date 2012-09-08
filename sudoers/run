@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rescapp Chpasswd run script
+# Rescapp Sudoers run script
 # Copyright (C) 2012 Adrian Gibanel Lopez
 #
 # Rescapp is free software: you can redistribute it and/or modify
