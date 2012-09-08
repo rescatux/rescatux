@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 # Rescapp Generate logo
 # Copyright (C) 2012 Adrian Gibanel Lopez
