@@ -29,6 +29,7 @@ class RescappOption():
       self.isOption=False
       self.hasOfflineDoc=False
       self.executable=False
+      self.beta=False
       
     def isMenu(self):
       return (self.isOption == False)
@@ -58,11 +59,16 @@ class RescappOption():
       self.executable=mybool
     def getExecutable(self):
       return self.executable
+    def setBeta(self, mybool):
+      self.beta=mybool
+    def getBeta(self):
+      return self.beta
     def setFromDir(self, dir_to_check, ndir):
       global current_pwd
       global name_filename
       global description_filename
       global run_filename
+      global beta_filename
       global offlinedoc_filename
 
       
@@ -87,6 +93,8 @@ class RescappOption():
       if (os.path.isfile(current_pwd + '/' + ndir + '/' + run_filename)):
 	self.setAsOption()
 	self.setExecutable(True)
+      if (os.path.isfile(current_pwd + '/' + ndir + '/' + beta_filename)):
+	self.setBeta(True)
       if (os.path.isfile(current_pwd + '/' + ndir + '/' + offlinedoc_filename)):
 	self.setAsOption()
 	self.setHasOfflineDoc(True)
@@ -100,6 +108,7 @@ class MainWindow(QtGui.QWidget):
       	global name_filename
 	global description_filename
 	global run_filename
+	global beta_filename
 	global offlinedoc_filename
 	global option_history_list
 
@@ -216,7 +225,10 @@ class MainWindow(QtGui.QWidget):
 	
 	if (self.selected_option.getExecutable() == True):
 	  self.rescue_btn.show()
-	  self.rescue_btn.setText(self.selected_option.getName()+ "!!!")
+	  if (self.selected_option.getBeta() == True):
+	    self.rescue_btn.setText(self.selected_option.getName()+ " (BETA) " + "!!!")
+	  else:
+	    self.rescue_btn.setText(self.selected_option.getName()+ "!!!")
 	  self.rescue_btn.setToolTip(self.selected_option.getDescription())
 	else:
 	  if (hasattr(self, 'rescue_btn') == True ):
@@ -269,7 +281,12 @@ class MainWindow(QtGui.QWidget):
 	if ((self.selected_option.isMenu() == True ) or (self.selected_option.getCode() == "help-rescapp")):
 	  for n_option in option_list:
 	    print "DEBUG: Option code: "+ n_option.getCode() +" was found"
-	    tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
+	    
+	    if (n_option.getBeta() == True):
+	      tmp_name_button = QtGui.QPushButton(n_option.getName()+ " (BETA) ", self)
+	    else:
+	      tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
+	   
 	    tmp_name_button.setToolTip(n_option.getDescription())
 	    
 	    if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
@@ -334,6 +351,7 @@ if __name__ == "__main__":
     name_filename='name'
     description_filename='description'
     run_filename='run'
+    beta_filename='ISBETA'
     offlinedoc_filename='local_doc.html'
     version_filename='VERSION'
     
