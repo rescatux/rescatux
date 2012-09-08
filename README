@@ -115,11 +115,11 @@ The files that usually conform a release are:
 
 Rescatux iso based on Super Grub2 Disk:
 
-  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8.iso
+  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8_sg2d.iso
 
 Rescatux iso based on Super Grub2 Disk md5sum file:
 
-  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8.iso.md5
+  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8_sg2d.iso.md5
 
 Rescatux source code:
 
