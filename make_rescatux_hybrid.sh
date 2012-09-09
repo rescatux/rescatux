@@ -32,5 +32,5 @@ BOOTINFO_PACKAGES="xz-lzma"
 #GNOME_MINIMAL_PACKAGES="gdm3 gedit gnome-core nautilus"
 PACKAGES="${LXDE_PACKAGES} ${PYTHON_PACKAGES} ${RAID_PACKAGES} ${LVM_PACKAGES} ${PASSWD_PACKAGES} ${SYNAPTIC_PACKAGES} ${GKSU_PACKAGES} ${GPARTED_PACKAGES} ${BOOTINFO_PACKAGES} zenity iceweasel xchat syslinux pastebinit mbr ntfs-3g chntpw samdump2 bkhive gawk" # I add syslinux so that isohybrid command is recognised.
 BOOT_OPTION="-b iso-hybrid"
-LINUX_FLAVOURS="486 amd64"
+LINUX_FLAVOURS="amd64 486"
 source make_common
