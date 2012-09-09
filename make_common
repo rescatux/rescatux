@@ -36,7 +36,7 @@ RESCATUX_EMPTY_DIRS="log"
 #This is for squeeze
 MIRROR_BOOTSTRAP="http://127.0.0.1:83/squeeze_debian/"
 MIRROR_CHROOT="http://127.0.0.1:83/squeeze_debian"
-SID_MIRROR="http://ftp.es.debian.org/debian" # Only used for live-* packages on build time so that they are 3.x for loop support
+SID_MIRROR="http://snapshot.debian.org/archive/debian/20120727T111800Z/" # Only used for live-* packages on build time so that they are 3.x for loop support
 BACKPORTED_PASSWD="/home/adrian/gnu/rescatux/pruebas_backport/passwd_4.1.5-1~bpo60+1_i386.deb"
 
 
@@ -138,7 +138,8 @@ lh config \
   --packages-lists standard-x11 \
   --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \
   --mirror-chroot "${MIRROR_CHROOT}" \
-  --syslinux-splash "${TEMP_FOLDER}/${RLE_FILE}"
+  --syslinux-splash "${TEMP_FOLDER}/${RLE_FILE}" \
+  --apt-options "--yes -o Acquire::Check-Valid-Until=false"
 
 sudo bash -c "lh build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
 mv binary${IS_HYBRID}.${FILE_EXTENSION} ${CURRENT_FOLDER}/${BASE_FILENAME}.${FILE_EXTENSION}
