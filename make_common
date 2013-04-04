@@ -34,14 +34,11 @@ RESCATUX_EMPTY_DIRS="log"
 #MIRROR_CHROOT="http://192.168.0.50/debian"
 
 #This is for squeeze
-MIRROR_BOOTSTRAP="http://127.0.0.1:83/squeeze_debian/"
-MIRROR_CHROOT="http://127.0.0.1:83/squeeze_debian"
-SID_MIRROR="http://snapshot.debian.org/archive/debian/20120727T111800Z/" # Only used for live-* packages on build time so that they are 3.x for loop support
-BACKPORTED_PASSWD="/home/adrian/gnu/rescatux/pruebas_backport/passwd_4.1.5-1~bpo60+1_i386.deb"
-
+MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian/"
+MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 
 ARCH="i386"
-DISTRIBUTION="squeeze" # Todo: Select with a switch
+DISTRIBUTION="wheezy" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
@@ -53,10 +50,7 @@ CURRENT_FOLDER=$PWD
 
 TEMP_FOLDER="/tmp/${RESCATUX_STR}-tmp-build-$$"
 SKEL_FOLDER="config/chroot_local-includes/etc/skel"
-CHROOT_SOURCES_FOLDER="config/chroot_sources"
-SID_CHROOT_CONFIG="config/chroot_sources/sid.chroot"
-CHROOT_APT_CONFIG_FOLDER="config/chroot_apt"
-APT_PREFERENCES="config/chroot_apt/preferences"
+
 PACKAGES_CHROOT_FOLDER="config/chroot_local-packages"
 
 
@@ -77,37 +71,10 @@ cd ..
 # Generate logo - End
 
 mkdir --parents $TEMP_FOLDER/
-# Special backported passwd package
+# Special backported passwd packages
 mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
-cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
-
-# Live-* to come from 3.x - BEGIN
-mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
-mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER}
-echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
-cat >>$TEMP_FOLDER/${APT_PREFERENCES} <<END
-Package: live-boot
-Pin: release n=sid
-Pin-Priority: 600
-
-Package: live-boot-initramfs-tools
-Pin: release n=sid
-Pin-Priority: 600
-
-Package: live-config
-Pin: release n=sid
-Pin-Priority: 600
-
-Package: live-config-sysvinit
-Pin: release n=sid
-Pin-Priority: 600
-
-Package: *
-Pin: release n=sid
-Pin-Priority: 1
-
-END
-# Live-* to come from 3.x - END
+# Backported passwd no longer needed in wheezy
+#cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
@@ -127,7 +94,7 @@ sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER
 
 # Volatile so that we can use a local mirror that has not mirrored updates
 
-lh config \
+lb config \
   --volatile false \
   --apt-recommends false \
   --syslinux-menu true \
@@ -141,7 +108,7 @@ lh config \
   --syslinux-splash "${TEMP_FOLDER}/${RLE_FILE}" \
   --apt-options "--yes -o Acquire::Check-Valid-Until=false"
 
-sudo bash -c "lh build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
+sudo bash -c "lb build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
 mv binary${IS_HYBRID}.${FILE_EXTENSION} ${CURRENT_FOLDER}/${BASE_FILENAME}.${FILE_EXTENSION}
 cd ${CURRENT_FOLDER}
 md5sum ${BASE_FILENAME}.${FILE_EXTENSION} > ${BASE_FILENAME}.${FILE_EXTENSION}.md5
