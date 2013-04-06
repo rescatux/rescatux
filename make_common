@@ -29,6 +29,9 @@ VERSION=`head -1 VERSION`
 RESCATUX_FILES="rescapp.py order.py setbackground.sh chat web grub-install update-grub grub.lis grub rescatux.lis show_log support support.lis fsck fs fs.lis images logos about.lis about about-rescapp rescatux_lib.sh share_log win win.lis winmbr winpass bootinfoscript share_log_forum VERSION COPYING rescapp_launcher.sh help-rescapp pass.lis pass chpasswd sudoers"
 RESCATUX_EMPTY_DIRS="log"
 
+DESKTOP_METAPACKAGE="task-lxde-desktop"
+CORE_PACKAGES="live-tools user-setup sudo eject"
+
 # This was for lenny
 #MIRROR_BOOTSTRAP="http://192.168.0.50/debian/"
 #MIRROR_CHROOT="http://192.168.0.50/debian"
@@ -49,12 +52,12 @@ BASE_FILENAME="${RESCATUX_MEDIA_STR}_${ARCH}_`echo ${LINUX_FLAVOURS} | sed s/' '
 CURRENT_FOLDER=$PWD
 
 TEMP_FOLDER="/tmp/${RESCATUX_STR}-tmp-build-$$"
-SKEL_FOLDER="config/chroot_local-includes/etc/skel"
+SKEL_FOLDER="config/includes.chroot/etc/skel"
 
-PACKAGES_CHROOT_FOLDER="config/chroot_local-packages"
+PACKAGES_CHROOT_FOLDER="config/packages.chroot"
 
 
-CUSTOM_PACKAGES_LISTS_FOLDER="config/chroot_local-packageslists"
+CUSTOM_PACKAGES_LISTS_FOLDER="config/package-lists"
 
 #LIVE_HELPER_LISTS_FOLDER="/usr/share/live-helper/lists"
 LIVE_HELPER_LISTS_FOLDER="/usr/share/live/build/lists"
@@ -90,23 +93,23 @@ cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp setbackground.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cd $TEMP_FOLDER
 #sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
-sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list"
+sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
+sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${DESKTOP_METAPACKAGE}.list.chroot"
+sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
+
 
 # Volatile so that we can use a local mirror that has not mirrored updates
 
 lb config \
-  --volatile false \
+  --updates false \
   --apt-recommends false \
-  --syslinux-menu true \
   --linux-flavours "${LINUX_FLAVOURS}" \
   ${DISTRIBUTION_OPTION} \
   ${ARCH_OPTION} \
   ${BOOT_OPTION} \
-  --packages-lists standard-x11 \
   --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \
   --mirror-chroot "${MIRROR_CHROOT}" \
-  --syslinux-splash "${TEMP_FOLDER}/${RLE_FILE}" \
-  --apt-options "--yes -o Acquire::Check-Valid-Until=false"
+  --apt-options "--force-yes --yes -o Acquire::Check-Valid-Until=false"
 
 sudo bash -c "lb build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
 mv binary${IS_HYBRID}.${FILE_EXTENSION} ${CURRENT_FOLDER}/${BASE_FILENAME}.${FILE_EXTENSION}
