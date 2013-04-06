@@ -113,6 +113,7 @@ lb config \
 
 sudo bash -c "lb build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
 mv binary${IS_HYBRID}.${FILE_EXTENSION} ${CURRENT_FOLDER}/${BASE_FILENAME}.${FILE_EXTENSION}
+mv binary.packages ${CURRENT_FOLDER}/${BASE_FILENAME}.packages
 cd ${CURRENT_FOLDER}
 md5sum ${BASE_FILENAME}.${FILE_EXTENSION} > ${BASE_FILENAME}.${FILE_EXTENSION}.md5
 echo "${BASE_FILENAME}.${FILE_EXTENSION} (and md5sum) DONE!"
