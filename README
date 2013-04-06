@@ -8,7 +8,7 @@ The URL is <http://www.supergrubdisk.org/rescatux/>.
 
 In order to build Rescatux in a Squeeze system or Squeeze chroot you need these packages:
 
-live-helper
+live-build
 imagemagick # Needed for logo generation
 syslinux # Needed for logo generation
 
@@ -24,47 +24,6 @@ Just check INSTALL.txt file on the package for build instructions.
 Build will generate chntpw binary file.
 
 Path to this file should be set at: make_common's CHNTPWNG_BINARY variable.
-
-=== Build backported passwd package ===
-
-This needs to be done on an squeeze system or chroot.
-
-First of all we need to install dpkg-dev backported package.
-
-1)
-Edit /etc/apt/sources.list and add:
-  deb http://backports.debian.org/debian-backports squeeze-backports main
-line.
-2)
-  apt-get update
-  apt-get -t squeeze-backports install dpkg-dev
-
-3) 
-  apt-get install devscripts build-essential
-4)
-Get shadow source code (adapt to your repository and latest version on squeeze):
-  dget -x http://ftp.de.debian.org/debian/pool/main/s/shadow/shadow_4.1.5-1.dsc
-5)
-Some more dependencies...
-  apt-get install autoconf automake1.9 libtool \
-  gettext libpam0g-dev debhelper quilt dpkg-dev \
-  xsltproc docbook-xsl docbook-xml libxml2-utils \
-  cdbs libselinux1-dev libsemanage1-dev \
-  gnome-doc-utils
-
-6)
-  cd shadow-4.1.5
-  dch --bpo
-7)
-  fakeroot debian/rules binary
-8)
-  dpkg-buildpackage -us -uc
-
-This will generate a deb package file like:
-passwd_4.1.5-1~bpo60+1_i386.deb
-
-Path to this package should be set at: make_common's BACKPORTED_PASSWD variable.
-
 
 === Isolinux based image ===
 
