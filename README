@@ -6,7 +6,7 @@ The URL is <http://www.supergrubdisk.org/rescatux/>.
 
 == BUILD INSTRUCTIONS ==
 
-In order to build Rescatux in a Squeeze system or Squeeze chroot you need these packages:
+In order to build Rescatux in a Wheezy system or Wheezy chroot you need these packages:
 
 live-build
 imagemagick # Needed for logo generation
@@ -14,8 +14,8 @@ syslinux # Needed for logo generation
 
 === Build chntpw-ng ===
 
-It doesn't matter too much if you build it from squeeze or from an unstable system.
-Probably it will work in squeeze ok.
+It doesn't matter too much if you build it from Wheezy or from an unstable system.
+Current version that we use at Wheezy based Rescatux was originally built in Squeeze.
 
 You will find chntpw-ng source code at: http://developer.berlios.de/project/showfiles.php?group_id=11211 .
 
@@ -35,7 +35,7 @@ SID_MIRROR
 BACKPORTED_PASSWD
 CHNTPWNG_BINARY
 
-Using an squeeze system or chroot run at the Rescatux source code directory:
+Using an Wheezy system or chroot run at the Rescatux source code directory:
 
   ./make_rescatux_hybrid.sh
 
