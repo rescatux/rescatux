@@ -51,7 +51,7 @@ RESCATUX_MEDIA_STR="${RESCATUX_STR}_${MEDIA_STR}"
 BASE_FILENAME="${RESCATUX_MEDIA_STR}_${ARCH}_`echo ${LINUX_FLAVOURS} | sed s/' '/'-'/g`_`head -n 1 VERSION`"
 CURRENT_FOLDER=$PWD
 
-TEMP_FOLDER="/tmp/${RESCATUX_STR}-tmp-build-$$"
+TEMP_FOLDER="$(pwd)/live-build"
 SKEL_FOLDER="config/includes.chroot/etc/skel"
 
 PACKAGES_CHROOT_FOLDER="config/packages.chroot"
@@ -98,18 +98,32 @@ sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_L
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
 
 
-# Volatile so that we can use a local mirror that has not mirrored updates
+# Initial lb config
+if [ ! -d .build ] ; then
+  lb config
+  # Copy auto examples
+  cp /usr/share/doc/live-build/examples/auto/* auto/
+fi
 
-lb config \
-  --updates false \
-  --apt-recommends false \
-  --linux-flavours "${LINUX_FLAVOURS}" \
-  ${DISTRIBUTION_OPTION} \
-  ${ARCH_OPTION} \
-  ${BOOT_OPTION} \
-  --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \
-  --mirror-chroot "${MIRROR_CHROOT}" \
-  --apt-options "--force-yes --yes -o Acquire::Check-Valid-Until=false"
+# Generate auto/config
+cat << EOF > auto/config
+#!/bin/sh
+
+lb config noauto \\
+  --updates false \\
+  --apt-recommends false \\
+  --linux-flavours "${LINUX_FLAVOURS}" \\
+  ${DISTRIBUTION_OPTION} \\
+  ${ARCH_OPTION} \\
+  ${BOOT_OPTION} \\
+  --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \\
+  --mirror-chroot "${MIRROR_CHROOT}" \\
+  --apt-options "--force-yes --yes -o Acquire::Check-Valid-Until=false" \\
+        "\${@}"
+EOF
+
+lb config
+sudo bash -c "lb clean"
 
 sudo bash -c "lb build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
 mv binary${IS_HYBRID}.${FILE_EXTENSION} ${CURRENT_FOLDER}/${BASE_FILENAME}.${FILE_EXTENSION}
