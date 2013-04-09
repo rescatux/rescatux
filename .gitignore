@@ -1,0 +1,6 @@
+# Ignore binary files
+*.iso
+*.md5
+*_build.log
+*.tar.gz
+*.packages
