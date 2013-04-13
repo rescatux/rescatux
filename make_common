@@ -29,7 +29,7 @@ VERSION=`head -1 VERSION`
 RESCATUX_FILES="rescapp.py order.py setbackground.sh chat web grub-install update-grub grub.lis grub rescatux.lis show_log support support.lis fsck fs fs.lis images logos about.lis about about-rescapp rescatux_lib.sh share_log win win.lis winmbr winpass bootinfoscript share_log_forum VERSION COPYING rescapp_launcher.sh help-rescapp pass.lis pass chpasswd sudoers"
 RESCATUX_EMPTY_DIRS="log"
 
-DESKTOP_METAPACKAGE="task-lxde-desktop"
+DESKTOP_METAPACKAGE="razorqt lightdm task-desktop"
 CORE_PACKAGES="live-tools user-setup sudo eject"
 
 # This was for lenny
@@ -37,11 +37,12 @@ CORE_PACKAGES="live-tools user-setup sudo eject"
 #MIRROR_CHROOT="http://192.168.0.50/debian"
 
 #This is for squeeze
-MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian/"
+MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian"
 MIRROR_CHROOT="http://127.0.0.1:9999/debian"
+SID_MIRROR="http://127.0.0.1:9999/debian/"
 
 ARCH="i386"
-DISTRIBUTION="wheezy" # Todo: Select with a switch
+DISTRIBUTION="testing" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
@@ -54,6 +55,14 @@ CURRENT_FOLDER=$PWD
 TEMP_FOLDER="$(pwd)/live-build"
 SKEL_FOLDER="config/includes.chroot/etc/skel"
 
+CHROOT_SOURCES_FOLDER="config/archives"
+SID_CHROOT_CONFIG="config/archives/sid.list.chroot"
+CHROOT_APT_CONFIG_FOLDER1="config/apt/"
+APT_PREFERENCES1="config/apt/preferences"
+CHROOT_APT_CONFIG_FOLDER2="config/archives/"
+APT_PREFERENCES2="config/archives/sid.pref"
+CHROOT_APT_CONFIG_FOLDER3="config/archives/"
+APT_PREFERENCES3="config/archives/sid.pref.chroot"
 PACKAGES_CHROOT_FOLDER="config/packages.chroot"
 
 
@@ -94,9 +103,28 @@ cp setbackground.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cd $TEMP_FOLDER
 #sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
 sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
-sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${DESKTOP_METAPACKAGE}.list.chroot"
+sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/rescatux_desktop.list.chroot"
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
 
+mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
+echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
+
+mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
+mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER2}
+mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER3}
+
+tee $TEMP_FOLDER/${APT_PREFERENCES1} \
+$TEMP_FOLDER/${APT_PREFERENCES2} \
+$TEMP_FOLDER/${APT_PREFERENCES3} <<END
+Package: razorqt
+Pin: release n=sid
+Pin-Priority: 600
+
+Package: *
+Pin: release n=sid
+Pin-Priority: 1
+
+END
 
 # Initial lb config
 if [ ! -d .build ] ; then
@@ -122,7 +150,7 @@ lb config noauto \\
         "\${@}"
 EOF
 
-lb config
+sudo bash -c "lb config"
 sudo bash -c "lb clean"
 
 sudo bash -c "lb build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
