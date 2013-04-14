@@ -80,7 +80,7 @@ CHNTPWNG_BINARY="../TRINITY/chntpwsource/chntpw-NG/chntpw"
 mkdir --parents $TEMP_FOLDER/${RLE_FOLDER}
 # Generate logo - Begin
 cd logo
-./generate_logo.sh "${RESCATUX_STR}" "${VERSION}" "${TEMP_FOLDER}/${RLE_FILE}"
+sudo bash -c "./generate_logo.sh \"${RESCATUX_STR}\" \"${VERSION}\" \"${TEMP_FOLDER}/${RLE_FILE}\""
 cd ..
 # Generate logo - End
 
