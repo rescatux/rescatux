@@ -9,3 +9,4 @@ Comment[en_US]=Rescapp - Rescue Tool
 Comment=Rescapp - Rescue Tool
 Exec=/home/user/Desktop/rescapp/rescapp.py
 X-GNOME-Autostart-enabled=true
+Icon=openbox.png
