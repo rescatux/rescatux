@@ -451,7 +451,7 @@ EXIT_STR="Exit"
 RUN_STR="Run"
 
 FIREFOX_COMMAND="iceweasel"
-GEDIT_COMMAND="leafpad"
+GEDIT_COMMAND="juffed"
 XCHAT_COMMAND="xchat"
 FDISK_COMMAND="/sbin/fdisk"
 FILEMANAGER_COMMAND="qtfm"
