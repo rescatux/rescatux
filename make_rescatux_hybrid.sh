@@ -20,7 +20,7 @@
 IS_HYBRID=".hybrid"
 MEDIA_STR="cdrom_usb_hybrid"
 FILE_EXTENSION="iso"
-RAZORQT_PACKAGES="wicd qtfm"
+RAZORQT_PACKAGES="wicd qtfm razorqt-power"
 PYTHON_PACKAGES="python-sip python-qt4"
 RAID_PACKAGES="dmraid"
 LVM_PACKAGES="lvm2"
