@@ -44,7 +44,7 @@ SIDUCTION_EXTRA_MIRROR="http://ftp.spline.de/mirrors/siduction/extra"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
 
 ARCH="i386"
-DISTRIBUTION="testing" # Todo: Select with a switch
+DISTRIBUTION="wheezy" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
