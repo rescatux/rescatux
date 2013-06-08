@@ -27,6 +27,31 @@ LVM_PACKAGES="lvm2"
 SYNAPTIC_PACKAGES="synaptic"
 GKSU_PACKAGES="gksu"
 GPARTED_PACKAGES="gparted gpart"
+BOOTREPAIR_PACKAGES="boot-repair \
+ boot-sav \
+ gawk \
+ pastebinit \
+ xz-utils \
+ gettext-base \
+ glade2script \
+ os-prober \
+ parted \
+ xdg-utils \
+ zenity \
+ boot-sav-extra \
+ gksu \
+ lsb-release \
+ zip \
+ dmraid \
+ lvm2 \
+ mbr \
+ mdadm \
+ os-uninstaller \
+ clean-ubiquity \
+ python \
+ gir1.2-gtk-3.0 \
+ "
+
 PACKAGES="${RAZORQT_PACKAGES} \
  ${PYTHON_PACKAGES} \
  ${RAID_PACKAGES} \
@@ -34,6 +59,7 @@ PACKAGES="${RAZORQT_PACKAGES} \
  ${SYNAPTIC_PACKAGES} \
  ${GKSU_PACKAGES} \
  ${GPARTED_PACKAGES} \
+ ${BOOTREPAIR_PACKAGES} \
  zenity \
  iceweasel \
  xchat \
