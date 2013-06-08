@@ -312,7 +312,12 @@ class MainWindow(QtGui.QWidget):
 	  name_pos_x=name_pos_x + 1
 	  
 	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
-	grid.addWidget(self.wb, bottom_start + 5, 0, 5, 5)
+	webgrid = QtGui.QHBoxLayout()
+	webgrid.addWidget(self.wb)
+	frame = QtGui.QFrame()
+	frame.setLayout(webgrid)
+	frame.setStyleSheet("margin:0px; border:10px solid rgb(124, 127, 126); ")
+	grid.addWidget(frame, bottom_start + 5, 0, 5, 5)
 	
 	if (self.selected_option.getHasOfflineDoc()):
 	  self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + self.selected_option.getCode() + '/' + offlinedoc_filename))        
