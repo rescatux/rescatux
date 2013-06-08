@@ -27,7 +27,25 @@ LVM_PACKAGES="lvm2"
 SYNAPTIC_PACKAGES="synaptic"
 GKSU_PACKAGES="gksu"
 GPARTED_PACKAGES="gparted gpart"
-PACKAGES="${RAZORQT_PACKAGES} ${PYTHON_PACKAGES} ${RAID_PACKAGES} ${LVM_PACKAGES} ${SYNAPTIC_PACKAGES} ${GKSU_PACKAGES} ${GPARTED_PACKAGES} zenity iceweasel xchat syslinux pastebinit mbr ntfs-3g chntpw samdump2 bkhive gawk" # I add syslinux so that isohybrid command is recognised.
+PACKAGES="${RAZORQT_PACKAGES} \
+ ${PYTHON_PACKAGES} \
+ ${RAID_PACKAGES} \
+ ${LVM_PACKAGES} \
+ ${SYNAPTIC_PACKAGES} \
+ ${GKSU_PACKAGES} \
+ ${GPARTED_PACKAGES} \
+ zenity \
+ iceweasel \
+ xchat \
+ syslinux \
+ pastebinit \
+ mbr \
+ ntfs-3g \
+ chntpw \
+ samdump2 \
+ bkhive \
+ gawk\
+ " # I add syslinux so that isohybrid command is recognised.
 BOOT_OPTION="-b iso-hybrid"
 LINUX_FLAVOURS="amd64 486"
 source make_common
