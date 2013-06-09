@@ -84,6 +84,7 @@ PACKAGES="${RAZORQT_PACKAGES} \
  samdump2 \
  bkhive \
  gawk\
+ extundelete\
  " # I add syslinux so that isohybrid command is recognised.
 BOOT_OPTION="-b iso-hybrid"
 LINUX_FLAVOURS="amd64 486"
