@@ -4,3 +4,9 @@
 *_build.log
 *.tar.gz
 *.packages
+*.sha1
+*.sha256
+\.directory
+\.stage
+logos/background.png
+
