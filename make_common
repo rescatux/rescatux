@@ -62,6 +62,12 @@ RESCATUX_FILES="rescapp.py \
  pass \
  chpasswd \
  sudoers \
+ expert-tools.lis \
+ expert-tools \
+ boot-repair \
+ testdisk \
+ photorec \
+ gparted \
  "
 RESCATUX_EMPTY_DIRS="log"
 
