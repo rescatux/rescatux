@@ -26,7 +26,43 @@ set -v
 # Fetch version from folder directory name
 VERSION=`head -1 VERSION`
 
-RESCATUX_FILES="rescapp.py order.py setbackground.sh chat web grub-install update-grub grub.lis grub rescatux.lis show_log support support.lis fsck fs fs.lis images logos about.lis about about-rescapp rescatux_lib.sh share_log win win.lis winmbr winpass bootinfoscript share_log_forum VERSION COPYING rescapp_launcher.sh help-rescapp pass.lis pass chpasswd sudoers"
+RESCATUX_FILES="rescapp.py \
+ order.py \
+ setbackground.sh \
+ chat \
+ web \
+ grub-install \
+ update-grub \
+ grub.lis \
+ grub \
+ rescatux.lis \
+ show_log \
+ support \
+ support.lis \
+ fsck \
+ fs \
+ fs.lis \
+ images \
+ logos \
+ about.lis \
+ about \
+ about-rescapp \
+ rescatux_lib.sh \
+ share_log win \
+ win.lis \
+ winmbr \
+ winpass \
+ bootinfoscript \
+ share_log_forum \
+ VERSION \
+ COPYING \
+ rescapp_launcher.sh \
+ help-rescapp \
+ pass.lis \
+ pass \
+ chpasswd \
+ sudoers \
+ "
 RESCATUX_EMPTY_DIRS="log"
 
 DESKTOP_METAPACKAGE="razorqt lightdm task-desktop"
