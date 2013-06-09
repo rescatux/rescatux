@@ -68,6 +68,7 @@ RESCATUX_FILES="rescapp.py \
  testdisk \
  photorec \
  gparted \
+ os-uninstaller \
  "
 RESCATUX_EMPTY_DIRS="log"
 
