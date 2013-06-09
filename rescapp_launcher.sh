@@ -23,6 +23,7 @@ export RESCATUX_PATH # Make it available to run scripts
 
 RESCATUX_LIB_FILE="${DEFAULT_PATH}/rescatux_lib.sh"
 export RESCATUX_LIB_FILE # Make it available to run scripts
+export RESCATUX_VERSION="$(head -n 1 ${RESCATUX_PATH}/VERSION)"
 
 
 source ${RESCATUX_LIB_FILE}
