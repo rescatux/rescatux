@@ -51,6 +51,18 @@ BOOTREPAIR_PACKAGES="boot-repair \
  python \
  gir1.2-gtk-3.0 \
  "
+TESTDISK_PACKAGES="testdisk \
+ e2fslibs \
+ libc6 \
+ libcomerr2 \
+ libjpeg8 \
+ libncursesw5 \
+ libntfs10 \
+ libtinfo5 \
+ libuuid1 \
+ zlib1g \
+ "
+
 
 PACKAGES="${RAZORQT_PACKAGES} \
  ${PYTHON_PACKAGES} \
@@ -60,6 +72,7 @@ PACKAGES="${RAZORQT_PACKAGES} \
  ${GKSU_PACKAGES} \
  ${GPARTED_PACKAGES} \
  ${BOOTREPAIR_PACKAGES} \
+ ${TESTDISK_PACKAGES} \
  zenity \
  iceweasel \
  xchat \
