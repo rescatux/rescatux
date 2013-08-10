@@ -53,9 +53,12 @@ function rtux_Grub_Update_Config () {
 
       rtux_File_Chroot_Script_Device_Map \
       "if ${UPDATE_GRUB_BINARY} --version ; then " \
-      "${UPDATE_GRUB_BINARY} ;"\
-      " else " \
-      "update-grub2 ;" \
+      "${UPDATE_GRUB_BINARY} ; "\
+      "elif update-grub2 --version ; " \
+      "then update-grub2 ; " \
+      "elif grub2-mkconfig --version ; " \
+      "then grub2-mkconfig -o /boot/grub2/grub.cfg ;"\
+      "else grub-mkconfig -o /boot/grub/grub.cfg ; "\
       "fi" \
       > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
 
