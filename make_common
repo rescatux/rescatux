@@ -69,6 +69,7 @@ RESCATUX_FILES="rescapp.py \
  photorec \
  gparted \
  os-uninstaller \
+ winpromote \
  "
 RESCATUX_EMPTY_DIRS="log"
 
