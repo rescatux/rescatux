@@ -271,6 +271,7 @@ function rtux_Get_Desktop_Width () {
 function rtux_File_Chroot_Script_Device_Map() {
 local command_line_to_run="$@"
   cat << EOF > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
+    set -x -v
     mount -a
     BOOT_GRUB_DIR="/boot/grub"
     if [ -d "/boot/grub2" ] ; then
