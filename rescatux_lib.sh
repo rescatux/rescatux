@@ -272,22 +272,26 @@ function rtux_File_Chroot_Script_Device_Map() {
 local command_line_to_run="$@"
   cat << EOF > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
     mount -a
+    BOOT_GRUB_DIR="/boot/grub"
+    if [ -d "/boot/grub2" ] ; then
+      BOOT_GRUB_DIR="/boot/grub2"
+    fi
     # Backup current device.map file (inside chroot) - TODO - BEGIN
-    cp /boot/grub/device.map /boot/grub/${DEVICE_MAP_BACKUP_STR}
+    cp \${BOOT_GRUB_DIR}/device.map \${BOOT_GRUB_DIR}/${DEVICE_MAP_BACKUP_STR}
     # Backup current device.map file (inside chroot) - TODO - END
 
     # Overwrite current device.map file with temporal device.map (inside chroot) - TODO - BEGIN
-    cp /${DEVICE_MAP_RESCATUX_STR} /boot/grub/device.map
+    cp /${DEVICE_MAP_RESCATUX_STR} \${BOOT_GRUB_DIR}/device.map
     # Overwrite current device.map file with temporal device.map (inside chroot) - TODO - END
 
     ${command_line_to_run}
     UPDATE_GRUB_OUTPUT=\$?
 
     # Restore current device.map file - BEGIN
-    cp /boot/grub/${DEVICE_MAP_BACKUP_STR} /boot/grub/device.map
+    cp \${BOOT_GRUB_DIR}/${DEVICE_MAP_BACKUP_STR} \${BOOT_GRUB_DIR}/device.map
     # Restore current device.map file - END
     # Delete temporal and backup device.map files- TODO - BEGIN
-    rm /boot/grub/${DEVICE_MAP_BACKUP_STR}
+    rm \${BOOT_GRUB_DIR}/${DEVICE_MAP_BACKUP_STR}
     rm /${DEVICE_MAP_RESCATUX_STR}
     # Delete temporal and backup device.map files- TODO - END
     umount -a
