@@ -20,7 +20,36 @@
 IS_HYBRID=".hybrid"
 MEDIA_STR="cdrom_usb_hybrid"
 FILE_EXTENSION="iso"
-RAZORQT_PACKAGES="wicd qtfm razorqt-power juffed qasmixer"
+XFE_PACKAGES="fontconfig-config \
+ libdrm2 \
+ libexpat1 \
+ libfontconfig1 \
+ libfox-1.6-0 \
+ libfreetype6 \
+ libgl1-mesa-glx \
+ libglapi-mesa \
+ libglu1-mesa \
+ libjbig0 libjpeg8 \
+ libpng12-0 \
+ libtiff4 \
+ libx11-6 \
+ libx11-data \
+ libx11-xcb1 \
+ libxau6 \
+ libxcb-glx0 \
+ libxcb1 \
+ libxcursor1 \
+ libxdamage1 \
+ libxdmcp6 \
+ libxext6 \
+ libxfixes3 \
+ libxft2 \
+ libxrender1 \
+ libxxf86vm1 \
+ ttf-dejavu-core \
+ ucf \
+ xfe"
+RAZORQT_PACKAGES="wicd razorqt-power juffed qasmixer"
 PYTHON_PACKAGES="python-sip python-qt4"
 RAID_PACKAGES="dmraid"
 LVM_PACKAGES="lvm2"
@@ -73,6 +102,7 @@ PACKAGES="${RAZORQT_PACKAGES} \
  ${GPARTED_PACKAGES} \
  ${BOOTREPAIR_PACKAGES} \
  ${TESTDISK_PACKAGES} \
+ ${XFE_PACKAGES} \
  zenity \
  iceweasel \
  xchat \

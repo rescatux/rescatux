@@ -84,7 +84,6 @@ CORE_PACKAGES="live-tools user-setup sudo eject"
 MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian"
 MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 SID_MIRROR="http://127.0.0.1:9999/debian/"
-SIDUCTION_EXTRA_MIRROR="http://ftp.spline.de/mirrors/siduction/extra"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
 
 ARCH="i386"
@@ -103,7 +102,6 @@ SKEL_FOLDER="config/includes.chroot/etc/skel"
 
 CHROOT_SOURCES_FOLDER="config/archives"
 SID_CHROOT_CONFIG="config/archives/sid.list.chroot"
-SIDUCTION_EXTRA_CHROOT_CONFIG="config/archives/siduction.extra.list.chroot"
 BOOTREPAIR_CHROOT_CONFIG="config/archives/bootrepair.list.chroot"
 CHROOT_APT_CONFIG_FOLDER1="config/apt/"
 APT_PREFERENCES1="config/apt/preferences"
@@ -159,7 +157,6 @@ sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
-echo -e -n "deb ${SIDUCTION_EXTRA_MIRROR} unstable main" > $TEMP_FOLDER/${SIDUCTION_EXTRA_CHROOT_CONFIG}
 echo -e -n "deb ${BOOTREPAIR_MIRROR} precise main" > $TEMP_FOLDER/${BOOTREPAIR_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
@@ -175,14 +172,6 @@ Pin-Priority: 600
 
 Package: *
 Pin: release n=sid
-Pin-Priority: 1
-
-Package: qtfm
-Pin: release o=Siduction
-Pin-Priority: 600
-
-Package: *
-Pin: release o=Siduction
 Pin-Priority: 1
 
 END
