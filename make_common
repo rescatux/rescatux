@@ -70,6 +70,7 @@ RESCATUX_FILES="rescapp.py \
  gparted \
  os-uninstaller \
  winpromote \
+ winunlock \
  "
 RESCATUX_EMPTY_DIRS="log"
 
