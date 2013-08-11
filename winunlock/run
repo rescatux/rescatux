@@ -1,0 +1,157 @@
+#!/bin/bash
+# Rescapp Winpromote run script
+# Copyright (C) 2012 Adrian Gibanel Lopez
+#
+# Rescapp is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Rescapp is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+
+# Return Windows SAM user that the user chooses
+# Every parametre is treated as the question to be asked to the user.
+function rtux_Choose_Sam_User () {
+  local text_to_ask="$@"
+
+  local SAM_LIST_VALUES=()
+  local SAM_LIST_VALUE_N=0
+  local sam_line_count=0
+  while [ ! ${sam_line_count} -eq ${sam_line_total} ] ; do
+    if [[ ${sam_line_count} -eq 0 ]] ; then
+      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="TRUE"
+      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
+      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="${SAM_USERS[${sam_line_count}]}"
+      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
+      sam_line_count=$((sam_line_count+1))
+    else
+      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="FALSE"
+      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
+      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="${SAM_USERS[${sam_line_count}]}"
+      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
+      sam_line_count=$((sam_line_count+1))
+    fi     
+  done
+
+  echo $(zenity ${ZENITY_COMMON_OPTIONS}  \
+	--list  \
+	--text "${text_to_ask}" \
+	--radiolist  \
+	--column "${SELECT_STR}" \
+	--column "${SAM_USER_STR}" \
+	"${SAM_LIST_VALUES[@]}"); 
+
+} # function rtux_Choose_Sam_User ()
+
+
+# Unlock windows user
+# 1 parametre = Selected partition
+function rtux_winunlock () {
+
+  local EXIT_VALUE=1 # Error by default
+  local SELECTED_PARTITION="$1"
+
+
+  # Mount the partition
+  local n_partition=${SELECTED_PARTITION}
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+  # Find the exact name for sam file
+      for n_windir in ${TMP_MNT_PARTITION}/* ; do
+	if [ -e ${n_windir}\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Aa][Mm]\
+	] ; then
+	  SAM_FILE=${n_windir}\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Aa][Mm]
+	fi
+
+  # Find the exact name for security file
+	if [ -e ${n_windir}\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]\
+	] ; then
+	  SECURITY_FILE=${n_windir}\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]
+	fi
+      done
+  # Backup of the files in a temporal folder
+    # TODO
+  # Define SAM_USERS as a bash array
+      SAM_USERS=()
+  # Obtain users from SAM file
+      sam_line_count=0
+      mkfifo /tmp/sampipe
+      bkhive ${SYSTEM_FILE} /dev/stdout\
+	| samdump2 ${SAM_FILE} /dev/stdin \
+	| awk -F ":" '{print $1}' > /tmp/sampipe &
+      while read -r sam_line ; do
+	SAM_USERS[${sam_line_count}]="${sam_line}"
+      sam_line_count=$((sam_line_count+1))
+      done < /tmp/sampipe
+      sam_line_total=${sam_line_count}
+
+
+  # Ask the user which password to reset	
+      CHOOSEN_USER=$(rtux_Choose_Sam_User \
+      "Choose Windows user to unlock")
+  # Run chntpw -L sam-file security-file
+	chntpw -p -u "${CHOOSEN_USER}" -L ${SAM_FILE} ${SECURITY_FILE};
+	EXIT_VALUE=$?
+  # Umount the partition
+
+    umount ${TMP_MNT_PARTITION};
+  fi # Partition was mounted ok
+
+  if [ $EXIT_VALUE -eq 2 ] ; then
+    return 0 # Exit value of 2 seems to mean sucess for blanking a password
+  else
+    return 1
+  fi
+
+} # function rtux_winpromote ()
+
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+# MAIN PROGRAM
+
+# TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
+
+
+SAM_USER_STR="Windows user"
+
+WINPROMOTE_OK_STR="User was unlocked OK! :)"
+WINPROMOTE_NOT_OK_STR="User was not unlocked. Something went wrong! :("
+
+
+SELECTED_PARTITION=$(rtux_Choose_Windows_partition);
+
+
+
+if rtux_winunlock ${SELECTED_PARTITION} ; then
+  rtux_Message_Success ${WINPROMOTE_OK_STR}
+else
+  rtux_Message_Failure ${WINPROMOTE_NOT_OK_STR}
+fi
+
