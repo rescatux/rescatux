@@ -117,7 +117,7 @@ function rtux_winunlock () {
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
       "Choose Windows user to unlock")
   # Run chntpw -L sam-file security-file
-	chntpw -p -u "${CHOOSEN_USER}" -L ${SAM_FILE} ${SECURITY_FILE};
+	chntpw -U -u "${CHOOSEN_USER}" -L ${SAM_FILE} ${SECURITY_FILE};
 	EXIT_VALUE=$?
   # Umount the partition
 
