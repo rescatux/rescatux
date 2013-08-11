@@ -178,11 +178,11 @@ Pin: release n=sid
 Pin-Priority: 1
 
 Package: qtfm
-Pin: release a=unstable
+Pin: release o=Siduction
 Pin-Priority: 600
 
 Package: *
-Pin: release a=unstable
+Pin: release o=Siduction
 Pin-Priority: 1
 
 END
