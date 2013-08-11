@@ -16,12 +16,17 @@
 # along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
 
 LIVE_HOME="/home/user"
-MAGIC_BACKGROUND_FILENAME="background.png"
-pcmanfm --set-wallpaper "${LIVE_HOME}/Desktop/rescapp/logos/${MAGIC_BACKGROUND_FILENAME}"
-pcmanfm --desktop &disown
+#MAGIC_BACKGROUND_FILENAME="background.png"
+#pcmanfm --set-wallpaper "${LIVE_HOME}/Desktop/rescapp/logos/${MAGIC_BACKGROUND_FILENAME}"
+#pcmanfm --desktop &disown
 sudo cp "${LIVE_HOME}/Desktop/rescapp/chntpw" /usr/sbin/
 sudo chmod +x /usr/sbin/chntpw
+mkdir --parents ${LIVE_HOME}/.local/share/applications
 cat << EOF > ${LIVE_HOME}/.local/share/applications/mimeapps.list
 [Added Associations]
 text/plain=leafpad.desktop;
+
+[Default Applications]
+application/x-directory=xfe.desktop
+inode/directory=xfe.desktop
 EOF
