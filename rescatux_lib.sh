@@ -136,13 +136,11 @@ function rtux_Choose_Hard_Disk () {
   for n_hard_disk in ${DETECTED_HARD_DISKS}; do
     if [[ ${n} -eq 0 ]] ; then
       local HD_LIST_VALUES="TRUE ${n_hard_disk} `${FDISK_COMMAND} -l \
-      | egrep ${n_hard_disk} \
-      | egrep 'Disk.*bytes' \
+      | grep -E "^Disk /dev/${n_hard_disk}.*bytes" \
       | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
     else
       local HD_LIST_VALUES="${HD_LIST_VALUES} FALSE ${n_hard_disk} `${FDISK_COMMAND} -l \
-      | egrep ${n_hard_disk} \
-      | egrep 'Disk.*bytes' \
+      | grep -E "^Disk /dev/${n_hard_disk}.*bytes" \
       | awk '{ sub(/,/,"");  print $3 "-" $4 }'`"
     fi
     let n=n+1
