@@ -91,6 +91,10 @@ TESTDISK_PACKAGES="testdisk \
  libuuid1 \
  zlib1g \
  "
+CRYPTSETUP_PACKAGES="cryptsetup \
+ libcryptsetup4 \
+ cryptsetup-bin \
+ "
 
 
 PACKAGES="${RAZORQT_PACKAGES} \
@@ -103,6 +107,7 @@ PACKAGES="${RAZORQT_PACKAGES} \
  ${BOOTREPAIR_PACKAGES} \
  ${TESTDISK_PACKAGES} \
  ${XFE_PACKAGES} \
+ ${CRYPTSETUP_PACKAGES} \
  zenity \
  iceweasel \
  xchat \
