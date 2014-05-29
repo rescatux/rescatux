@@ -180,16 +180,23 @@ class MainWindow(QtGui.QWidget):
       description_list = list()
       option_list = list()
       
-      f=open(current_pwd + '/' + menu_base)
+      
+      f=open(current_pwd + '/' + 'rescatux.lis')
       for mydir in f:
 	ndir = mydir.rstrip('\r\n');
 	dir_to_check = os.path.join(current_pwd, ndir)
 	print dir_to_check
 	if os.path.isdir(dir_to_check):
 	  
-	  new_option = RescappOption()
-	  new_option.setFromDir(dir_to_check, ndir)
-	  option_list.append(new_option)
+	  f2=open(current_pwd + '/' + ndir + '.lis')
+	  for mydir2 in f2:
+	    ndir2 = mydir2.rstrip('\r\n');
+	    dir_to_check2 = os.path.join(current_pwd, ndir2)
+	    print dir_to_check2
+	    if os.path.isdir(dir_to_check2):
+	      new_option = RescappOption()
+	      new_option.setFromDir(dir_to_check2, ndir2)
+	      option_list.append(new_option)
 	  
 	  
 	else:
@@ -198,6 +205,7 @@ class MainWindow(QtGui.QWidget):
       if (menu_base == "rescatux.lis"):
 	self.selected_option = help_support_option
       self.drawMainWindows()
+
       
     def drawMainWindows(self):
       
