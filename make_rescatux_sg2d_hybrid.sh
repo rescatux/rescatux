@@ -16,7 +16,7 @@
 # along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
 
 # SG2 STUFF
-SG2D_SOURCE_DIRECTORY="../../sgd/git/supergrub/"
+SG2D_SOURCE_DIRECTORY="../../sgd/git/supergrub2/"
 RESCATUX_SOURCE_PWD=`pwd`
 BOOT_ISOS_DIRECTORY="boot-isos"
 ORIGINAL_GRUB_CFG_BACKUP="original_grub_cfg_backup.cfg"
