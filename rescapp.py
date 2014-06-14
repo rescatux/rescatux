@@ -26,15 +26,15 @@ class RescappOption():
       self.code=""
       self.name=""
       self.description=""
-      self.isOption=False
+      self.isOptionAttr=False
       self.hasOfflineDoc=False
       self.executable=False
       self.beta=False
       
     def isMenu(self):
-      return (self.isOption == False)
+      return (self.isOptionAttr == False)
     def isOption(self):
-      return ((self.isMenu(self)) == False)
+      return (self.isOptionAttr == True)
     def setCode(self,code):
       self.code=code
     def setName(self,name):
@@ -48,9 +48,9 @@ class RescappOption():
     def getDescription(self):
       return self.description
     def setAsMenu(self):
-      self.isOption = False
+      self.isOptionAttr = False
     def setAsOption(self):
-      self.isOption = True
+      self.isOptionAttr = True
     def setHasOfflineDoc(self, mybool):
       self.hasOfflineDoc=mybool
     def getHasOfflineDoc(self):
