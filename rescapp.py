@@ -219,7 +219,7 @@ class MainWindow(QtGui.QWidget):
 	options_offset = 0
 	
         mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
-	mainmenu_btn.clicked.connect(partial(self.parserescappmenues,mainmenu_filename))
+	mainmenu_btn.clicked.connect(partial(self.backToMainMenu))
 	mainmenu_btn.setToolTip("Go back to the Main Menu")
 	mainmenu_btn.setIcon(QtGui.QIcon(mainmenu_icon_path))
 	
@@ -288,7 +288,7 @@ class MainWindow(QtGui.QWidget):
 	name_pos_x = 1
 	name_pos_y = 0
 	print "DEBUG: selected option code: " + self.selected_option.getCode()
-	if ((self.selected_option.isMenu() == True ) or (self.selected_option.getCode() == "help-rescapp")):
+	if ((self.selected_option.isMenu() == True ) or (self.selected_option.getCode() == "main-menu")):
 	  for n_option in option_list:
 	    print "DEBUG: n_option code: "+ n_option.getCode() +" was found"
 	    if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
@@ -322,17 +322,16 @@ class MainWindow(QtGui.QWidget):
 	  tmp_description_label.setWordWrap(True)
 	  grid.addWidget(tmp_description_label,options_offset+name_pos_x,name_pos_y,rows_per_option,4)
 	  name_pos_x=name_pos_x + 1
-	  
-	bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
-	webgrid = QtGui.QHBoxLayout()
-	webgrid.addWidget(self.wb)
-	frame = QtGui.QFrame()
-	frame.setLayout(webgrid)
-	frame.setStyleSheet("margin:0px; border:10px solid rgb(124, 127, 126); ")
-	grid.addWidget(frame, bottom_start + 5, 0, 5, 5)
-	
-	if (self.selected_option.getHasOfflineDoc()):
-	  self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + self.selected_option.getCode() + '/' + offlinedoc_filename))        
+	if (self.selected_option.getCode() != "main-menu"):
+	  bottom_start = options_offset + (name_pos_x * rows_per_option) + 8
+	  webgrid = QtGui.QHBoxLayout()
+	  webgrid.addWidget(self.wb)
+	  frame = QtGui.QFrame()
+	  frame.setLayout(webgrid)
+	  frame.setStyleSheet("margin:0px; border:10px solid rgb(124, 127, 126); ")
+	  grid.addWidget(frame, bottom_start + 5, 0, 5, 5)
+	  if (self.selected_option.getHasOfflineDoc()):
+	    self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + self.selected_option.getCode() + '/' + offlinedoc_filename))
         
         
 	self.setLayout(grid)
@@ -350,7 +349,9 @@ class MainWindow(QtGui.QWidget):
         self.addAction(self.exitAction)
 	self.parserescappmenues(mainmenu_filename)
 
-        
+    def backToMainMenu(self):
+	self.selectSupportOption(main_menu_support_option)
+	self.show()
 
 
 if __name__ == "__main__":
@@ -396,12 +397,15 @@ if __name__ == "__main__":
 
     help_support_option= RescappOption()
     help_support_option.setFromDir(os.path.join(current_pwd, 'help-rescapp'), 'help-rescapp')
+
+    main_menu_support_option= RescappOption()
+    main_menu_support_option.setFromDir(os.path.join(current_pwd, 'main-menu'), 'main-menu')
     
     app=QtGui.QApplication(sys.argv)
     url = QtCore.QUrl('file:///' + current_pwd + '/' + help_support_option.getCode() + '/' + offlinedoc_filename)
     mw=MainWindow(url)
     mw.setWindowTitle("Rescatux " + rescapp_version +" Rescapp")
 
-    mw.selectSupportOption(help_support_option)
+    mw.selectSupportOption(main_menu_support_option)
     mw.show()
     sys.exit(app.exec_())
