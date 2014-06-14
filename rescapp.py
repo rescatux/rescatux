@@ -332,9 +332,17 @@ class MainWindow(QtGui.QWidget):
 	  grid.addWidget(frame, bottom_start + 5, 0, 5, 5)
 	  if (self.selected_option.getHasOfflineDoc()):
 	    self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + self.selected_option.getCode() + '/' + offlinedoc_filename))
-        
-        
-	self.setLayout(grid)
+	  self.setLayout(grid)
+	else:
+	  scrollArea = QtGui.QScrollArea()
+	  gridQWidget =  QtGui.QWidget()
+	  gridQWidget.setLayout(grid)
+	  scrollArea.setWidgetResizable(True)
+	  scrollArea.setWidget(gridQWidget)
+	  qVboxLayout = QtGui.QVBoxLayout()
+	  qVboxLayout.addWidget(scrollArea)
+	  self.setLayout(qVboxLayout)
+
 	self.setMaximumHeight(1000)
 
     def initActions(self):
