@@ -287,12 +287,12 @@ class MainWindow(QtGui.QWidget):
 	else:
 	  grid.addWidget(back_btn,0,1,1,1)
 	  back_btn.hide()
-	grid.addWidget(self.chat_btn,0,2,1,1)
-	grid.addWidget(self.share_log_btn,0,3,1,1)
-	grid.addWidget(self.help_btn,0,4,1,1)
-	grid.addWidget(self.rescue_btn,title_offset,1,title_offset+rows_per_option-1,1)
+	grid.addWidget(self.chat_btn,1,2,1,1)
+	grid.addWidget(self.share_log_btn,1,3,1,1)
+	grid.addWidget(self.rescue_btn,0,3,1,1)
+	grid.addWidget(self.help_btn,1,4,1,1)
 
-	options_offset = 1 + title_offset
+	options_offset = 0 + title_offset
 	  
 	options_slot_list = list ()
 	x_grid_position = 1
