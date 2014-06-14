@@ -187,16 +187,18 @@ class MainWindow(QtGui.QWidget):
 	dir_to_check = os.path.join(current_pwd, ndir)
 	print dir_to_check
 	if os.path.isdir(dir_to_check):
-	  
+	  new_option = RescappOption()
+	  new_option.setFromDir(dir_to_check, ndir)
+	  option_list.append(new_option)
 	  f2=open(current_pwd + '/' + ndir + '.lis')
 	  for mydir2 in f2:
 	    ndir2 = mydir2.rstrip('\r\n');
 	    dir_to_check2 = os.path.join(current_pwd, ndir2)
 	    print dir_to_check2
 	    if os.path.isdir(dir_to_check2):
-	      new_option = RescappOption()
-	      new_option.setFromDir(dir_to_check2, ndir2)
-	      option_list.append(new_option)
+	      new_option2 = RescappOption()
+	      new_option2.setFromDir(dir_to_check2, ndir2)
+	      option_list.append(new_option2)
 	  
 	  
 	else:
@@ -288,28 +290,30 @@ class MainWindow(QtGui.QWidget):
 	print "DEBUG: selected option code: " + self.selected_option.getCode()
 	if ((self.selected_option.isMenu() == True ) or (self.selected_option.getCode() == "help-rescapp")):
 	  for n_option in option_list:
-	    print "DEBUG: Option code: "+ n_option.getCode() +" was found"
-	    
-	    if (n_option.getBeta() == True):
-	      tmp_name_button = QtGui.QPushButton(n_option.getName()+ " (BETA) ", self)
-	    else:
-	      tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
-	   
-	    tmp_name_button.setToolTip(n_option.getDescription())
-	    
+	    print "DEBUG: n_option code: "+ n_option.getCode() +" was found"
 	    if ((n_option.getExecutable() == True) or (n_option.getHasOfflineDoc() == True)):
-	      print "DEBUG: Option " + n_option.getCode() + " has offlinedoc and it is executable"
+	      print "DEBUG: n_option " + n_option.getCode() + " has offlinedoc and it is executable"
+	      if (n_option.getBeta() == True):
+		tmp_name_button = QtGui.QPushButton(n_option.getName()+ " (BETA) ", self)
+	      else:
+		tmp_name_button = QtGui.QPushButton(n_option.getName(), self)
 	      tmp_option_slot = partial(self.selectOption,n_option.getCode())
 	      tmp_name_button.clicked.connect(tmp_option_slot)
 	    else:
-	      print "DEBUG: Option " + n_option.getCode() + " is a menu"
-	      tmp_option_slot = partial(self.selectMenu,n_option)
-	      tmp_name_button.clicked.connect(tmp_option_slot)
-	      tmp_name_button.setIcon(QtGui.QIcon(menu_icon_path))
-	      
+	      print "DEBUG: n_option " + n_option.getCode() + " is a menu"
+	      tmp_name_button = QtGui.QLabel(n_option.getName(), self)
+	      tmp_name_button.setTextFormat(QtCore.Qt.RichText)
+	      tmp_name_button.setText("<img src=" + menu_icon_path + ">"+n_option.getName())
+
+	    tmp_name_button.setToolTip(n_option.getDescription())
+	    if (n_option.isMenu()):
+	      name_pos_y=name_pos_y + 1
+	      name_pos_x=name_pos_x + 1
+	      x_grid_position = x_grid_position + rows_per_option
+	      name_pos_y=0
 	    grid.addWidget(tmp_name_button,options_offset+name_pos_x,name_pos_y,rows_per_option,1)
 	    name_pos_y=name_pos_y + 1
-	    if ((name_pos_y % maximum_option_columns) == 0):
+	    if ((name_pos_y % maximum_option_columns) == 0) or (n_option.isMenu()):
 	      name_pos_x=name_pos_x + 1
 	      x_grid_position = x_grid_position + rows_per_option
 	      name_pos_y=0
@@ -332,7 +336,7 @@ class MainWindow(QtGui.QWidget):
         
         
 	self.setLayout(grid)
-	self.setMaximumHeight(570)
+	self.setMaximumHeight(1000)
 
     def initActions(self):
         self.exitAction = QtGui.QAction('Quit', self)
