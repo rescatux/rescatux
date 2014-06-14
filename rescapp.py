@@ -353,7 +353,7 @@ class MainWindow(QtGui.QWidget):
 	  scrollArea.setWidget(gridQWidget)
 	  scrollArea.setMinimumWidth(gridQWidget.minimumSizeHint().width())
 	  qVboxLayout = QtGui.QVBoxLayout()
-	  qVboxLayout.addWidget(scrollArea))
+	  qVboxLayout.addWidget(scrollArea)
 	  self.setLayout(qVboxLayout)
 
 	self.setMaximumHeight(1000)
