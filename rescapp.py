@@ -20,6 +20,18 @@ from PyQt4 import QtGui,QtCore,QtWebKit
 from functools import partial
 
 
+class VerticalScrollArea(QtGui.QScrollArea):
+    def __init__(self):
+      super(VerticalScrollArea,self).__init__()
+      self.setWidgetResizable(True)
+      self.setFrameStyle(QtGui.QFrame.NoFrame)
+      self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+      self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+      self.m_scrollAreaWidgetContents = QtGui.QWidget()
+      self.m_scrollAreaWidgetContents.setSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+      self.baseLayout = QtGui.QVBoxLayout(self.m_scrollAreaWidgetContents)
+      self.setWidget(self.m_scrollAreaWidgetContents)
+
 class RescappOption():
 
     def __init__(self):
@@ -334,13 +346,14 @@ class MainWindow(QtGui.QWidget):
 	    self.wb.load(QtCore.QUrl('file:///' + current_pwd + '/' + self.selected_option.getCode() + '/' + offlinedoc_filename))
 	  self.setLayout(grid)
 	else:
-	  scrollArea = QtGui.QScrollArea()
+	  scrollArea = VerticalScrollArea()
 	  gridQWidget =  QtGui.QWidget()
 	  gridQWidget.setLayout(grid)
 	  scrollArea.setWidgetResizable(True)
 	  scrollArea.setWidget(gridQWidget)
+	  scrollArea.setMinimumWidth(gridQWidget.minimumSizeHint().width())
 	  qVboxLayout = QtGui.QVBoxLayout()
-	  qVboxLayout.addWidget(scrollArea)
+	  qVboxLayout.addWidget(scrollArea))
 	  self.setLayout(qVboxLayout)
 
 	self.setMaximumHeight(1000)
