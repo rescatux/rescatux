@@ -280,8 +280,10 @@ class MainWindow(QtGui.QWidget):
         grid = QtGui.QGridLayout()
         grid.setSpacing(10)
 	
-
-	grid.addWidget(mainmenu_btn,0,0,1,1)
+	if (self.selected_option.getCode() != "main-menu"):
+	  grid.addWidget(mainmenu_btn,0,0,1,1)
+	else:
+	  mainmenu_btn.hide()
 	if (len (option_history_list) > 1):
 	  grid.addWidget(back_btn,0,1,1,1)
 	else:
