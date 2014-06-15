@@ -292,7 +292,7 @@ class MainWindow(QtGui.QWidget):
 	grid.addWidget(self.rescue_btn,0,3,1,1)
 	grid.addWidget(self.help_btn,1,4,1,1)
 
-	options_offset = 0 + title_offset
+	options_offset = -1 + title_offset
 	  
 	options_slot_list = list ()
 	x_grid_position = 1
