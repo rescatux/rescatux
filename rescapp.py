@@ -230,7 +230,7 @@ class MainWindow(QtGui.QWidget):
 	title_offset = 1
 	options_offset = 0
 	
-        mainmenu_btn = QtGui.QPushButton('MAIN MENU', self)
+        mainmenu_btn = QtGui.QPushButton('Menu', self)
 	mainmenu_btn.clicked.connect(partial(self.backToMainMenu))
 	mainmenu_btn.setToolTip("Go back to the Main Menu")
 	mainmenu_btn.setIcon(QtGui.QIcon(mainmenu_icon_path))
