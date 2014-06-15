@@ -71,6 +71,7 @@ RESCATUX_FILES="rescapp.py \
  os-uninstaller \
  winpromote \
  winunlock \
+ main-menu \
  "
 RESCATUX_EMPTY_DIRS="log"
 
