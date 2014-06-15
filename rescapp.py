@@ -240,7 +240,7 @@ class MainWindow(QtGui.QWidget):
 	back_btn.setToolTip("Go back to the previous option")
 	back_btn.setIcon(QtGui.QIcon(back_icon_path))
 	
-	self.rescue_btn = QtGui.QPushButton('RESCUE!', self)
+	self.rescue_btn = QtGui.QPushButton('Run !', self)
 	self.rescue_btn.setToolTip("Run selected option!")
 	self.rescue_btn.clicked.connect(self.runRescue)
 	self.rescue_btn.setIcon(QtGui.QIcon(rescue_icon_path))
@@ -248,9 +248,9 @@ class MainWindow(QtGui.QWidget):
 	if (self.selected_option.getExecutable() == True):
 	  self.rescue_btn.show()
 	  if (self.selected_option.getBeta() == True):
-	    self.rescue_btn.setText(self.selected_option.getName()+ " (BETA) " + "!!!")
+	    self.rescue_btn.setText(" (BETA) " + "Run !")
 	  else:
-	    self.rescue_btn.setText(self.selected_option.getName()+ "!!!")
+	    self.rescue_btn.setText("Run !")
 	  self.rescue_btn.setToolTip(self.selected_option.getDescription())
 	else:
 	  if (hasattr(self, 'rescue_btn') == True ):
