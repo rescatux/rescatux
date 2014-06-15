@@ -75,7 +75,7 @@ RESCATUX_FILES="rescapp.py \
  "
 RESCATUX_EMPTY_DIRS="log"
 
-DESKTOP_METAPACKAGE="razorqt lightdm task-desktop"
+DESKTOP_METAPACKAGE="task-lxde-desktop"
 CORE_PACKAGES="live-tools user-setup sudo eject"
 
 # This was for lenny
@@ -158,7 +158,6 @@ sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_L
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
-echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
 echo -e -n "deb ${BOOTREPAIR_MIRROR} precise main" > $TEMP_FOLDER/${BOOTREPAIR_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
@@ -168,13 +167,6 @@ mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER3}
 tee $TEMP_FOLDER/${APT_PREFERENCES1} \
 $TEMP_FOLDER/${APT_PREFERENCES2} \
 $TEMP_FOLDER/${APT_PREFERENCES3} <<END
-Package: razorqt
-Pin: release n=sid
-Pin-Priority: 600
-
-Package: *
-Pin: release n=sid
-Pin-Priority: 1
 
 END
 

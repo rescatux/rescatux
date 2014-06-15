@@ -49,7 +49,7 @@ XFE_PACKAGES="fontconfig-config \
  ttf-dejavu-core \
  ucf \
  xfe"
-RAZORQT_PACKAGES="wicd razorqt-power juffed qasmixer"
+LXDE_PACKAGES="network-manager-gnome"
 PYTHON_PACKAGES="python-sip python-qt4"
 RAID_PACKAGES="dmraid"
 LVM_PACKAGES="lvm2"
@@ -97,7 +97,7 @@ CRYPTSETUP_PACKAGES="cryptsetup \
  "
 
 
-PACKAGES="${RAZORQT_PACKAGES} \
+PACKAGES="${LXDE_PACKAGES} \
  ${PYTHON_PACKAGES} \
  ${RAID_PACKAGES} \
  ${LVM_PACKAGES} \
