@@ -139,7 +139,6 @@ mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
-mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/razor
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/pcmanfm/LXDE
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp
@@ -151,9 +150,7 @@ cp ${CHNTPWNG_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp setbackground.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
-cp -r razorqtconf/* $TEMP_FOLDER/${SKEL_FOLDER}/.config/razor/
 cp -r lxdeconf/* $TEMP_FOLDER/${SKEL_FOLDER}/.config/pcmanfm/LXDE
-cp razor-power.desktop $TEMP_FOLDER/${SKEL_FOLDER}/
 cd $TEMP_FOLDER
 #sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
 sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
