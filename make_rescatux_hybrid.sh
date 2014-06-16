@@ -49,7 +49,7 @@ XFE_PACKAGES="fontconfig-config \
  ttf-dejavu-core \
  ucf \
  xfe"
-LXDE_PACKAGES="network-manager-gnome"
+LXDE_PACKAGES="network-manager-gnome feh"
 PYTHON_PACKAGES="python-sip python-qt4"
 RAID_PACKAGES="dmraid"
 LVM_PACKAGES="lvm2"
@@ -79,6 +79,7 @@ BOOTREPAIR_PACKAGES="boot-repair \
  clean-ubiquity \
  python \
  gir1.2-gtk-3.0 \
+ python-gi
  "
 TESTDISK_PACKAGES="testdisk \
  e2fslibs \
