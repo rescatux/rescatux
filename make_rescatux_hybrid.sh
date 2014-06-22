@@ -67,6 +67,9 @@ CRYPTSETUP_PACKAGES="cryptsetup \
  libcryptsetup4 \
  cryptsetup-bin \
  "
+FILESYSTEM_PACKAGES="reiserfsprogs \
+ reiser4progs \
+ "
 
 
 PACKAGES="${LXDE_PACKAGES} \
@@ -79,6 +82,7 @@ PACKAGES="${LXDE_PACKAGES} \
  ${BOOTREPAIR_PACKAGES} \
  ${TESTDISK_PACKAGES} \
  ${CRYPTSETUP_PACKAGES} \
+ ${FILESYSTEM_PACKAGES} \
  zenity \
  iceweasel \
  xchat \
