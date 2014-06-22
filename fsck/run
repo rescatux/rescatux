@@ -32,7 +32,7 @@ function rtux_Fsck_Forced () {
 	--progress \
 	--pulsate \
 	--auto-close) >> /dev/stdout
-  EXIT_VALUE=$?
+  EXIT_VALUE=${PIPESTATUS[0]}
   return ${EXIT_VALUE}
 
 } # rtux_Fsck_Forced ()
