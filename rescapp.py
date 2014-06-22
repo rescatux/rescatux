@@ -268,11 +268,6 @@ class MainWindow(QtGui.QWidget):
 	self.share_log_btn.clicked.connect(partial(self.selectSupportOption,share_log_support_option))
 	self.share_log_btn.setToolTip(share_log_support_option.getDescription())
 	self.share_log_btn.setIcon(QtGui.QIcon(support_icon_path))
-
-	self.show_log_btn = QtGui.QPushButton(show_log_support_option.getName(), self)
-	self.show_log_btn.clicked.connect(partial(self.selectSupportOption,show_log_support_option))
-	self.show_log_btn.setToolTip(show_log_support_option.getDescription())
-	self.show_log_btn.setIcon(QtGui.QIcon(support_icon_path))
 	
 	self.help_btn = QtGui.QPushButton(help_support_option.getName(), self)
 	self.help_btn.clicked.connect(partial(self.selectSupportOption,help_support_option))
@@ -294,10 +289,9 @@ class MainWindow(QtGui.QWidget):
 	else:
 	  grid.addWidget(back_btn,0,1,1,1)
 	  back_btn.hide()
-	grid.addWidget(self.chat_btn,2,1,1,1)
-	grid.addWidget(self.share_log_btn,2,2,1,1)
+	grid.addWidget(self.chat_btn,2,2,1,1)
+	grid.addWidget(self.share_log_btn,2,3,1,1)
 	grid.addWidget(self.rescue_btn,0,3,1,1)
-	grid.addWidget(self.show_log_btn,2,3,1,1)
 	grid.addWidget(self.help_btn,2,4,1,1)
 
 	options_offset = -1 + title_offset
@@ -423,8 +417,6 @@ if __name__ == "__main__":
     chat_support_option.setFromDir(os.path.join(current_pwd, 'chat'), 'chat')
     share_log_support_option= RescappOption()
     share_log_support_option.setFromDir(os.path.join(current_pwd, 'share_log'), 'share_log')
-    show_log_support_option= RescappOption()
-    show_log_support_option.setFromDir(os.path.join(current_pwd, 'show_log'), 'show_log')
 
     help_support_option= RescappOption()
     help_support_option.setFromDir(os.path.join(current_pwd, 'help-rescapp'), 'help-rescapp')
