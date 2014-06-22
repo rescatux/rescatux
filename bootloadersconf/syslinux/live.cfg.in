@@ -1,12 +1,12 @@
-label live-@FLAVOUR@
-	menu label ^Live (@FLAVOUR@)
+label rescatux-@FLAVOUR@
+	menu label ^Rescatux (@FLAVOUR@)
 	menu default
 	linux @LINUX@
 	initrd @INITRD@
 	append @APPEND_LIVE@
 
-label live-@FLAVOUR@-failsafe
-	menu label ^Live (@FLAVOUR@ failsafe)
+label rescatux-@FLAVOUR@-failsafe
+	menu label ^Rescatux (@FLAVOUR@ failsafe)
 	linux @LINUX@
 	initrd @INITRD@
 	append @APPEND_LIVE_FAILSAFE@
