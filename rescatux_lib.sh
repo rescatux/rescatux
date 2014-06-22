@@ -439,7 +439,7 @@ function rtux_Enter_Pass() {
 
 # Rescatux lib main variables
 
-RESCATUX_URL="http://rescatux.berlios.de"
+RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
 RESCATUX_IRC_URL="irc://irc.freenode.net/rescatux"
 RESCATUX_PASTEBIN_URL="http://paste.debian.net"
 RESC_USER_IRC_PREFIX="resc_"
