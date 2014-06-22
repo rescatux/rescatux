@@ -454,10 +454,10 @@ EXIT_STR="Exit"
 RUN_STR="Run"
 
 FIREFOX_COMMAND="iceweasel"
-GEDIT_COMMAND="leafpad"
+GEDIT_COMMAND="xdg-open"
 XCHAT_COMMAND="xchat"
 FDISK_COMMAND="/sbin/fdisk"
-FILEMANAGER_COMMAND="pcmanfm"
+FILEMANAGER_COMMAND="xdg-open"
 
 FIREFOX_WINDOW_STR="Iceweasel"
 XCHAT_WINDOW_STR="Xchat"
