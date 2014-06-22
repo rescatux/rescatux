@@ -25,7 +25,7 @@ GRAVITY=0
 X_POSITION=0
 Y_POSITION=0
 
-${FIREFOX_COMMAND} --new-window ${RESCATUX_URL} &
+${FIREFOX_COMMAND} ${RESCATUX_URL} &
 sleep 5s;
 
 wmctrl \

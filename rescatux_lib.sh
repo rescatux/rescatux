@@ -453,7 +453,7 @@ EXIT_STR="Exit"
 
 RUN_STR="Run"
 
-FIREFOX_COMMAND="iceweasel"
+FIREFOX_COMMAND="xdg-open"
 GEDIT_COMMAND="xdg-open"
 XCHAT_COMMAND="xchat"
 FDISK_COMMAND="/sbin/fdisk"
