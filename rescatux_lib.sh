@@ -121,7 +121,7 @@ function rtux_Message_Success () {
 function rtux_Message_Failure () {
   local text_to_show="$@"
   zenity ${ZENITY_COMMON_OPTIONS} \
-    --info \
+    --error \
     --title="${FAILURE_STR}" \
     --text="${text_to_show}";
 } # function rtux_Message_Failure ()
