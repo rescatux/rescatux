@@ -125,6 +125,10 @@ RLE_FILE="${RLE_FOLDER}/${RESCATUX_STR}.rle"
 
 CHNTPWNG_BINARY="../TRINITY/chntpwsource/chntpw-NG/chntpw"
 
+LB_ISO_APPLICATION="Rescatux Gnu/Linux ${VERSION}"
+LB_ISO_PUBLISHER="Rescatux team"
+LB_ISO_VOLUME="Rescatux${VERSION}"
+
 mkdir --parents $TEMP_FOLDER/${RLE_FOLDER}
 # Generate logo - Begin
 cd logo
@@ -194,6 +198,9 @@ lb config noauto \\
   --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \\
   --mirror-chroot "${MIRROR_CHROOT}" \\
   --apt-options "--force-yes --yes -o Acquire::Check-Valid-Until=false" \\
+  --iso-application "${LB_ISO_APPLICATION}" \\
+  --iso-publisher "${LB_ISO_PUBLISHER}" \\
+  --iso-volume "${LB_ISO_VOLUME}" \\
         "\${@}"
 EOF
 
