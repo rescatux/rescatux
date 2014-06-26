@@ -19,7 +19,8 @@
 # This script assumes that the user has sudo permissions on lh build
 MEDIA_STR="usb"
 FILE_EXTENSION="img"
-PACKAGES="zenity iceweasel xchat wmctrl"
+
+PACKAGES="${COMMON_PACKAGES}"
 BOOT_OPTION="-b usb-hdd"
 source make_common
 

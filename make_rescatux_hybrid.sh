@@ -17,85 +17,12 @@
 
 # This script assumes apt-get install live-helper has been done
 # This script assumes that the user has sudo permissions on lh build
+source rescatux_common_packages
 IS_HYBRID=".hybrid"
 MEDIA_STR="cdrom_usb_hybrid"
 FILE_EXTENSION="iso"
-LXDE_PACKAGES="network-manager-gnome feh"
-PYTHON_PACKAGES="python-sip python-qt4"
-RAID_PACKAGES="dmraid"
-LVM_PACKAGES="lvm2"
-SYNAPTIC_PACKAGES="synaptic"
-GKSU_PACKAGES="gksu"
-GPARTED_PACKAGES="gparted gpart"
-BOOTREPAIR_PACKAGES="boot-repair \
- boot-sav \
- gawk \
- pastebinit \
- xz-utils \
- gettext-base \
- glade2script \
- os-prober \
- parted \
- xdg-utils \
- zenity \
- boot-sav-extra \
- gksu \
- lsb-release \
- zip \
- dmraid \
- lvm2 \
- mbr \
- mdadm \
- os-uninstaller \
- clean-ubiquity \
- python \
- gir1.2-gtk-3.0 \
- python-gi
- "
-TESTDISK_PACKAGES="testdisk \
- e2fslibs \
- libc6 \
- libcomerr2 \
- libjpeg8 \
- libncursesw5 \
- libntfs10 \
- libtinfo5 \
- libuuid1 \
- zlib1g \
- "
-CRYPTSETUP_PACKAGES="cryptsetup \
- libcryptsetup4 \
- cryptsetup-bin \
- "
-FILESYSTEM_PACKAGES="reiserfsprogs \
- reiser4progs \
- "
 
-
-PACKAGES="${LXDE_PACKAGES} \
- ${PYTHON_PACKAGES} \
- ${RAID_PACKAGES} \
- ${LVM_PACKAGES} \
- ${SYNAPTIC_PACKAGES} \
- ${GKSU_PACKAGES} \
- ${GPARTED_PACKAGES} \
- ${BOOTREPAIR_PACKAGES} \
- ${TESTDISK_PACKAGES} \
- ${CRYPTSETUP_PACKAGES} \
- ${FILESYSTEM_PACKAGES} \
- zenity \
- iceweasel \
- xchat \
- syslinux \
- pastebinit \
- mbr \
- ntfs-3g \
- chntpw \
- samdump2 \
- bkhive \
- gawk\
- extundelete\
- " # I add syslinux so that isohybrid command is recognised.
+PACKAGES="${COMMON_PACKAGES}"
 BOOT_OPTION="-b iso-hybrid"
 LINUX_FLAVOURS="amd64 486"
 source make_common
