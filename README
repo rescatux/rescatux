@@ -37,10 +37,10 @@ CHNTPWNG_BINARY
 
 Using an Wheezy system or chroot run at the Rescatux source code directory:
 
-  ./make_rescatux_hybrid.sh
+  ./make_rescatux.sh
 
 This will generate an image like:
-  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b7.iso
+  rescatux-0.30b7.iso
 
 === SG2D based image ===
 
@@ -51,6 +51,10 @@ Edit SG2D_SOURCE_DIRECTORY variable in make_rescatux_sg2d_hybrid.sh file.
 Its value should be path to your Super Grub2 Disk source code directory.
 
 Using an unstable/wheezey system or chroot run at the Rescatux source code directory:
+
+  ./make_rescatux_hybrid.sh
+
+  and then:
 
   ./make_rescatux_sg2d_hybrid.sh
 
@@ -72,13 +76,13 @@ in order to generate a file like:
 
 The files that usually conform a release are:
 
-Rescatux iso based on Super Grub2 Disk:
+Rescatux iso:
 
-  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8_sg2d.iso
+  rescatux-0.30b7.iso
 
-Rescatux iso based on Super Grub2 Disk md5sum file:
+Rescatux iso md5sum file:
 
-  rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8_sg2d.iso.md5
+  rescatux-0.30b7.iso.md5
 
 Rescatux source code:
 
