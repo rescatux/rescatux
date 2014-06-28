@@ -75,6 +75,7 @@ CUSTOM_BOOTLOADER_CONFIG_FOLDER="config/bootloaders"
 
 #LIVE_HELPER_LISTS_FOLDER="/usr/share/live-helper/lists"
 LIVE_HELPER_LISTS_FOLDER="/usr/share/live/build/lists"
+RESCATUX_DATA_FOLDER="config/includes.chroot/usr/share/rescatux-data/"
 RLE_FOLDER="config/binary_syslinux"
 RLE_FILE="${RLE_FOLDER}/${RESCATUX_STR}.rle"
 
@@ -102,6 +103,7 @@ mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/pcmanfm/LXDE
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CUSTOM_BOOTLOADER_CONFIG_FOLDER}
+mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cp -r rescapp $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 for n_empty_dir in ${RESCATUX_EMPTY_DIRS} ; do
   mkdir $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/${n_empty_dir}
@@ -112,6 +114,7 @@ cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp setbackground.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp -r lxdeconf/* $TEMP_FOLDER/${SKEL_FOLDER}/.config/pcmanfm/LXDE
 cp -r bootloadersconf/* $TEMP_FOLDER/${CUSTOM_BOOTLOADER_CONFIG_FOLDER}
+cp -r logos $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cd $TEMP_FOLDER
 #sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
 sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
