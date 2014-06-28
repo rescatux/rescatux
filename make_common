@@ -26,53 +26,8 @@ set -v
 # Fetch version from folder directory name
 VERSION=`head -1 VERSION`
 
-RESCATUX_FILES="rescapp.py \
- order.py \
- setbackground.sh \
- chat \
- web \
- grub-install \
- update-grub \
- grub.lis \
- grub \
- rescatux.lis \
- show_log \
- support \
- support.lis \
- fsck \
- fs \
- fs.lis \
- images \
+RESCATUX_FILES=" \
  logos \
- about.lis \
- about \
- about-rescapp \
- rescatux_lib.sh \
- share_log win \
- win.lis \
- winmbr \
- winpass \
- bootinfoscript \
- share_log_forum \
- VERSION \
- COPYING \
- rescapp_launcher.sh \
- help-rescapp \
- pass.lis \
- pass \
- chpasswd \
- sudoers \
- expert-tools.lis \
- expert-tools \
- boot-repair \
- testdisk \
- photorec \
- gparted \
- os-uninstaller \
- winpromote \
- winunlock \
- main-menu \
- lxdeconf \
  "
 RESCATUX_EMPTY_DIRS="log"
 
@@ -146,9 +101,8 @@ mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/pcmanfm/LXDE
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
-mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp
 mkdir --parents $TEMP_FOLDER/${CUSTOM_BOOTLOADER_CONFIG_FOLDER}
-cp -r ${RESCATUX_FILES} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
+cp -r rescapp $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 for n_empty_dir in ${RESCATUX_EMPTY_DIRS} ; do
   mkdir $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/${n_empty_dir}
 done
