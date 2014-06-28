@@ -27,7 +27,4 @@ cat << EOF > ${LIVE_HOME}/.local/share/applications/mimeapps.list
 [Added Associations]
 text/plain=leafpad.desktop;
 
-[Default Applications]
-application/x-directory=xfe.desktop
-inode/directory=xfe.desktop
 EOF
