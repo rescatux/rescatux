@@ -22,5 +22,5 @@ Name=No Name
 Name[en_US]=Rescapp
 Comment[en_US]=Rescapp - Rescue Tool
 Comment=Rescapp - Rescue Tool
-Exec=/home/user/Desktop/rescapp/setbackground.sh
+Exec=/usr/bin/set-rescatux-background.sh
 X-GNOME-Autostart-enabled=true
