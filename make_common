@@ -93,14 +93,14 @@ cd ..
 # Generate logo - End
 
 mkdir --parents $TEMP_FOLDER/
+
+
+rm -rf ${TEMP_FOLDER}/config
+cp -a live-config ${TEMP_FOLDER}/config
 # Special backported passwd packages
 mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 # Backported passwd no longer needed in wheezy
 #cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
-
-mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
-mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
-mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/.config/pcmanfm/LXDE
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CUSTOM_BOOTLOADER_CONFIG_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
@@ -111,8 +111,6 @@ done
 cp ${CHNTPWNG_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
-cp setbackground.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
-cp -r lxdeconf/* $TEMP_FOLDER/${SKEL_FOLDER}/.config/pcmanfm/LXDE
 cp -r bootloadersconf/* $TEMP_FOLDER/${CUSTOM_BOOTLOADER_CONFIG_FOLDER}
 cp -r logos $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cd $TEMP_FOLDER
