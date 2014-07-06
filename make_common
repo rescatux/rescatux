@@ -113,6 +113,10 @@ cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp -r logos $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cp set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
+for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
+  sed -i "s/@RESCATUX_VERSION@/${VERSION}/g" \
+    ${TEMP_FOLDER}/config/bootloaders/${n_splash_dir}/splash.svg.in
+done
 cd $TEMP_FOLDER
 #sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
 sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
