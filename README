@@ -92,3 +92,23 @@ Rescatux source code:
 
 You can change Rescatux version at VERSION file.
 
+=== About Rescatux logo ===
+
+New Rescatux logo ( 06 July 2014 ) is a mixed and modified image based on these three pictures:
+
+* A Gnu wearing a jacket
+** Author: Sarah Katzenell Rabkin
+** Url: https://www.gnu.org/graphics/gnu-jacket.html
+** License: Creative Commons Attribution-Sharealike 2.0
+license (http://www.gnu.org/licenses/license-list.html#ccbysa).
+* Tux
+** Author: lewing@isc.tamu.edu and The GIMP
+** Url: http://commons.wikimedia.org/wiki/File:Tux.png
+** License: Permission to use and/or modify this image is granted provided you acknowledge me lewing@isc.tamu.edu and The GIMP if someone asks.
+* Thermometer
+** Author: Via Wikimedia commons
+** License: CC-BY-SA-3.0 (http://creativecommons.org/licenses/by-sa/3.0/)]
+** Url: http://commons.wikimedia.org/wiki/File:Clinical_thermometer_38.7.JPG
+
+You can find it at: live-config/bootloaders/{extlinux,isolinux,pxelinux,syslinux}/splash.svg.in
+
