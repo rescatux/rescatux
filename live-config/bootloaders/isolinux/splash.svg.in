@@ -15,7 +15,7 @@
    id="svg3320"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="splash.svg.in.svg">
+   sodipodi:docname="splash.svg.in">
   <defs
      id="defs3322">
     <radialGradient
@@ -192,9 +192,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.775"
-     inkscape:cx="122.7514"
-     inkscape:cy="240.44337"
+     inkscape:zoom="1.55"
+     inkscape:cx="382.05717"
+     inkscape:cy="242.11728"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -238,18 +238,18 @@
        transform="scale(1.0000015,0.9999985)"
        sodipodi:linespacing="100%"
        id="text3002"
-       y="1043.7236"
-       x="3.584857"
-       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold"
+       y="1040.4978"
+       x="-0.28610495"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold"
        xml:space="preserve"><tspan
          sodipodi:role="line"
          id="tspan3098"
-         x="3.584857"
-         y="1043.7236">live-boot: @LIVE_BOOT_VERSION@ live-config: @LIVE_CONFIG_VERSION@ live-tools: @LIVE_TOOLS_VERSION@</tspan><tspan
+         x="-0.28610495"
+         y="1040.4978">live-boot: @LIVE_BOOT_VERSION@ live-config: @LIVE_CONFIG_VERSION@ live-tools: @LIVE_TOOLS_VERSION@</tspan><tspan
          sodipodi:role="line"
          id="tspan3100"
-         x="3.584857"
-         y="1051.7236" /></text>
+         x="-0.28610495"
+         y="1054.4978" /></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -263,37 +263,37 @@
          x="200"
          y="336.7742" /></text>
     <text
-       transform="scale(0.95482426,1.0473132)"
+       transform="scale(0.95482422,1.0473132)"
        sodipodi:linespacing="100%"
        id="text3002-1"
-       y="974.29633"
-       x="2.0669761"
-       style="font-size:7.63858271px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold"
+       y="952.11981"
+       x="-1.3114535"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold"
        xml:space="preserve"><tspan
          sodipodi:role="line"
          id="tspan3108"
-         x="2.0669761"
-         y="974.29633">@PROJECT@ @VERSION@ (@DISTRIBUTION@) @DESCRIPTION@ @ARCHITECTURE@ Build: @YEAR@-@MONTH@-@DAY@ @HOUR@:@MINUTE@:@SECOND@</tspan></text>
+         x="-1.3114535"
+         y="952.11981">@PROJECT@ @VERSION@ (@DISTRIBUTION@) @DESCRIPTION@ @ARCHITECTURE@ Build: @YEAR@-@MONTH@-@DAY@ @HOUR@:@MINUTE@:@SECOND@</tspan></text>
     <text
        transform="scale(1.0000015,0.9999985)"
        sodipodi:linespacing="100%"
        id="text3002-7"
-       y="1030.7177"
-       x="3.217345"
-       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold"
+       y="1019.1047"
+       x="-1.2987773"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold"
        xml:space="preserve"><tspan
          sodipodi:role="line"
          id="tspan3102"
-         x="3.217345"
-         y="1030.7177">linux: @LINUX_VERSIONS@ live-build: @LIVE_BUILD_VERSION@</tspan><tspan
+         x="-1.2987773"
+         y="1019.1047">linux: @LINUX_VERSIONS@ live-build: @LIVE_BUILD_VERSION@</tspan><tspan
          sodipodi:role="line"
          id="tspan3104"
-         x="3.217345"
-         y="1038.7177" /><tspan
+         x="-1.2987773"
+         y="1033.1047" /><tspan
          sodipodi:role="line"
          id="tspan3106"
-         x="3.217345"
-         y="1046.7177" /></text>
+         x="-1.2987773"
+         y="1047.1047" /></text>
     <image
        y="574.81384"
        x="453.51614"
