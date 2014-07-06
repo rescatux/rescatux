@@ -16,9 +16,9 @@
 # along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
 
 LIVE_HOME="/home/user"
-MAGIC_BACKGROUND_FILENAME="background.png"
-feh --bg-fill "/usr/share/rescatux-data/logos/${MAGIC_BACKGROUND_FILENAME}"
-pcmanfm --set-wallpaper "/usr/share/rescatux-data/logos/${MAGIC_BACKGROUND_FILENAME}"
+MAGIC_BACKGROUND_PATH="/lib/live/mount/medium/isolinux/splash.png"
+feh --bg-fill "${MAGIC_BACKGROUND_PATH}"
+pcmanfm --set-wallpaper "${MAGIC_BACKGROUND_PATH}"
 pcmanfm --desktop &disown
 sudo cp "${LIVE_HOME}/Desktop/rescapp/chntpw" /usr/sbin/
 sudo chmod +x /usr/sbin/chntpw
