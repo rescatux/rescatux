@@ -3,6 +3,11 @@ This is Rescatux, a Debian Live CD aimed at easy rescue.
 Please visit the official web page of GRUB 2, for more information.
 The URL is <http://www.supergrubdisk.org/rescatux/>.
 
+== OBTAIN SOURCE CODE ==
+
+You can obtain most recent source code from out git repository by issuing:
+
+  git clone http://git.code.sf.net/p/rescatux/git rescatux-git
 
 == BUILD INSTRUCTIONS ==
 
