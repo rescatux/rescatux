@@ -18,6 +18,7 @@
 # SG2 STUFF
 SG2D_SOURCE_DIRECTORY="../../sgd/git/supergrub2/"
 RESCATUX_SOURCE_PWD=`pwd`
+RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 BOOT_ISOS_DIRECTORY="boot-isos"
 ORIGINAL_GRUB_CFG_BACKUP="original_grub_cfg_backup.cfg"
 # RESCATUX STUFF
@@ -51,13 +52,14 @@ cp ${RESCATUX_SOURCE_PWD}/logos/background.png menus
 cp ${RESCATUX_SOURCE_PWD}/unicode.pf2 menus
 cp ${RESCATUX_SOURCE_PWD}/rescatux-theme.txt menus
 sed -e "s/RESCATUX_ISO_TO_REPLACE/${ORIGINAL_RESCATUX_ISO}/g" ${RESCATUX_SOURCE_PWD}/rescatux_grub.cfg > menus/grub.cfg
-./supergrub-mkrescue -o=${RESCATUX_SOURCE_PWD}/${SG2D_RESCATUX_ISO}
+./supergrub-mkrescue -o=${RESCATUX_RELEASE_DIR}/${SG2D_RESCATUX_ISO}
 cp ${ORIGINAL_GRUB_CFG_BACKUP} menus/grub.cfg
 rm ${BOOT_ISOS_DIRECTORY}/${ORIGINAL_RESCATUX_ISO}
 rm menus/background.png
 rm menus/unicode.pf2
 rm menus/rescatux-theme.txt
 
-cd ${RESCATUX_SOURCE_PWD}
+cd ${RESCATUX_RELEASE_DIR}
 md5sum ${SG2D_RESCATUX_ISO} > ${SG2D_RESCATUX_ISO}.md5
 cp ${BASE_FILENAME}.packages ${SG2D_RESCATUX_ISO}.packages
+cd ${RESCATUX_SOURCE_PWD}

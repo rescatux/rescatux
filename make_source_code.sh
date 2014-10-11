@@ -18,5 +18,6 @@
 set -x
 set -v
 
+RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 BASE_FILENAME="rescatux-`head -n 1 VERSION`"
-git archive HEAD | gzip > ${BASE_FILENAME}.tar.gz
+git archive HEAD | gzip > ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.tar.gz

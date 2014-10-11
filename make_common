@@ -34,6 +34,8 @@ RESCATUX_EMPTY_DIRS="log"
 DESKTOP_METAPACKAGE="task-lxde-desktop"
 CORE_PACKAGES="live-tools user-setup sudo eject"
 
+RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
+
 # This was for lenny
 #MIRROR_BOOTSTRAP="http://192.168.0.50/debian/"
 #MIRROR_CHROOT="http://192.168.0.50/debian"
@@ -44,11 +46,15 @@ MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 SID_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
 
+ARCH="i386"
 DISTRIBUTION="wheezy" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
+RESCATUX_STR="rescatux"
 
+RESCATUX_MEDIA_STR="${RESCATUX_STR}_${MEDIA_STR}"
+BASE_FILENAME=${BASE_FILENAME-"${RESCATUX_MEDIA_STR}_${ARCH}_`echo ${LINUX_FLAVOURS} | sed s/' '/'-'/g`_`head -n 1 VERSION`"}
 CURRENT_FOLDER=$PWD
 
 TEMP_FOLDER="$(pwd)/live-build"
@@ -162,9 +168,10 @@ EOF
 sudo bash -c "lb config"
 sudo bash -c "lb clean"
 
-sudo bash -c "lb build 2>&1 | tee ${CURRENT_FOLDER}/${BASE_FILENAME}_build.log"
-mv binary${IS_HYBRID}.${FILE_EXTENSION} ${CURRENT_FOLDER}/${BASE_FILENAME}.${FILE_EXTENSION}
-mv binary.packages ${CURRENT_FOLDER}/${BASE_FILENAME}.packages
-cd ${CURRENT_FOLDER}
+sudo bash -c "lb build 2>&1 | tee ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}_build.log"
+mv binary${IS_HYBRID}.${FILE_EXTENSION} ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.${FILE_EXTENSION}
+mv binary.packages ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.packages
+cd ${RESCATUX_RELEASE_DIR}
 md5sum ${BASE_FILENAME}.${FILE_EXTENSION} > ${BASE_FILENAME}.${FILE_EXTENSION}.md5
 echo "${BASE_FILENAME}.${FILE_EXTENSION} (and md5sum) DONE!"
+cd ${CURRENT_FOLDER}

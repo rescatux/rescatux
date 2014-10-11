@@ -93,6 +93,10 @@ Rescatux source code:
 
   rescatux_source_code_0.30b8.tar.gz
 
+which will be found on:
+
+rescatux-release directory.
+
 === Other notes ===
 
 You can change Rescatux version at VERSION file.
