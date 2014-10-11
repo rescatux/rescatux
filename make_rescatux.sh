@@ -25,7 +25,10 @@ FILE_EXTENSION="iso"
 PACKAGES="${COMMON_PACKAGES}"
 BOOT_OPTION="-b iso-hybrid"
 LINUX_FLAVOURS="amd64 486"
+ARCH="i386"
+RESCATUX_STR="rescatux"
 
+RESCATUX_MEDIA_STR="${RESCATUX_STR}_${MEDIA_STR}"
 BASE_FILENAME="rescatux-$(head -n 1 VERSION)"
 
 source make_common

@@ -44,15 +44,11 @@ MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 SID_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
 
-ARCH="i386"
 DISTRIBUTION="wheezy" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
-RESCATUX_STR="rescatux"
 
-RESCATUX_MEDIA_STR="${RESCATUX_STR}_${MEDIA_STR}"
-BASE_FILENAME=${BASE_FILENAME-"${RESCATUX_MEDIA_STR}_${ARCH}_`echo ${LINUX_FLAVOURS} | sed s/' '/'-'/g`_`head -n 1 VERSION`"}
 CURRENT_FOLDER=$PWD
 
 TEMP_FOLDER="$(pwd)/live-build"
