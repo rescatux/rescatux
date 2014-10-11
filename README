@@ -46,22 +46,23 @@ Using an Wheezy system or chroot run at the Rescatux source code directory:
 
 This will generate an image like:
   rescatux-0.30b7.iso
+in rescatux-release directory.
 
 === SG2D based image ===
 
 You need to have installed GNU GRUB2 in your system, at least the grub-mkrescue and grub-mkfont binaries.
 You also need to have Super Grub2 Disk source code.
 
-Edit SG2D_SOURCE_DIRECTORY variable in make_rescatux_sg2d_hybrid.sh file.
+Edit SG2D_SOURCE_DIRECTORY variable in make_rescatux_sg2d.sh file.
 Its value should be path to your Super Grub2 Disk source code directory.
 
 Using an unstable/wheezey system or chroot run at the Rescatux source code directory:
 
-  ./make_rescatux_hybrid.sh
+  ./make_rescatux.sh
 
   and then:
 
-  ./make_rescatux_sg2d_hybrid.sh
+  ./make_rescatux_sg2d.sh
 
 This will generate an image like:
   rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b8_sg2d.iso
@@ -76,6 +77,9 @@ in order to generate a file like:
 
   rescatux_source_code_0.30b6.tar.gz
 
+which will be found on:
+
+rescatux-release directory.
 
 === Release ===
 
