@@ -53,6 +53,7 @@ function rtux_Sudoers () {
       echo -e -n "\n${SELECTED_USER}\tALL=(ALL:ALL)\tALL\n" >> \
       ${TMP_MNT_PARTITION}${DEFAULT_SUDOERS_FILE}
       chmod 440 ${TMP_MNT_PARTITION}${DEFAULT_SUDOERS_FILE}
+      chown root:root ${TMP_MNT_PARTITION}${DEFAULT_SUDOERS_FILE}
       EXIT_VALUE=$?
 	  
     fi # Linux detector was found
