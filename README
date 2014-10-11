@@ -13,7 +13,7 @@ You can obtain most recent source code from out git repository by issuing:
 
 In order to build Rescatux in a Wheezy system or Wheezy chroot you need these packages:
 
-live-build
+live-build (patched as below)
 imagemagick # Needed for logo generation
 syslinux # Needed for logo generation
 
@@ -29,6 +29,31 @@ Just check INSTALL.txt file on the package for build instructions.
 Build will generate chntpw binary file.
 
 Path to this file should be set at: make_common's CHNTPWNG_BINARY variable.
+
+== Debian Live needed patches ==
+
+A per current version of live-build package it needs patching (On your wheezy or wheezy chroot system) so that two features work ok:
+* Arch autodetection in Isolinux bootloader
+* Support for loopback.cfg
+
+If you want to know if the patches are no longer needed please check these associated bugs. You will see in which live-build version they are finally fixed.
+
+* https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=757697
+* https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=757883
+
+Here there is a mini script for applying these patches.
+
+#!/bin/bash
+CURRENT_DIR=$(pwd)
+cd /
+BACKUP_SUFFIX="_backup_rescatux_$(date +'%F-%H-%M')"
+cp -a /usr/lib/live/build/binary_syslinux /usr/lib/live/build/binary_syslinux${BACKUP_SUFFIX}
+cp -a /usr/lib/live/build/binary /usr/lib/live/build/binary${BACKUP_SUFFIX}
+patch -p1 < ${CURRENT_DIR}/debian-live-patches/debian_live_cpu64bit_detection.diff
+patch -p1 < ${CURRENT_DIR}/debian-live-patches/debian_live_loopback_cfg_support.diff
+cd ${CURRENT_DIR}
+
+The patches are found in: debian-live-patches directory.
 
 === Isolinux based image ===
 

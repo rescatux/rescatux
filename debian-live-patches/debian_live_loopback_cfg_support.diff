@@ -1,0 +1,320 @@
+diff -urN original/usr/lib/live/build/binary fork_loopback_cfg/usr/lib/live/build/binary
+--- original/usr/lib/live/build/binary	2014-08-16 03:09:01.512575406 +0000
++++ fork_loopback_cfg/usr/lib/live/build/binary	2014-08-16 03:09:37.377196377 +0000
+@@ -64,6 +64,7 @@
+ lb binary_memtest ${@}
+ lb binary_grub ${@}
+ lb binary_grub2 ${@}
++lb binary_loopback_cfg ${@}
+ lb binary_syslinux ${@}
+ lb binary_yaboot ${@}
+ lb binary_silo ${@}
+diff -urN original/usr/lib/live/build/binary_loopback_cfg fork_loopback_cfg/usr/lib/live/build/binary_loopback_cfg
+--- original/usr/lib/live/build/binary_loopback_cfg	1970-01-01 00:00:00.000000000 +0000
++++ fork_loopback_cfg/usr/lib/live/build/binary_loopback_cfg	2014-08-16 23:12:21.746935266 +0000
+@@ -0,0 +1,305 @@
++#!/bin/sh
++
++## live-build(7) - System Build Scripts
++## Copyright (C) 2006-2013 Daniel Baumann <daniel@debian.org>
++##
++## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
++## This is free software, and you are welcome to redistribute it
++## under certain conditions; see COPYING for details.
++
++
++set -e
++
++# Including common functions
++[ -e "${LIVE_BUILD}/scripts/build.sh" ] && . "${LIVE_BUILD}/scripts/build.sh" || . /usr/lib/live/build.sh
++
++# Setting static variables
++DESCRIPTION="$(Echo 'installs loopback.cfg into binary')"
++HELP=""
++USAGE="${PROGRAM} [--force]"
++
++Arguments "${@}"
++
++# Reading configuration files
++Read_conffiles config/all config/common config/bootstrap config/chroot config/binary config/source
++Set_defaults
++
++Echo_message "Begin installing loopback.cfg..."
++
++# Requiring stage file
++Require_stagefile .build/config .build/bootstrap
++
++# Checking stage file
++Check_stagefile .build/binary_loopback_cfg
++
++# Checking grub2 templates
++Check_templates grub2
++
++# Checking lock file
++Check_lockfile .lock
++
++# Creating lock file
++Create_lockfile .lock
++
++# Check architecture
++Check_architectures amd64 i386
++Check_crossarchitectures
++
++# Checking depends
++#Check_package chroot/usr/bin/grub-mkimage grub-pc
++
++# Restoring cache
++Restore_cache cache/packages.binary
++
++# Installing depends
++Install_package
++
++# Local functions
++Grub_live_entry_commands ()
++{
++	local KERNEL="${1}"
++	local INITRD="${2}"
++	local APPEND="${3}"
++
++	LINUX_LIVE="${LINUX_LIVE}\nlinux\t\t/${KERNEL} ${INITFS:+boot=${INITFS} }config LB_BOOTAPPEND_LIVE ${APPEND}"
++	LINUX_LIVE="${LINUX_LIVE}\ninitrd\t\t/${INITRD}"
++}
++
++Grub_live_entry ()
++{
++	local LABEL="${1}"
++	local KERNEL="${2}"
++	local INITRD="${3}"
++	local APPEND="${4}"
++
++	LINUX_LIVE="${LINUX_LIVE}\nmenuentry \"Debian GNU/Linux - ${LABEL}\" {"
++	Grub_live_entry_commands "${KERNEL}" "${INITRD}" "${APPEND} findiso=\${iso_path}"
++	LINUX_LIVE="${LINUX_LIVE}\n}"
++}
++
++Grub_live_autodetect_entry ()
++{
++	local LABEL="${1}"
++	local AMD64_KERNEL="${2}"
++	local AMD64_INITRD="${3}"
++	local _486_KERNEL="${4}"
++	local _486_INITRD="${5}"
++	local APPEND="${6}"
++
++	LINUX_LIVE="${LINUX_LIVE}\nmenuentry \"Debian GNU/Linux - ${LABEL}\" {"
++	LINUX_LIVE="${LINUX_LIVE}\nif cpuid -l ; then"
++	Grub_live_entry_commands "${AMD64_KERNEL}" "${AMD64_INITRD}" "${APPEND} findiso=\${iso_path}"
++	LINUX_LIVE="${LINUX_LIVE}\nelse"
++	Grub_live_entry_commands "${_486_KERNEL}" "${_486_INITRD}" "${APPEND} findiso=\${iso_path}"
++	LINUX_LIVE="${LINUX_LIVE}\nfi"
++	LINUX_LIVE="${LINUX_LIVE}\n}"
++}
++
++case "${LB_INITRAMFS}" in
++	casper)
++		INITFS="casper"
++		;;
++
++	live-boot)
++		INITFS="live"
++		;;
++
++	*)
++		INITFS=""
++		;;
++esac
++
++# Setting destination directory
++case "${LB_BINARY_IMAGES}" in
++	iso*|tar)
++		case "${LB_INITRAMFS}" in
++			casper)
++				DESTDIR_LIVE="binary/casper"
++				;;
++
++			live-boot)
++				DESTDIR_LIVE="binary/live"
++				;;
++
++			*)
++				DESTDIR_LIVE="binary/live"
++				;;
++		esac
++
++		DESTDIR_INSTALL="binary/install"
++		;;
++
++	hdd*|netboot)
++		Echo_warning "Bootloader in this image type not yet supported by live-build."
++		Echo_warning "This would produce a not bootable image, aborting (FIXME)."
++		exit 1
++	;;
++esac
++
++Check_multiarchitectures
++
++# Creating directory
++mkdir -p "${DESTDIR_LIVE}"
++
++# Setting boot parameters
++if [ "${LB_UNION_FILESYSTEM}" != "aufs" ]
++then
++	LB_BOOTAPPEND_LIVE="${LB_BOOTAPPEND_LIVE} union=${LB_UNION_FILESYSTEM}"
++fi
++
++if [ -n "${LB_NET_COW_PATH}" ]
++then
++	Echo_error "Net cow not yet supported on grub"
++	exit 1
++fi
++
++if [ "${LB_EXPOSED_ROOT}" != "false" ]
++then
++	LB_BOOTAPPEND_LIVE="${LB_BOOTAPPEND_LIVE} exposedroot"
++fi
++
++LB_BOOTAPPEND_LIVE="$(echo ${LB_BOOTAPPEND_LIVE} | sed -e 's|  ||')"
++
++# Assembling kernel configuration
++
++if [ "${LB_BOOTLOADER}" != "syslinux" ]
++then
++
++	_AMD64_486_NUMBER="0"
++
++	for _FLAVOUR in ${LB_LINUX_FLAVOURS}
++	do
++		if [ "${_FLAVOUR}" = "amd64" -o "${_FLAVOUR}" = "486" ] ; then
++			_AMD64_486_NUMBER="$((${_AMD64_486_NUMBER} + 1))"
++		fi
++	done
++
++	if [ "${_AMD64_486_NUMBER}" -ge 2 ] ; then
++		# Default entries
++		AMD64_KERNEL="$(basename chroot/boot/vmlinuz-*amd64)"
++		AMD64_INITRD="initrd.img-$(echo ${AMD64_KERNEL} | sed -e 's|vmlinuz-||')"
++		_486_KERNEL="$(basename chroot/boot/vmlinuz-*486)"
++		_486_INITRD="initrd.img-$(echo ${_486_KERNEL} | sed -e 's|vmlinuz-||')"
++
++		Grub_live_autodetect_entry "live (autodetect)" \
++			"$(basename ${DESTDIR_LIVE})/${AMD64_KERNEL}" \
++			"$(basename ${DESTDIR_LIVE})/${AMD64_INITRD}" \
++			"$(basename ${DESTDIR_LIVE})/${_486_KERNEL}" \
++			"$(basename ${DESTDIR_LIVE})/${_486_INITRD}"
++	fi
++
++	# Default entries
++	DEFAULT_FLAVOUR="$(echo ${LB_LINUX_FLAVOURS} | awk '{ print $1 }')"
++	DEFAULT_KERNEL="$(basename chroot/boot/vmlinuz-*${DEFAULT_FLAVOUR})"
++	DEFAULT_INITRD="initrd.img-$(echo ${DEFAULT_KERNEL} | sed -e 's|vmlinuz-||')"
++
++	Grub_live_entry "live" "$(basename ${DESTDIR_LIVE})/${DEFAULT_KERNEL}" "$(basename ${DESTDIR_LIVE})/${DEFAULT_INITRD}"
++
++	if [ "${LB_BOOTAPPEND_FAILSAFE}" != "none" ]
++	then
++		Grub_live_entry "live (fail-safe mode)" "$(basename ${DESTDIR_LIVE})/${DEFAULT_KERNEL}" "$(basename ${DESTDIR_LIVE})/${DEFAULT_INITRD}" "${LB_BOOTAPPEND_FAILSAFE}"
++	fi
++
++	for KERNEL in chroot/boot/vmlinuz-*
++	do
++		VERSION="$(basename ${KERNEL} | sed -e 's|vmlinuz-||')"
++
++		Grub_live_entry "live, kernel ${VERSION}" "$(basename ${DESTDIR_LIVE})/$(basename ${KERNEL})" "$(basename ${DESTDIR_LIVE})/initrd.img-${VERSION}"
++		Grub_live_entry "live, kernel ${VERSION} (fail-safe mode)" "$(basename ${DESTDIR_LIVE})/$(basename ${KERNEL})" "$(basename ${DESTDIR_LIVE})/initrd.img-${VERSION}" "${LB_BOOTAPPEND_FAILSAFE}"
++	done
++else # LB_BOOTLOADER = syslinux
++
++	#if [ -e "${_TARGET}/live.cfg.in" ]
++	#then
++		# This is all rather suboptimal.. needs prettifying at some point
++		_FLAVOURS="$(echo ${LB_LINUX_FLAVOURS} | wc -w)"
++
++		case "${_FLAVOURS}" in
++			1)
++				Grub_live_entry "live (${LB_LINUX_FLAVOURS})" "$(basename ${DESTDIR_LIVE})/vmlinuz" "$(basename ${DESTDIR_LIVE})/initrd.img" "${LB_BOOTAPPEND_LIVE}"
++				Grub_live_entry "live (${LB_LINUX_FLAVOURS}) (failsafe mode)" "$(basename ${DESTDIR_LIVE})/vmlinuz" "$(basename ${DESTDIR_LIVE})/initrd.img" "${LB_BOOTAPPEND_LIVE_FAILSAFE}"
++			;;
++
++			*)
++				_AMD64_486_NUMBER="0"
++
++				for _FLAVOUR in ${LB_LINUX_FLAVOURS}
++				do
++					if [ "${_FLAVOUR}" = "amd64" -o "${_FLAVOUR}" = "486" ] ; then
++						_AMD64_486_NUMBER="$((${_AMD64_486_NUMBER} + 1))"
++					fi
++				done
++
++				_NUMBER="0"
++				for _FLAVOUR in ${LB_LINUX_FLAVOURS}
++				do
++					_NUMBER="$((${_NUMBER} + 1))"
++					if [ "${_FLAVOUR}" = "amd64" ] ; then
++						AMD64_KERNEL="vmlinuz${_NUMBER}"
++						AMD64_INITRD="initrd${_NUMBER}.img"
++					fi
++
++					if [ "${_FLAVOUR}" = "486" ] ; then
++						_486_KERNEL="vmlinuz${_NUMBER}"
++						_486_INITRD="initrd${_NUMBER}.img"
++					fi
++				done
++
++				_NUMBER="0"
++
++				for _FLAVOUR in ${LB_LINUX_FLAVOURS}
++				do
++					_NUMBER="$((${_NUMBER} + 1))"
++
++					if [ "${_NUMBER}" -gt 1 ]
++					then
++						Grub_live_entry "live (${_FLAVOUR})" "$(basename ${DESTDIR_LIVE})/vmlinuz${_NUMBER}" "$(basename ${DESTDIR_LIVE})/initrd${_NUMBER}.img" "${LB_BOOTAPPEND_LIVE}"
++						Grub_live_entry "live (${_FLAVOUR}) (failsafe mode)" "$(basename ${DESTDIR_LIVE})/vmlinuz${_NUMBER}" "$(basename ${DESTDIR_LIVE})/initrd${_NUMBER}.img" "${LB_BOOTAPPEND_LIVE_FAILSAFE}"
++
++					else
++						if [ "${_AMD64_486_NUMBER}" -ge 2 ] ; then
++
++							Grub_live_autodetect_entry "live (autodetect)" \
++								"$(basename ${DESTDIR_LIVE})/${AMD64_KERNEL}" \
++								"$(basename ${DESTDIR_LIVE})/${AMD64_INITRD}" \
++								"$(basename ${DESTDIR_LIVE})/${_486_KERNEL}" \
++								"$(basename ${DESTDIR_LIVE})/${_486_INITRD}"
++						fi
++
++						Grub_live_entry "live (${_FLAVOUR})" "$(basename ${DESTDIR_LIVE})/vmlinuz${_NUMBER}" "$(basename ${DESTDIR_LIVE})/initrd${_NUMBER}.img" "${LB_BOOTAPPEND_LIVE}"
++						Grub_live_entry "live (${_FLAVOUR}) (failsafe mode)" "$(basename ${DESTDIR_LIVE})/vmlinuz${_NUMBER}" "$(basename ${DESTDIR_LIVE})/initrd${_NUMBER}.img" "${LB_BOOTAPPEND_LIVE_FAILSAFE}"
++					fi
++
++				done
++
++				;;
++		esac
++	#fi
++fi
++LINUX_LIVE="$(/bin/echo ${LINUX_LIVE} | sed -e 's|binary||g' -e 's|//|/|g')"
++
++# Assembling memtest configuration
++if [ -f "${DESTDIR_LIVE}"/memtest ]
++then
++	MEMTEST="#\t \"Other\"\n"
++	MEMTEST="${MEMTEST}\nmenuentry\t\"${LB_MEMTEST}\" {\nlinux16\t$(basename ${DESTDIR_LIVE})/memtest\n}"
++	MEMTEST="$(/bin/echo ${MEMTEST} | sed -e 's|//|/|g')"
++fi
++
++# Copying templates
++mkdir -p binary/boot/grub
++cp "${TEMPLATES}"/grub.cfg binary/boot/grub/loopback.cfg
++
++sed -i -e "s|LINUX_LIVE|${LINUX_LIVE}|" -e "s|LINUX_INSTALL||" -e "s|MEMTEST|${MEMTEST}|" binary/boot/grub/loopback.cfg
++sed -i -e "s#LB_BOOTAPPEND_INSTALL##" -e "s#LB_BOOTAPPEND_LIVE#${LB_BOOTAPPEND_LIVE}#" binary/boot/grub/loopback.cfg
++
++sed -i -e 's|\ $||g' binary/boot/grub/loopback.cfg
++
++# Saving cache
++Save_cache cache/packages.binary
++
++# Removing depends
++Remove_package
++
++# Creating stage file
++Create_stagefile .build/binary_loopback_cfg

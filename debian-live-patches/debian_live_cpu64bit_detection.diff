@@ -1,0 +1,63 @@
+diff -urN original/usr/lib/live/build/binary_syslinux fork_cpu64bit_detection/usr/lib/live/build/binary_syslinux
+--- original/usr/lib/live/build/binary_syslinux	2014-08-14 02:42:20.007666770 +0000
++++ fork_cpu64bit_detection/usr/lib/live/build/binary_syslinux	2014-08-15 05:08:58.701948081 +0000
+@@ -161,6 +161,12 @@
+ 		;;
+ esac
+ 
++# Copy necessary syslinux modules
++for module in ifcpu64.c32
++do
++	cp "chroot/usr/lib/syslinux/${module}" "${_TARGET}/"
++done
++
+ # Configuring files
+ if [ -e "${_TARGET}/live.cfg.in" ]
+ then
+@@ -183,6 +189,22 @@
+ 			;;
+ 
+ 		*)
++			_AMD64_486_NUMBER="0"
++
++			for _FLAVOUR in ${LB_LINUX_FLAVOURS}
++			do
++				if [ "${_FLAVOUR}" = "amd64" -o "${_FLAVOUR}" = "486" ] ; then
++					_AMD64_486_NUMBER="$((${_AMD64_486_NUMBER} + 1))"
++				fi
++			done
++
++			if [ "${_AMD64_486_NUMBER}" -ge 2 ] ; then
++				_AMD64_LABEL=$(cat "${_TARGET}/live.cfg.in" | grep "^label" | grep -v "failsafe" | sed 's/label //g' | sed -e "s|@FLAVOUR@|""amd64""|g")
++				_486_LABEL=$(cat "${_TARGET}/live.cfg.in" | grep "^label" | grep -v "failsafe" | sed 's/label //g' | sed -e "s|@FLAVOUR@|""486""|g")
++				_AUTO_LABEL=$(cat "${_TARGET}/live.cfg.in" | grep "^label" | grep -v "failsafe" | sed 's/label //g' | sed -e "s|@FLAVOUR@|""autodetect""|g")
++				_AUTO_MENU_LABEL=$(cat "${_TARGET}/live.cfg.in" | grep "menu label" | grep -v "failsafe" | sed 's/.*menu label //g' | sed -e "s|@FLAVOUR@|""auto""|g")
++			fi
++
+ 			_NUMBER="0"
+ 
+ 			for _FLAVOUR in ${LB_LINUX_FLAVOURS}
+@@ -197,7 +219,22 @@
+ 					echo "" >> "${_TARGET}/live.cfg"
+ 					grep -v 'menu default' "${_TARGET}/live.cfg.in" >> "${_TARGET}/live.cfg"
+ 				else
+-					cat "${_TARGET}/live.cfg.in" >> "${_TARGET}/live.cfg"
++					if [ "${_AMD64_486_NUMBER}" -ge 2 ] ; then
++						cat << EOF >> "${_TARGET}/live.cfg"
++label ${_AUTO_LABEL}
++	menu label ${_AUTO_MENU_LABEL}
++	com32 ifcpu64.c32
++	append ${_AMD64_LABEL} -- ${_486_LABEL} -- ${_486_LABEL}
++
++EOF
++					fi
++
++
++					if [ "${_AMD64_486_NUMBER}" -ge 2 ] ; then
++						grep -v 'menu default' "${_TARGET}/live.cfg.in" >> "${_TARGET}/live.cfg"
++					else
++						cat "${_TARGET}/live.cfg.in" >> "${_TARGET}/live.cfg"
++					fi
+ 				fi
+ 
+ 				sed -i -e "s|@FLAVOUR@|${_FLAVOUR}|g" \
