@@ -87,7 +87,7 @@ COMMON_PACKAGES="${LXDE_PACKAGES} \
  xchat \
  syslinux \
  pastebinit \
- mbr \
+ lilo \
  ntfs-3g \
  chntpw \
  samdump2 \
