@@ -44,6 +44,7 @@ RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian"
 MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 SID_MIRROR="http://127.0.0.1:9999/debian/"
+JESSIE_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
 
 ARCH="i386"
@@ -62,6 +63,7 @@ SKEL_FOLDER="config/includes.chroot/etc/skel"
 
 CHROOT_SOURCES_FOLDER="config/archives"
 SID_CHROOT_CONFIG="config/archives/sid.list.chroot"
+JESSIE_CHROOT_CONFIG="config/archives/jessie.list.chroot"
 BOOTREPAIR_CHROOT_CONFIG="config/archives/bootrepair.list.chroot"
 CHROOT_APT_CONFIG_FOLDER1="config/apt/"
 APT_PREFERENCES1="config/apt/preferences"
@@ -123,6 +125,7 @@ sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_L
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
+echo -e -n "deb ${JESSIE_MIRROR} jessie main" > $TEMP_FOLDER/${JESSIE_CHROOT_CONFIG}
 echo -e -n "deb ${BOOTREPAIR_MIRROR} precise main" > $TEMP_FOLDER/${BOOTREPAIR_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
@@ -132,7 +135,21 @@ mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER3}
 tee $TEMP_FOLDER/${APT_PREFERENCES1} \
 $TEMP_FOLDER/${APT_PREFERENCES2} \
 $TEMP_FOLDER/${APT_PREFERENCES3} <<END
+Package: chntpw
+Pin: release n=jessie
+Pin-Priority: 600
 
+Package: libgcrypt20
+Pin: release n=jessie
+Pin-Priority: 600
+
+Package: libc6
+Pin: release n=jessie
+Pin-Priority: 600
+
+Package: *
+Pin: release n=jessie
+Pin-Priority: 1
 END
 
 # Initial lb config
