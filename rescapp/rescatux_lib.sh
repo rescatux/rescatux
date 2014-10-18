@@ -85,7 +85,7 @@ function rtux_Get_Windows_Os_Partitions() {
     if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ;
     then
       for n_windir in ${TMP_MNT_PARTITION}/* ; do
-	  if [ -e ${n_windir}\
+	  if [ -e "${n_windir}"\
 /[Ss][Yy][Ss][Tt][Ee][Mm]32\
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Aa][Mm]\

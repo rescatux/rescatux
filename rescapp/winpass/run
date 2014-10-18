@@ -73,24 +73,24 @@ function rtux_winpass_reset () {
     then
   # Find the exact name for sam file
       for n_windir in ${TMP_MNT_PARTITION}/* ; do
-	if [ -e ${n_windir}\
+	if [ -e "${n_windir}"\
 /[Ss][Yy][Ss][Tt][Ee][Mm]32\
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Aa][Mm]\
 	] ; then
-	  SAM_FILE=${n_windir}\
+	  SAM_FILE="${n_windir}"\
 /[Ss][Yy][Ss][Tt][Ee][Mm]32\
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Aa][Mm]
 	fi
 
   # Find the exact name for security file
-	if [ -e ${n_windir}\
+	if [ -e "${n_windir}"\
 /[Ss][Yy][Ss][Tt][Ee][Mm]32\
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]\
 	] ; then
-	  SECURITY_FILE=${n_windir}\
+	  SECURITY_FILE="${n_windir}"\
 /[Ss][Yy][Ss][Tt][Ee][Mm]32\
 /[Cc][Oo][Nn][Ff][Ii][Gg]\
 /[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]
