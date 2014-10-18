@@ -52,7 +52,7 @@ function rtux_Choose_Sam_User () {
 	--column "${SAM_USER_STR}" \
 	"${SAM_LIST_VALUES[@]}"); 
 
-} # function rtux_Choose_Hard_Disk ()
+} # rtux_Choose_Sam_User ()
 
 
 # Reset windows password
@@ -84,17 +84,6 @@ function rtux_winpass_reset () {
 /[Ss][Aa][Mm]
 	fi
 
-  # Find the exact name for security file
-	if [ -e "${n_windir}"\
-/[Ss][Yy][Ss][Tt][Ee][Mm]32\
-/[Cc][Oo][Nn][Ff][Ii][Gg]\
-/[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]\
-	] ; then
-	  SECURITY_FILE="${n_windir}"\
-/[Ss][Yy][Ss][Tt][Ee][Mm]32\
-/[Cc][Oo][Nn][Ff][Ii][Gg]\
-/[Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy]
-	fi
       done
   # Backup of the files in a temporal folder
     # TODO
