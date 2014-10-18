@@ -17,19 +17,6 @@ live-build (patched as below)
 imagemagick # Needed for logo generation
 syslinux # Needed for logo generation
 
-=== Build chntpw-ng ===
-
-It doesn't matter too much if you build it from Wheezy or from an unstable system.
-Current version that we use at Wheezy based Rescatux was originally built in Squeeze.
-
-You will find chntpw-ng source code at: http://developer.berlios.de/project/showfiles.php?group_id=11211 .
-
-Just check INSTALL.txt file on the package for build instructions.
-
-Build will generate chntpw binary file.
-
-Path to this file should be set at: make_common's CHNTPWNG_BINARY variable.
-
 == Debian Live needed patches ==
 
 A per current version of live-build package it needs patching (On your wheezy or wheezy chroot system) so that two features work ok:
@@ -63,7 +50,6 @@ MIRROR_BOOTSTRAP
 MIRROR_CHROOT
 SID_MIRROR
 BACKPORTED_PASSWD
-CHNTPWNG_BINARY
 
 Using an Wheezy system or chroot run at the Rescatux source code directory:
 

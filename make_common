@@ -81,8 +81,6 @@ RESCATUX_BIN_FOLDER="config/includes.chroot/usr/bin/"
 RLE_FOLDER="config/binary_syslinux"
 RLE_FILE="${RLE_FOLDER}/${RESCATUX_STR}.rle"
 
-CHNTPWNG_BINARY="../TRINITY/chntpwsource/chntpw-NG/chntpw"
-
 LB_ISO_APPLICATION="Rescatux Gnu/Linux ${VERSION}"
 LB_ISO_PUBLISHER="Rescatux team"
 LB_ISO_VOLUME="Rescatux${VERSION}"
@@ -110,7 +108,6 @@ cp -r rescapp $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 for n_empty_dir in ${RESCATUX_EMPTY_DIRS} ; do
   mkdir $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/${n_empty_dir}
 done
-cp ${CHNTPWNG_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
 cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp -r logos $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}

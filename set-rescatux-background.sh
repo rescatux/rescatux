@@ -20,8 +20,6 @@ MAGIC_BACKGROUND_PATH="/lib/live/mount/medium/isolinux/splash.png"
 feh --bg-fill "${MAGIC_BACKGROUND_PATH}"
 pcmanfm --set-wallpaper "${MAGIC_BACKGROUND_PATH}"
 pcmanfm --desktop &disown
-sudo cp "${LIVE_HOME}/Desktop/rescapp/chntpw" /usr/sbin/
-sudo chmod +x /usr/sbin/chntpw
 mkdir --parents ${LIVE_HOME}/.local/share/applications
 cat << EOF > ${LIVE_HOME}/.local/share/applications/mimeapps.list
 [Added Associations]
