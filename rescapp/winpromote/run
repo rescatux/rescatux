@@ -63,6 +63,8 @@ function rtux_winpromote () {
   local SELECTED_PARTITION="$1"
   local SAM_PIPE="/tmp/sampipe"
   local WINDOWS_ADMIN_GROUP_HEX='0x220'
+  local WINDOWS_USERS_GROUP_HEX='0x221'
+  local WINDOWS_GUESTS_GROUP_HEX='0x222'
 
 
   # Mount the partition
@@ -106,9 +108,18 @@ function rtux_winpromote () {
   # Ask the user which password to reset	
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
       "Choose Windows user to promote to Admin")
+  # Comment from chntpw.c file
+  # Will add the user to the administrator group (0x220)
+  # and to the users group (0x221). That should usually be
+  # what is needed to log in and get administrator rights.
+  # Also, remove the user from the guest group (0x222), since
+  # it may forbid logins.
+
   # Run chntpw -L sam-file security-file
 	samusrgrp -E -a -u "0x${CHOOSEN_USER}" -g ${WINDOWS_ADMIN_GROUP_HEX} ${SAM_FILE};
 	EXIT_VALUE=$?
+	samusrgrp -E -a -u "0x${CHOOSEN_USER}" -g ${WINDOWS_USERS_GROUP_HEX} ${SAM_FILE};
+	samusrgrp -E -r -u "0x${CHOOSEN_USER}" -g ${WINDOWS_GUESTS_GROUP_HEX} ${SAM_FILE};
   # Umount the partition
 
     umount ${TMP_MNT_PARTITION};
