@@ -106,7 +106,7 @@ function rtux_winpass_reset () {
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
       "Choose Windows user to reset its password")
   # Run chntpw -L sam-file security-file
-	sampasswd -r -u "0x${CHOOSEN_USER}" ${SAM_FILE};
+	sampasswd -E -r -u "0x${CHOOSEN_USER}" ${SAM_FILE};
 	EXIT_VALUE=$?
   # Umount the partition
 

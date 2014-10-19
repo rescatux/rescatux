@@ -107,7 +107,7 @@ function rtux_winpromote () {
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
       "Choose Windows user to promote to Admin")
   # Run chntpw -L sam-file security-file
-	samusrgrp -a -u "0x${CHOOSEN_USER}" -g ${WINDOWS_ADMIN_GROUP_HEX} ${SAM_FILE};
+	samusrgrp -E -a -u "0x${CHOOSEN_USER}" -g ${WINDOWS_ADMIN_GROUP_HEX} ${SAM_FILE};
 	EXIT_VALUE=$?
   # Umount the partition
 
