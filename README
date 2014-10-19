@@ -19,6 +19,9 @@ syslinux # Needed for logo generation
 
 == About chntpw build ==
 
+Till the current bug in sampasswd (it does not save its changes)
+and till samunlock is added upstream we need to build this program on our own.
+
 Get chntpw source code from:
 
 * branch : chntpw-ng-1.01
@@ -30,12 +33,12 @@ ln -s /usr/include/asm-generic /usr/include/asm
 
 so that the upstream source code builds ok
 
-Then run:
+Then run (inside a Jessie chroot):
 make
 
-so that: samunlock and samunlock.static are generated.
+so that: samunlock, sampasswd, samunlock.static and sampasswd.static are generated.
 
-Path to samunlock should be set at: make_common's SAMUNLOCK_BINARY variable.
+Path to samunlock directory should be set at: make_common's CHNTPW_PATH variable.
 
 == Debian Live needed patches ==
 
@@ -70,7 +73,7 @@ MIRROR_BOOTSTRAP
 MIRROR_CHROOT
 SID_MIRROR
 BACKPORTED_PASSWD
-SAMUNLOCK_BINARY
+CHNTPW_PATH
 
 Using an Wheezy system or chroot run at the Rescatux source code directory:
 

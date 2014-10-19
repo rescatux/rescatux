@@ -20,8 +20,8 @@ MAGIC_BACKGROUND_PATH="/lib/live/mount/medium/isolinux/splash.png"
 feh --bg-fill "${MAGIC_BACKGROUND_PATH}"
 pcmanfm --set-wallpaper "${MAGIC_BACKGROUND_PATH}"
 pcmanfm --desktop &disown
-sudo cp "${LIVE_HOME}/Desktop/rescapp/samunlock" /usr/sbin/
-sudo chmod +x /usr/sbin/samunlock
+sudo cp "${LIVE_HOME}/Desktop/rescapp/samunlock" "${LIVE_HOME}/Desktop/rescapp/sampasswd" /usr/sbin/
+sudo chmod +x /usr/sbin/samunlock /usr/sbin/sampasswd
 mkdir --parents ${LIVE_HOME}/.local/share/applications
 cat << EOF > ${LIVE_HOME}/.local/share/applications/mimeapps.list
 [Added Associations]
