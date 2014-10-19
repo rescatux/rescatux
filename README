@@ -17,6 +17,26 @@ live-build (patched as below)
 imagemagick # Needed for logo generation
 syslinux # Needed for logo generation
 
+== About chntpw build ==
+
+Get chntpw source code from:
+
+* branch : chntpw-ng-1.01
+* repository : https://github.com/adrian15/chntpw
+
+You might need to run:
+
+ln -s /usr/include/asm-generic /usr/include/asm
+
+so that the upstream source code builds ok
+
+Then run:
+make
+
+so that: samunlock and samunlock.static are generated.
+
+Path to samunlock should be set at: make_common's SAMUNLOCK_BINARY variable.
+
 == Debian Live needed patches ==
 
 A per current version of live-build package it needs patching (On your wheezy or wheezy chroot system) so that two features work ok:
@@ -50,6 +70,7 @@ MIRROR_BOOTSTRAP
 MIRROR_CHROOT
 SID_MIRROR
 BACKPORTED_PASSWD
+SAMUNLOCK_BINARY
 
 Using an Wheezy system or chroot run at the Rescatux source code directory:
 
