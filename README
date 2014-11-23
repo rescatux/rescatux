@@ -40,6 +40,17 @@ so that: samunlock, sampasswd, samunlock.static and sampasswd.static are generat
 
 Path to samunlock directory should be set at: make_common's CHNTPW_PATH variable.
 
+== About tails-greeter build ==
+
+I am using a tails-greeter fork while I try to get it integrated properly into Debian Live. Here there is how you need to build it (inside a Wheezy chroot):
+
+git clone https://github.com/adrian15/tails-greeter.git
+cd greeter
+git checkout rescatux_0.32
+dpkg-buildpackage -us -uc
+
+You need to define the deb path at: make_common's RESCATUX_TAILS_GREETER variable.
+
 == Debian Live needed patches ==
 
 A per current version of live-build package it needs patching (On your wheezy or wheezy chroot system) so that two features work ok:

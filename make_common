@@ -46,6 +46,7 @@ MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 SID_MIRROR="http://127.0.0.1:9999/debian/"
 JESSIE_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
+RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/tails_greeter_git/tails-greeter_0.8.5_all.deb"
 
 ARCH="i386"
 DISTRIBUTION="wheezy" # Todo: Select with a switch
@@ -107,6 +108,7 @@ cp -a live-config ${TEMP_FOLDER}/config
 mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 # Backported passwd no longer needed in wheezy
 #cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
+cp ${RESCATUX_TAILS_GREETER} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
@@ -181,6 +183,7 @@ lb config noauto \\
   --iso-application "${LB_ISO_APPLICATION}" \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
   --iso-volume "${LB_ISO_VOLUME}" \\
+  --bootappend-live "boot=live config quiet splash live-config.nox11autologin" \\
         "\${@}"
 EOF
 
