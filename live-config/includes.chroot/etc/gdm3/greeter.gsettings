@@ -1,0 +1,57 @@
+# These are the options for the greeter session that can be set 
+# through GSettings. Any GSettings setting that is used by the 
+# greeter session can be set here.
+
+
+# Theming options
+# ===============
+#  - Change the GTK+ theme
+# [org.gnome.desktop.interface]
+# gtk-theme='Adwaita'
+#  - Use another background
+[org.gnome.desktop.background]
+picture-uri='file:////lib/live/mount/medium/isolinux/splash.png'
+# picture-options='zoom'
+#  - Or no background at all
+# [org.gnome.desktop.background]
+# picture-options='none'
+# primary-color='#000000'
+
+# Greeter session choice
+# ======================
+# Use 'gdm-shell' for the GNOME Shell version.
+# Never use anything not starting with 'gdm-'.
+[org.gnome.desktop.session]
+session-name='gdm-fallback'
+# session-name='gdm-shell'
+
+# Login manager options
+# =====================
+[org.gnome.login-screen]
+logo='/usr/share/icons/gnome/48x48/places/debian-swirl.png'
+fallback-logo='/usr/share/icons/gnome/48x48/places/debian-swirl.png'
+
+# - Disable user list
+# disable-user-list=true
+# - Disable restart buttons
+# disable-restart-buttons=true
+# - Show a login welcome message
+# banner-message-enable=true
+# banner-message-text='Welcome'
+
+# Prevent the power management icon from showing up
+[org.gnome.power-manager]
+icon-policy='never'
+
+# Disabling sound in the greeter
+#[org.gnome.desktop.sound]
+#event-sounds=false
+
+# The metacity compositor doesn’t go well with the greeter
+# so just to be sure
+[org.gnome.metacity]
+compositing-manager=false
+
+# No workspaces
+[org.gnome.desktop.wm.preferences]
+num-workspaces=1
