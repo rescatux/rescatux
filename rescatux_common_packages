@@ -165,4 +165,5 @@ COMMON_PACKAGES="${LXDE_PACKAGES} \
  bkhive \
  gawk\
  extundelete\
+ locales \
  " # I add syslinux so that isohybrid command is recognised.

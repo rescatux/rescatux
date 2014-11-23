@@ -154,6 +154,10 @@ Package: libc6
 Pin: release n=jessie
 Pin-Priority: 600
 
+Package: locales
+Pin: release n=jessie
+Pin-Priority: 600
+
 Package: *
 Pin: release n=jessie
 Pin-Priority: 1
@@ -183,7 +187,7 @@ lb config noauto \\
   --iso-application "${LB_ISO_APPLICATION}" \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
   --iso-volume "${LB_ISO_VOLUME}" \\
-  --bootappend-live "boot=live config quiet splash live-config.nox11autologin" \\
+  --bootappend-live "boot=live config quiet splash live-config.nox11autologin locales=en_US.UTF-8" \\
         "\${@}"
 EOF
 
