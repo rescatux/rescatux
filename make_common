@@ -150,6 +150,10 @@ Package: libgcrypt20
 Pin: release n=jessie
 Pin-Priority: 600
 
+Package: libgpg-error0
+Pin: release n=jessie
+Pin-Priority: 600
+
 Package: libc6
 Pin: release n=jessie
 Pin-Priority: 600
