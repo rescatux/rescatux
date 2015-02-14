@@ -68,6 +68,8 @@ CRYPTSETUP_PACKAGES="cryptsetup \
 FILESYSTEM_PACKAGES="reiserfsprogs \
  reiser4progs \
  btrfs-tools \
+ xfsprogs \
+ xfsdump \
  "
 
 TAILSGREETER_PACKAGES="\
