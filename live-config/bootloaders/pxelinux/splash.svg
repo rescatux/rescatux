@@ -273,7 +273,7 @@
          sodipodi:role="line"
          id="tspan3108"
          x="-1.3114535"
-         y="926.85565">@PROJECT@ @VERSION@ (@DISTRIBUTION@) @DESCRIPTION@ @ARCHITECTURE@ Build: @YEAR@-@MONTH@-@DAY@ @HOUR@:@MINUTE@:@SECOND@</tspan></text>
+         y="926.85565">@PROJECT@ @VERSION@ (@DISTRIBUTION@) @ARCHITECTURE@ Build: @YEAR@-@MONTH@-@DAY@ @HOUR@:@MINUTE@:@SECOND@</tspan></text>
     <text
        transform="scale(1.0000015,0.9999985)"
        sodipodi:linespacing="100%"
