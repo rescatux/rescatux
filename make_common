@@ -199,8 +199,8 @@ sudo bash -c "lb config"
 sudo bash -c "lb clean"
 
 sudo bash -c "lb build 2>&1 | tee ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}_build.log"
-mv binary${IS_HYBRID}.${FILE_EXTENSION} ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.${FILE_EXTENSION}
-mv binary.packages ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.packages
+mv live-image-i386${IS_HYBRID}.${FILE_EXTENSION} ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.${FILE_EXTENSION}
+mv live-image-i386.packages ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.packages
 cd ${RESCATUX_RELEASE_DIR}
 md5sum ${BASE_FILENAME}.${FILE_EXTENSION} > ${BASE_FILENAME}.${FILE_EXTENSION}.md5
 echo "${BASE_FILENAME}.${FILE_EXTENSION} (and md5sum) DONE!"
