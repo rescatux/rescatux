@@ -11,7 +11,7 @@ You can obtain most recent source code from out git repository by issuing:
 
 == BUILD INSTRUCTIONS ==
 
-In order to build Rescatux in a Wheezy system or Wheezy chroot you need these packages:
+In order to build Rescatux in a Jessie system or Jessie chroot you need these packages:
 
 live-build (patched as below)
 imagemagick # Needed for logo generation
@@ -42,7 +42,7 @@ Path to samunlock directory should be set at: make_common's CHNTPW_PATH variable
 
 == About tails-greeter build ==
 
-I am using a tails-greeter fork while I try to get it integrated properly into Debian Live. Here there is how you need to build it (inside a Wheezy chroot):
+I am using a tails-greeter fork while I try to get it integrated properly into Debian Live. Here there is how you need to build it (inside a Jessie chroot):
 
 git clone https://github.com/adrian15/tails-greeter.git
 cd greeter
@@ -53,7 +53,7 @@ You need to define the deb path at: make_common's RESCATUX_TAILS_GREETER variabl
 
 == Debian Live needed patches ==
 
-A per current version of live-build package it needs patching (On your wheezy or wheezy chroot system) so that two features work ok:
+A per current version of live-build package it needs patching (On your jessie or jessie chroot system) so that two features work ok:
 * Arch autodetection in Isolinux bootloader
 * Support for loopback.cfg
 
@@ -86,7 +86,7 @@ SID_MIRROR
 BACKPORTED_PASSWD
 CHNTPW_PATH
 
-Using an Wheezy system or chroot run at the Rescatux source code directory:
+Using an Jessie system or chroot run at the Rescatux source code directory:
 
   ./make_rescatux.sh
 
@@ -102,7 +102,7 @@ You also need to have Super Grub2 Disk source code.
 Edit SG2D_SOURCE_DIRECTORY variable in make_rescatux_sg2d.sh file.
 Its value should be path to your Super Grub2 Disk source code directory.
 
-Using an unstable/wheezey system or chroot run at the Rescatux source code directory:
+Using an unstable/jessie system or chroot run at the Rescatux source code directory:
 
   ./make_rescatux.sh
 

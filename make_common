@@ -49,7 +49,7 @@ BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
 RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/tails_greeter_git/tails-greeter_0.8.5_all.deb"
 
 ARCH="i386"
-DISTRIBUTION="wheezy" # Todo: Select with a switch
+DISTRIBUTION="jessie" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
@@ -106,7 +106,7 @@ rm -rf ${TEMP_FOLDER}/config
 cp -a live-config ${TEMP_FOLDER}/config
 # Special backported passwd packages
 mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
-# Backported passwd no longer needed in wheezy
+# Backported passwd no longer needed in jessie
 #cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 cp ${RESCATUX_TAILS_GREETER} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
