@@ -48,7 +48,12 @@ BOOTREPAIR_PACKAGES="boot-repair \
  clean-ubiquity \
  python \
  gir1.2-gtk-3.0 \
- python-gi
+ python-gi \
+ ntfs-3g \
+ efibootmgr \
+ syslinux-common \
+ cryptsetup \
+ boot-info \
  "
 TESTDISK_PACKAGES="testdisk \
  e2fslibs \
