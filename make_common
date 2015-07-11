@@ -112,9 +112,10 @@ cp ${RESCATUX_TAILS_GREETER} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
+mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp -r rescapp $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 for n_empty_dir in ${RESCATUX_EMPTY_DIRS} ; do
-  mkdir $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/${n_empty_dir}
+  mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/${n_empty_dir}
 done
 cp ${SAMUNLOCK_BINARY} ${SAMPASSWD_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
 cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
