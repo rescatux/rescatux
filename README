@@ -16,6 +16,7 @@ In order to build Rescatux in a Jessie system or Jessie chroot you need these pa
 live-build (patched as below)
 imagemagick # Needed for logo generation
 syslinux # Needed for logo generation
+syslinux-utils # Needed for logo generation
 
 == About chntpw build ==
 
