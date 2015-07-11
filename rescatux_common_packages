@@ -54,12 +54,13 @@ TESTDISK_PACKAGES="testdisk \
  e2fslibs \
  libc6 \
  libcomerr2 \
- libjpeg8 \
+ libjpeg62-turbo \
  libncursesw5 \
- libntfs10 \
+ libntfs-3g852 \
  libtinfo5 \
  libuuid1 \
  zlib1g \
+ ntfs-3g \
  "
 CRYPTSETUP_PACKAGES="cryptsetup \
  libcryptsetup4 \
