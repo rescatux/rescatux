@@ -102,7 +102,7 @@ cd ..
 mkdir --parents $TEMP_FOLDER/
 
 
-rm -rf ${TEMP_FOLDER}/config
+sudo rm -rf ${TEMP_FOLDER}/config
 cp -a live-config ${TEMP_FOLDER}/config
 # Special backported passwd packages
 mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
