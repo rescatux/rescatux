@@ -192,7 +192,7 @@ lb config noauto \\
   --iso-application "${LB_ISO_APPLICATION}" \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
   --iso-volume "${LB_ISO_VOLUME}" \\
-  --bootappend-live "boot=live config quiet splash live-config.nox11autologin locales=en_US.UTF-8" \\
+  --bootappend-live "boot=live config quiet splash locales=en_US.UTF-8" \\
         "\${@}"
 EOF
 
