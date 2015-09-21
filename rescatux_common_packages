@@ -148,6 +148,20 @@ TAILSGREETER_PACKAGES="\
  upower \
  usbmuxd \
 "
+SELINUX_PACKAGES="\
+ libapol4 \
+ libqpol1 \
+ policycoreutils \
+ python-ipy \
+ python-selinux \
+ python-semanage \
+ python-sepolgen \
+ python-sepolicy \
+ python-setools \
+ selinux-utils \
+ selinux-basics \
+ auditd \
+"
 
 COMMON_PACKAGES="${LXDE_PACKAGES} \
  ${PYTHON_PACKAGES} \
@@ -160,6 +174,7 @@ COMMON_PACKAGES="${LXDE_PACKAGES} \
  ${TESTDISK_PACKAGES} \
  ${CRYPTSETUP_PACKAGES} \
  ${FILESYSTEM_PACKAGES} \
+ ${SELINUX_PACKAGES} \
  zenity \
  iceweasel \
  xchat \
