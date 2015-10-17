@@ -43,7 +43,7 @@ RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 #This is for squeeze
 MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian"
 MIRROR_CHROOT="http://127.0.0.1:9999/debian"
-SID_MIRROR="http://127.0.0.1:9999/debian/"
+SID_MIRROR="http://snapshot.debian.org/archive/debian/20151017T100905Z/"
 JESSIE_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
 RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/tails_greeter_git/tails-greeter_0.8.5_all.deb"
