@@ -41,7 +41,7 @@ so that: samunlock, sampasswd, samunlock.static and sampasswd.static are generat
 
 Path to samunlock directory should be set at: make_common's CHNTPW_PATH variable.
 
-== About tails-greeter build ==
+== About tails-greeter build (Outdated in 0.40 beta 1) ==
 
 I am using a tails-greeter fork while I try to get it integrated properly into Debian Live. Here there is how you need to build it (inside a Jessie chroot):
 
