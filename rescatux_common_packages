@@ -161,6 +161,8 @@ SELINUX_PACKAGES="\
  selinux-utils \
  selinux-basics \
  auditd \
+ selinux-policy-default \
+ setools \
 "
 
 COMMON_PACKAGES="${LXDE_PACKAGES} \
