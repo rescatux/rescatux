@@ -174,7 +174,7 @@ lb config noauto \\
   --iso-application "${LB_ISO_APPLICATION}" \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
   --iso-volume "${LB_ISO_VOLUME}" \\
-  --bootappend-live "boot=live config quiet splash selinux=1 enforcing=0 locales=en_US.UTF-8" \\
+  --bootappend-live "boot=live config quiet splash selinux=1 security=selinux enforcing=0 locales=en_US.UTF-8" \\
         "\${@}"
 EOF
 
