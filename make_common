@@ -84,7 +84,7 @@ RESCATUX_BIN_FOLDER="config/includes.chroot/usr/bin/"
 RLE_FOLDER="config/binary_syslinux"
 RLE_FILE="${RLE_FOLDER}/${RESCATUX_STR}.rle"
 
-CHNTPW_PATH="../TRINITY/chntpwsource/chntpw-NG"
+CHNTPW_PATH="../subproyectos/chntpwsource/chntpw-NG"
 SAMPASSWD_BINARY="${CHNTPW_PATH}/sampasswd"
 SAMUNLOCK_BINARY="${CHNTPW_PATH}/samunlock"
 
