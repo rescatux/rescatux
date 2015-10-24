@@ -270,7 +270,6 @@ function rtux_File_Chroot_Script_Device_Map() {
 local command_line_to_run="$@"
   cat << EOF > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
     set -x -v
-    mount -a
     BOOT_GRUB_DIR="/boot/grub"
     if [ -d "/boot/grub2" ] ; then
       BOOT_GRUB_DIR="/boot/grub2"
@@ -293,7 +292,6 @@ local command_line_to_run="$@"
     rm \${BOOT_GRUB_DIR}/${DEVICE_MAP_BACKUP_STR}
     rm /${DEVICE_MAP_RESCATUX_STR}
     # Delete temporal and backup device.map files- TODO - END
-    umount -a
     exit \${UPDATE_GRUB_OUTPUT}
 EOF
 }
@@ -435,6 +433,31 @@ function rtux_Enter_Pass() {
 	  --hide-text
 
 } # rtux_Choose_Hard_Disk_Position()
+
+# 1 parametre = Temporal mount point
+# Return temporal fstab path
+function rtux_make_tmp_fstab() {
+
+  local TMP_MNT_PARTITION="$1"
+  local ORIGINAL_FSTAB="${TMP_MNT_PARTITION}/etc/fstab"
+  local TMP_FSTAB="${TMP_FOLDER}/tmp-rescatux-fstab-$$"
+  cat "${ORIGINAL_FSTAB}" |\
+  grep -E -v '^#' |\
+  grep -E -v '^[[:space:]]*$' |\
+  awk -v mount_dir=${TMP_MNT_PARTITION} '{
+    if ($2 != "none" && $2 == "/")
+      print $1 " " mount_dir " " $3 " " $4 " " $5 " " $6 ;
+    else if ($2 != "none")
+           print $1 " "mount_dir $2 " " $3 " " $4 " " $5 " " $6 ;
+    else
+      print $1 " " $2 " " $3 " " $4 " " $5 " " $6;
+  }
+  ' \
+  > "${TMP_FSTAB}"
+
+  echo "${TMP_FSTAB}";
+
+} # rtux_make_tmp_fstab()
 
 
 # Rescatux lib main variables

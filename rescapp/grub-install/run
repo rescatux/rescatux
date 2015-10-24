@@ -45,6 +45,9 @@ function rtux_Grub_Install () {
     mount -o bind /proc ${TMP_MNT_PARTITION}/proc
     mount -o bind /sys ${TMP_MNT_PARTITION}/sys
 
+    # Generate tmp fstab
+    TMP_FSTAB=$(rtux_make_tmp_fstab "${TMP_MNT_PARTITION}")
+
     if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
        rtux_File_Reordered_Device_Map \
       > ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
@@ -67,16 +70,14 @@ function rtux_Grub_Install () {
       chmod +x ${TMP_MNT_PARTITION_SCRIPT}
 
       # TODO: Let the user use other than now hard-coded /bin/bash
+      mount -a --fstab "${TMP_FSTAB}"
       chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT}
       EXIT_VALUE=$?
       mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
       rm ${TMP_MNT_PARTITION_SCRIPT}
 		  
     fi # Linux detector was found
-    umount ${TMP_MNT_PARTITION}/sys
-    umount ${TMP_MNT_PARTITION}/proc
-    umount ${TMP_MNT_PARTITION}/dev
-    umount ${TMP_MNT_PARTITION};
+    umount --recursive "${TMP_MNT_PARTITION}"
   fi # Partition was mounted ok
 
   return ${EXIT_VALUE}
