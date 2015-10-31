@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Recompute CHS on an hybrid MBR inside a GPT partition - Rescapp - Documentation</title>
+</head>
+<body>
+<h1>Recompute CHS on an hybrid MBR inside a GPT partition - Rescapp - Documentation</h1>
+<p></p>
+Choose your language.
+<center><TABLE width="176" BORDER="0">
+
+<TR>
+   <TD><a href="#english">English</a></TD>
+</TR>
+
+</TABLE></center>
+<ul>
+  <li><a href="#english">English</a></li>
+</ul>
+
+<a name="english">Recompute CHS on an hybrid MBR inside a GPT partition - Rescapp - Documentation</a>
+<br/>
+<br/>
+This option can sometimes help if a disk utility, OS, or BIOS doesn't like the CHS values used by the partitions in the protective or hybrid MBR. In particular, the GPT specification requires a CHS value of 0xFFFFFF for over-8GiB partitions, but this value is technically illegal by the usual standards. Some BIOSes hang if they encounter this value. This option will recompute a more normal CHS value -- 0xFEFFFF for over-8GiB partitions, enabling these BIOSes to boot.
+<br/>
+
+<ul>
+  <li>
+  <b>Step 1</b><p></p>Rescapp searchs for hard disks on your computer.
+  </li>
+  <li>
+  <b>Step 2</b><p></p>If such hard disks have been found Rescapp presents you the hard disks. At the same time you are prompted:<p></p>
+  <i>Which hard disk?</i><p></p> You are supposed to choose the hard disk which has a GPT partition which you want its hybrid MBR CHS to be recomputed.
+  </li>
+  <li>
+  <b>Step 3</b><p></p>Rescapp with all gathered information is going to recompute the CHS for the hybrid MBR inside your GPT hard disk.<b>Please wait</b>. Currently (Rescatux 0.40b1) this step is time consuming but no Please wait message has been implemented.
+  </li>
+  <li>
+  <b>Step 4</b><p></p>You are informed about the hybrid mbr CHS recompute process.<p></p>Message is self explanatory. You either get:<p></p><i>Success! Hybrid MBR CHS was recomputed OK! :)</i><p></p>or<p></p><i>Failure! Hybrid MBR CHS was not recomputed. Something went wrong! :(</i>
+  </li>
+  <li>
+  <b>Step 5</b><p></p>A log file called <i>gpt-recompute-hybrid-mbr-chs_log.txt</i> can be found at Desktop <i>logs</i> folder.
+  </li>
+</ul>
+
+
+</body>
+</html>
