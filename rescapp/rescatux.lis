@@ -3,5 +3,6 @@ grub
 fs
 pass
 win
+gpt
 expert-tools
 about
