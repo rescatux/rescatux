@@ -28,7 +28,7 @@ function rtux_Hybridmbr_Create () {
   local EXIT_VALUE=1 # Error by default
   local SELECTED_HARD_DISK="$1"
 
-  sgdisk -h /dev/${SELECTED_HARD_DISK}
+  sgdisk -h 1,2,3 /dev/${SELECTED_HARD_DISK}
 
   EXIT_VALUE=$?
   return ${EXIT_VALUE}
