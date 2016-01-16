@@ -162,6 +162,7 @@ cat << EOF > auto/config
 #!/bin/sh
 
 lb config noauto \\
+  --bootloaders "${BOOTLOADERS_OPTION}" \\
   --updates false \\
   --apt-recommends false \\
   --linux-flavours "${LINUX_FLAVOURS}" \\
