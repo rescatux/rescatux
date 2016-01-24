@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys, subprocess, os, time, linecache, sip
+import sys, subprocess, os, time, linecache, sip, datetime
 from PyQt4 import QtGui,QtCore,QtWebKit
 from functools import partial
 
@@ -424,6 +424,10 @@ if __name__ == "__main__":
     main_menu_support_option= RescappOption()
     main_menu_support_option.setFromDir(os.path.join(current_pwd, 'main-menu'), 'main-menu')
     
+    if ((datetime.datetime.now().month==4) and (datetime.datetime.now().day==1)):
+		execfile(current_pwd + "/" + "afd.py")
+		execfile(current_pwd + "/" + "afd2.py")
+
     app=QtGui.QApplication(sys.argv)
     url = QtCore.QUrl('file:///' + current_pwd + '/' + help_support_option.getCode() + '/' + offlinedoc_filename)
     mw=MainWindow(url)
