@@ -46,7 +46,7 @@ MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 SID_MIRROR="http://snapshot.debian.org/archive/debian/20151017T100905Z/"
 JESSIE_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
-RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/tails_greeter_git/tails-greeter_0.8.5_all.deb"
+RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/subproyectos/tails_greeter/tails-greeter_0.8.17_all.deb"
 
 ARCH="i386"
 DISTRIBUTION="jessie" # Todo: Select with a switch
@@ -175,7 +175,7 @@ lb config noauto \\
   --iso-application "${LB_ISO_APPLICATION}" \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
   --iso-volume "${LB_ISO_VOLUME}" \\
-  --bootappend-live "boot=live config quiet splash selinux=1 security=selinux enforcing=0 locales=en_US.UTF-8" \\
+  --bootappend-live "boot=live config quiet splash selinux=1 security=selinux enforcing=0 locales=en_US.UTF-8 live-config.nox11autologin" \\
         "\${@}"
 EOF
 
