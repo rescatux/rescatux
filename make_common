@@ -46,7 +46,7 @@ MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 SID_MIRROR="http://snapshot.debian.org/archive/debian/20151017T100905Z/"
 JESSIE_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
-RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/subproyectos/tails_greeter/tails-greeter_0.8.17_all.deb"
+RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/subproyectos/tails_greeter/tails-greeter_0.8.22_all.deb"
 
 ARCH="i386"
 DISTRIBUTION="jessie" # Todo: Select with a switch
