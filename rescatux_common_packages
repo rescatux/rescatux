@@ -221,6 +221,10 @@ TAILSGREETER_PACKAGES="\
  ttf-unifont \
  upower \
  xwayland \
+ metacity \
+ libmetacity-private2 \
+ metacity-common \
+ sgml-base \
 "
 SELINUX_PACKAGES="\
  libapol4 \
