@@ -47,7 +47,7 @@ I am using a tails-greeter fork while I try to get it integrated properly into D
 
 git clone https://github.com/rescatux/tails-greeter.git
 cd greeter
-git checkout rescatux_0.32
+git checkout rescatux_0.40b8
 dpkg-buildpackage -us -uc
 
 You need to define the deb path at: make_common's RESCATUX_TAILS_GREETER variable.
