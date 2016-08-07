@@ -1,2 +1,5 @@
 [org/gnome/desktop/session]
 session-name='gdm-tails'
+
+[org/gnome/desktop/background]
+picture-uri='file:///lib/live/mount/medium/isolinux/splash.png'
