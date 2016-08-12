@@ -27,7 +27,7 @@ function rtux_Get_Etc_Issue_Content() {
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
     if [[ -e ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} ]] ; then
       echo $(head -n 1 ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} |\
-	sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /-/g' -e 's/\ \ /-/g' -e 's/\n/-/g')
+	sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /_/g' -e 's/\ \ /_/g' -e 's/\n/_/g' -e 's/--/_/g')
     else
       echo "${NOT_DETECTED_STR}"
     fi
