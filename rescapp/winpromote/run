@@ -21,6 +21,16 @@ set -x
 set -v
 
 
+function rtux_backup_windows_config () {
+
+  SAM_FILE="$1"
+  PRE_RESCATUX_STR="PRE_RESCATUX"
+  CURRENT_SECOND_STR="$(date +%Y-%m-%d-%H-%M-%S)"
+  SAM_DIR="$(dirname ${SAM_FILE})"
+  cp -r "${SAM_DIR}" "${SAM_DIR}_${PRE_RESCATUX_STR}_${CURRENT_SECOND_STR}"
+
+}
+
 # Return Windows SAM user that the user chooses
 # Every parametre is treated as the question to be asked to the user.
 function rtux_Choose_Sam_User () {
@@ -89,7 +99,7 @@ function rtux_winpromote () {
 
       done
   # Backup of the files in a temporal folder
-    # TODO
+      rtux_backup_windows_config "${SAM_FILE}"
   # Define SAM_USERS as a bash array
       SAM_USERS=()
   # Obtain users from SAM file
