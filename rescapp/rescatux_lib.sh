@@ -459,6 +459,16 @@ function rtux_make_tmp_fstab() {
 
 } # rtux_make_tmp_fstab()
 
+function rtux_backup_windows_config () {
+
+  SAM_FILE="$1"
+  PRE_RESCATUX_STR="PRE_RESCATUX"
+  CURRENT_SECOND_STR="$(date +%Y-%m-%d-%H-%M-%S)"
+  SAM_DIR="$(dirname ${SAM_FILE})"
+  cp -r "${SAM_DIR}" "${SAM_DIR}_${PRE_RESCATUX_STR}_${CURRENT_SECOND_STR}"
+
+}
+
 
 # Rescatux lib main variables
 
