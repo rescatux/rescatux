@@ -84,7 +84,7 @@ function rtux_winunlock () {
 
   return ${EXIT_VALUE};
 
-} # function rtux_winpromote ()
+} # function rtux_winunlock ()
 
 # TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
 
