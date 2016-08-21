@@ -22,38 +22,6 @@ set -v
 
 
 
-# Return Windows SAM user that the user chooses
-# Every parametre is treated as the question to be asked to the user.
-function rtux_Choose_Sam_User () {
-  local text_to_ask="$@"
-
-  local SAM_LIST_VALUES=()
-  local SAM_LIST_VALUE_N=0
-  local sam_line_count=0
-  while [ ! ${sam_line_count} -eq ${sam_line_total} ] ; do
-    if [[ ${sam_line_count} -eq 0 ]] ; then
-      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="TRUE"
-    else
-      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]="FALSE"
-    fi
-      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
-      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]=$(echo "${SAM_USERS[${sam_line_count}]}" | awk -F ':' '{print $1}')
-      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
-      SAM_LIST_VALUES[${SAM_LIST_VALUE_N}]=$(echo "${SAM_USERS[${sam_line_count}]}" | awk -F ':' '{print $2}')
-      SAM_LIST_VALUE_N=$((SAM_LIST_VALUE_N+1))
-      sam_line_count=$((sam_line_count+1))
-  done
-
-  echo $(zenity ${ZENITY_COMMON_OPTIONS}  \
-	--list  \
-	--text "${text_to_ask}" \
-	--radiolist  \
-	--column "${SELECT_STR}" \
-	--column "${SELECT_STR}" \
-	--column "${SAM_USER_STR}" \
-	"${SAM_LIST_VALUES[@]}"); 
-
-} # rtux_Choose_Sam_User ()
 
 
 # Reset windows password
