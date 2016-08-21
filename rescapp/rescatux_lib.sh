@@ -502,6 +502,68 @@ function rtux_Choose_Sam_User () {
 
 } # rtux_Choose_Sam_User ()
 
+# Reset windows password
+# 1 parametre = Selected partition
+function rtux_winpass_reset () {
+
+  local EXIT_VALUE=1 # Error by default
+  local SELECTED_PARTITION="$1"
+  local SAM_PIPE="/tmp/sampipe"
+
+
+  # Mount the partition
+  local n_partition=${SELECTED_PARTITION}
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+  # Find the exact name for sam file
+      for n_windir in ${TMP_MNT_PARTITION}/* ; do
+	if [ -e "${n_windir}"\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Aa][Mm]\
+	] ; then
+	  SAM_FILE="${n_windir}"\
+/[Ss][Yy][Ss][Tt][Ee][Mm]32\
+/[Cc][Oo][Nn][Ff][Ii][Gg]\
+/[Ss][Aa][Mm]
+	fi
+
+      done
+  # Backup of the files in a temporal folder
+      rtux_backup_windows_config "${SAM_FILE}"
+  # Define SAM_USERS as a bash array
+      SAM_USERS=()
+  # Obtain users from SAM file
+      sam_line_count=0
+      mkfifo "${SAM_PIPE}"
+	  sampasswd -l ${SAM_FILE} \
+	  > "${SAM_PIPE}" &
+      while read -r sam_line ; do
+	SAM_USERS[${sam_line_count}]="${sam_line}"
+      sam_line_count=$((sam_line_count+1))
+      done < "${SAM_PIPE}"
+      sam_line_total=${sam_line_count}
+      rm "${SAM_PIPE}"
+
+
+  # Ask the user which password to reset
+      CHOOSEN_USER=$(rtux_Choose_Sam_User \
+      "Choose Windows user to reset its password")
+  # Run chntpw -L sam-file security-file
+	sampasswd -E -r -u "0x${CHOOSEN_USER}" ${SAM_FILE};
+	EXIT_VALUE=$?
+  # Umount the partition
+
+    umount ${TMP_MNT_PARTITION};
+  fi # Partition was mounted ok
+
+  return ${EXIT_VALUE};
+
+} # rtux_winpass_reset ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
