@@ -567,17 +567,15 @@ function rtux_winpass_reset () {
 
 } # rtux_winpass_reset ()
 
-# Promote windows user
+# Promote windows user payload
 # 1 parametre = Selected partition
-function rtux_winpromote () {
+# 2 parametre = SAM file
+# 3 parametre = Choosen user
+function rtux_winpromote_payload () {
 
   local SELECTED_PARTITION="$1"
-  rtux_Get_Sam_Users ${SELECTED_PARTITION}
-  # Backup of the files in a temporal folder
-  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
-  # Ask the user which password to reset
-  CHOOSEN_USER=$(rtux_Choose_Sam_User \
-    "Choose Windows user to promote to Admin")
+  local SAM_FILE="$2"
+  local CHOOSEN_USER="$3"
 
   local EXIT_VALUE=1 # Error by default
 
@@ -609,6 +607,22 @@ function rtux_winpromote () {
   fi # Partition was mounted ok
 
   return ${EXIT_VALUE};
+
+} # function rtux_winpromote_payload ()
+
+# Promote windows user
+# 1 parametre = Selected partition
+function rtux_winpromote () {
+
+  local SELECTED_PARTITION="$1"
+  rtux_Get_Sam_Users ${SELECTED_PARTITION}
+  # Backup of the files in a temporal folder
+  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
+  # Ask the user which password to reset
+  CHOOSEN_USER=$(rtux_Choose_Sam_User \
+    "Choose Windows user to promote to Admin")
+
+  return rtux_winpromote_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
 
 } # function rtux_winpromote ()
 
