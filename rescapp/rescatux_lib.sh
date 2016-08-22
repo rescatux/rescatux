@@ -521,17 +521,15 @@ function rtux_Choose_Sam_User () {
 
 } # rtux_Choose_Sam_User ()
 
-# Reset windows password
+# Reset windows password payload
 # 1 parametre = Selected partition
-function rtux_winpass_reset () {
+# 2 parametre = SAM file
+# 3 parametre = Choosen user
+function rtux_winpass_reset_payload () {
 
   local SELECTED_PARTITION="$1"
-  rtux_Get_Sam_Users ${SELECTED_PARTITION}
-  # Backup of the files in a temporal folder
-  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
-  # Ask the user which password to reset
-  CHOOSEN_USER=$(rtux_Choose_Sam_User \
-    "Choose Windows user to reset its password")
+  local SAM_FILE="$2"
+  local CHOOSEN_USER="$3"
 
   local EXIT_VALUE=1 # Error by default
   # Mount the partition
@@ -550,6 +548,22 @@ function rtux_winpass_reset () {
   fi # Partition was mounted ok
 
   return ${EXIT_VALUE};
+
+} # rtux_winpass_reset_payload ()
+
+# Reset windows password
+# 1 parametre = Selected partition
+function rtux_winpass_reset () {
+
+  local SELECTED_PARTITION="$1"
+  rtux_Get_Sam_Users ${SELECTED_PARTITION}
+  # Backup of the files in a temporal folder
+  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
+  # Ask the user which password to reset
+  CHOOSEN_USER=$(rtux_Choose_Sam_User \
+    "Choose Windows user to reset its password")
+
+  return rtux_winpass_reset_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
 
 } # rtux_winpass_reset ()
 
