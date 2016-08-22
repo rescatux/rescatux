@@ -507,11 +507,10 @@ function rtux_Choose_Sam_User () {
 # 1 parametre = Selected partition
 function rtux_winpass_reset () {
 
-  local EXIT_VALUE=1 # Error by default
   local SELECTED_PARTITION="$1"
-  local SAM_PIPE="/tmp/sampipe"
+  rtux_Get_Sam_Users ${SELECTED_PARTITION}
 
-
+  local EXIT_VALUE=1 # Error by default
   # Mount the partition
   local n_partition=${SELECTED_PARTITION}
   local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
@@ -519,36 +518,8 @@ function rtux_winpass_reset () {
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
-  # Find the exact name for sam file
-      for n_windir in ${TMP_MNT_PARTITION}/* ; do
-	if [ -e "${n_windir}"\
-/[Ss][Yy][Ss][Tt][Ee][Mm]32\
-/[Cc][Oo][Nn][Ff][Ii][Gg]\
-/[Ss][Aa][Mm]\
-	] ; then
-	  SAM_FILE="${n_windir}"\
-/[Ss][Yy][Ss][Tt][Ee][Mm]32\
-/[Cc][Oo][Nn][Ff][Ii][Gg]\
-/[Ss][Aa][Mm]
-	fi
-
-      done
   # Backup of the files in a temporal folder
       rtux_backup_windows_config "${SAM_FILE}"
-  # Define SAM_USERS as a bash array
-      SAM_USERS=()
-  # Obtain users from SAM file
-      sam_line_count=0
-      mkfifo "${SAM_PIPE}"
-	  sampasswd -l ${SAM_FILE} \
-	  > "${SAM_PIPE}" &
-      while read -r sam_line ; do
-	SAM_USERS[${sam_line_count}]="${sam_line}"
-      sam_line_count=$((sam_line_count+1))
-      done < "${SAM_PIPE}"
-      sam_line_total=${sam_line_count}
-      rm "${SAM_PIPE}"
-
 
   # Ask the user which password to reset
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
@@ -569,13 +540,10 @@ function rtux_winpass_reset () {
 # 1 parametre = Selected partition
 function rtux_winpromote () {
 
-  local EXIT_VALUE=1 # Error by default
   local SELECTED_PARTITION="$1"
-  local SAM_PIPE="/tmp/sampipe"
-  local WINDOWS_ADMIN_GROUP_HEX='0x220'
-  local WINDOWS_USERS_GROUP_HEX='0x221'
-  local WINDOWS_GUESTS_GROUP_HEX='0x222'
+  rtux_Get_Sam_Users ${SELECTED_PARTITION}
 
+  local EXIT_VALUE=1 # Error by default
 
   # Mount the partition
   local n_partition=${SELECTED_PARTITION}
@@ -584,40 +552,15 @@ function rtux_winpromote () {
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
-  # Find the exact name for sam file
-      for n_windir in ${TMP_MNT_PARTITION}/* ; do
-	if [ -e "${n_windir}"\
-/[Ss][Yy][Ss][Tt][Ee][Mm]32\
-/[Cc][Oo][Nn][Ff][Ii][Gg]\
-/[Ss][Aa][Mm]\
-	] ; then
-	  SAM_FILE="${n_windir}"\
-/[Ss][Yy][Ss][Tt][Ee][Mm]32\
-/[Cc][Oo][Nn][Ff][Ii][Gg]\
-/[Ss][Aa][Mm]
-	fi
-
-      done
   # Backup of the files in a temporal folder
       rtux_backup_windows_config "${SAM_FILE}"
-  # Define SAM_USERS as a bash array
-      SAM_USERS=()
-  # Obtain users from SAM file
-      sam_line_count=0
-      mkfifo "${SAM_PIPE}"
-	  sampasswd -l ${SAM_FILE} \
-	  > "${SAM_PIPE}" &
-      while read -r sam_line ; do
-	SAM_USERS[${sam_line_count}]="${sam_line}"
-      sam_line_count=$((sam_line_count+1))
-      done < "${SAM_PIPE}"
-      sam_line_total=${sam_line_count}
-      rm "${SAM_PIPE}"
-
-
   # Ask the user which password to reset
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
       "Choose Windows user to promote to Admin")
+
+  local WINDOWS_ADMIN_GROUP_HEX='0x220'
+  local WINDOWS_USERS_GROUP_HEX='0x221'
+  local WINDOWS_GUESTS_GROUP_HEX='0x222'
   # Comment from chntpw.c file
   # Will add the user to the administrator group (0x220)
   # and to the users group (0x221). That should usually be
@@ -643,6 +586,40 @@ function rtux_winpromote () {
 # 1 parametre = Selected partition
 function rtux_winunlock () {
 
+  local SELECTED_PARTITION="$1"
+  rtux_Get_Sam_Users ${SELECTED_PARTITION}
+
+  local EXIT_VALUE=1 # Error by default
+
+  # Mount the partition
+  local n_partition=${SELECTED_PARTITION}
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+  # Backup of the files in a temporal folder
+      rtux_backup_windows_config "${SAM_FILE}"
+  # Ask the user which password to reset
+      CHOOSEN_USER=$(rtux_Choose_Sam_User \
+      "Choose Windows user to unlock")
+  # Run chntpw -L sam-file security-file
+	samunlock -E -U -u "0x${CHOOSEN_USER}" ${SAM_FILE};
+	EXIT_VALUE=$?
+  # Umount the partition
+
+    umount ${TMP_MNT_PARTITION};
+  fi # Partition was mounted ok
+
+  return ${EXIT_VALUE};
+
+} # function rtux_winunlock ()
+
+# Get SAM Users
+# 1 parametre = Selected partition
+# It sets global variable SAM_USERS
+function rtux_Get_Sam_Users () {
+
   local EXIT_VALUE=1 # Error by default
   local SELECTED_PARTITION="$1"
   local SAM_PIPE="/tmp/sampipe"
@@ -669,8 +646,6 @@ function rtux_winunlock () {
 	fi
 
       done
-  # Backup of the files in a temporal folder
-      rtux_backup_windows_config "${SAM_FILE}"
   # Define SAM_USERS as a bash array
       SAM_USERS=()
   # Obtain users from SAM file
@@ -685,21 +660,10 @@ function rtux_winunlock () {
       sam_line_total=${sam_line_count}
       rm "${SAM_PIPE}"
 
-
-  # Ask the user which password to reset
-      CHOOSEN_USER=$(rtux_Choose_Sam_User \
-      "Choose Windows user to unlock")
-  # Run chntpw -L sam-file security-file
-	samunlock -E -U -u "0x${CHOOSEN_USER}" ${SAM_FILE};
-	EXIT_VALUE=$?
-  # Umount the partition
-
     umount ${TMP_MNT_PARTITION};
   fi # Partition was mounted ok
 
-  return ${EXIT_VALUE};
-
-} # function rtux_winunlock ()
+}
 
 # Rescatux lib main variables
 
