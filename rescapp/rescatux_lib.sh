@@ -562,8 +562,10 @@ function rtux_winpass_reset () {
   # Ask the user which password to reset
   CHOOSEN_USER=$(rtux_Choose_Sam_User \
     "Choose Windows user to reset its password")
-
-  return rtux_winpass_reset_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  local PAYLOAD_EXIT_VALUE=1;
+  rtux_winpass_reset_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  PAYLOAD_EXIT_VALUE=$?
+  return ${PAYLOAD_EXIT_VALUE};
 
 } # rtux_winpass_reset ()
 
@@ -622,7 +624,10 @@ function rtux_winpromote () {
   CHOOSEN_USER=$(rtux_Choose_Sam_User \
     "Choose Windows user to promote to Admin")
 
-  return rtux_winpromote_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  local PAYLOAD_EXIT_VALUE=1;
+  rtux_winpromote_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  PAYLOAD_EXIT_VALUE=$?
+  return ${PAYLOAD_EXIT_VALUE};
 
 } # function rtux_winpromote ()
 
@@ -669,7 +674,10 @@ function rtux_winunlock () {
   CHOOSEN_USER=$(rtux_Choose_Sam_User \
     "Choose Windows user to unlock")
 
-  return rtux_winunlock_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  local PAYLOAD_EXIT_VALUE=1;
+  rtux_winunlock_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  PAYLOAD_EXIT_VALUE=$?
+  return ${PAYLOAD_EXIT_VALUE};
 
 } # function rtux_winunlock ()
 
