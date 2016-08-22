@@ -24,8 +24,8 @@ set -v
 
 # MAIN PROGRAM
 
-WINPROMOTE_OK_STR="User was unlocked OK! :)"
-WINPROMOTE_NOT_OK_STR="User was not unlocked. Something went wrong! :("
+WINUNLOCK_OK_STR="User was unlocked OK! :)"
+WINUNLOCK_NOT_OK_STR="User was not unlocked. Something went wrong! :("
 
 
 SELECTED_PARTITION=$(rtux_Choose_Windows_partition);
@@ -33,8 +33,8 @@ SELECTED_PARTITION=$(rtux_Choose_Windows_partition);
 
 
 if rtux_winunlock ${SELECTED_PARTITION} ; then
-  rtux_Message_Success ${WINPROMOTE_OK_STR}
+  rtux_Message_Success ${WINUNLOCK_OK_STR}
 else
-  rtux_Message_Failure ${WINPROMOTE_NOT_OK_STR}
+  rtux_Message_Failure ${WINUNLOCK_NOT_OK_STR}
 fi
 
