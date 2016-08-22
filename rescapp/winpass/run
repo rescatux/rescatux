@@ -24,8 +24,6 @@ set -v
 
 # MAIN PROGRAM
 
-SAM_USER_STR="Windows user"
-
 WINPASS_RESET_OK_STR="Windows password was reset OK! :)"
 WINPASS_NOT_RESET_STR="Windows password was not reset. Something went wrong! :("
 

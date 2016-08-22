@@ -24,8 +24,6 @@ set -v
 
 # MAIN PROGRAM
 
-SAM_USER_STR="Windows user"
-
 WINPROMOTE_OK_STR="User was unlocked OK! :)"
 WINPROMOTE_NOT_OK_STR="User was not unlocked. Something went wrong! :("
 
