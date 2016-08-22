@@ -529,6 +529,9 @@ function rtux_winpass_reset () {
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
   # Backup of the files in a temporal folder
   rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
+  # Ask the user which password to reset
+  CHOOSEN_USER=$(rtux_Choose_Sam_User \
+    "Choose Windows user to reset its password")
 
   local EXIT_VALUE=1 # Error by default
   # Mount the partition
@@ -538,10 +541,6 @@ function rtux_winpass_reset () {
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
-
-  # Ask the user which password to reset
-      CHOOSEN_USER=$(rtux_Choose_Sam_User \
-      "Choose Windows user to reset its password")
   # Run chntpw -L sam-file security-file
 	sampasswd -E -r -u "0x${CHOOSEN_USER}" ${SAM_FILE};
 	EXIT_VALUE=$?
@@ -562,6 +561,9 @@ function rtux_winpromote () {
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
   # Backup of the files in a temporal folder
   rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
+  # Ask the user which password to reset
+  CHOOSEN_USER=$(rtux_Choose_Sam_User \
+    "Choose Windows user to promote to Admin")
 
   local EXIT_VALUE=1 # Error by default
 
@@ -572,10 +574,6 @@ function rtux_winpromote () {
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
-  # Ask the user which password to reset
-      CHOOSEN_USER=$(rtux_Choose_Sam_User \
-      "Choose Windows user to promote to Admin")
-
   local WINDOWS_ADMIN_GROUP_HEX='0x220'
   local WINDOWS_USERS_GROUP_HEX='0x221'
   local WINDOWS_GUESTS_GROUP_HEX='0x222'
@@ -608,6 +606,9 @@ function rtux_winunlock () {
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
   # Backup of the files in a temporal folder
   rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
+  # Ask the user which password to reset
+  CHOOSEN_USER=$(rtux_Choose_Sam_User \
+    "Choose Windows user to unlock")
 
   local EXIT_VALUE=1 # Error by default
 
@@ -618,9 +619,6 @@ function rtux_winunlock () {
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
-  # Ask the user which password to reset
-      CHOOSEN_USER=$(rtux_Choose_Sam_User \
-      "Choose Windows user to unlock")
   # Run chntpw -L sam-file security-file
 	samunlock -E -U -u "0x${CHOOSEN_USER}" ${SAM_FILE};
 	EXIT_VALUE=$?
