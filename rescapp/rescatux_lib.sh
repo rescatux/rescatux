@@ -469,6 +469,7 @@ function rtux_backup_windows_config () {
 
 }
 
+# TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
 # Return Windows SAM user that the user chooses
 # Every parametre is treated as the question to be asked to the user.
 function rtux_Choose_Sam_User () {
