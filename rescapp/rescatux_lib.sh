@@ -459,13 +459,31 @@ function rtux_make_tmp_fstab() {
 
 } # rtux_make_tmp_fstab()
 
+# 1 parametre = Selected partition
+# 2 parametre = SAM file
 function rtux_backup_windows_config () {
 
-  SAM_FILE="$1"
-  PRE_RESCATUX_STR="PRE_RESCATUX"
-  CURRENT_SECOND_STR="$(date +%Y-%m-%d-%H-%M-%S)"
-  SAM_DIR="$(dirname ${SAM_FILE})"
-  cp -r "${SAM_DIR}" "${SAM_DIR}_${PRE_RESCATUX_STR}_${CURRENT_SECOND_STR}"
+  local SELECTED_PARTITION="$1"
+  local SAM_FILE="$2"
+
+  # Mount the partition
+  local n_partition=${SELECTED_PARTITION}
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+
+      PRE_RESCATUX_STR="PRE_RESCATUX"
+      CURRENT_SECOND_STR="$(date +%Y-%m-%d-%H-%M-%S)"
+      SAM_DIR="$(dirname ${SAM_FILE})"
+      cp -r "${SAM_DIR}" "${SAM_DIR}_${PRE_RESCATUX_STR}_${CURRENT_SECOND_STR}"
+
+      # Umount the partition
+
+      umount ${TMP_MNT_PARTITION};
+  fi # Partition was mounted ok
+
 
 }
 
@@ -509,6 +527,8 @@ function rtux_winpass_reset () {
 
   local SELECTED_PARTITION="$1"
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
+  # Backup of the files in a temporal folder
+  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
 
   local EXIT_VALUE=1 # Error by default
   # Mount the partition
@@ -518,8 +538,6 @@ function rtux_winpass_reset () {
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
-  # Backup of the files in a temporal folder
-      rtux_backup_windows_config "${SAM_FILE}"
 
   # Ask the user which password to reset
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
@@ -542,6 +560,8 @@ function rtux_winpromote () {
 
   local SELECTED_PARTITION="$1"
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
+  # Backup of the files in a temporal folder
+  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
 
   local EXIT_VALUE=1 # Error by default
 
@@ -552,8 +572,6 @@ function rtux_winpromote () {
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
-  # Backup of the files in a temporal folder
-      rtux_backup_windows_config "${SAM_FILE}"
   # Ask the user which password to reset
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
       "Choose Windows user to promote to Admin")
@@ -588,6 +606,8 @@ function rtux_winunlock () {
 
   local SELECTED_PARTITION="$1"
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
+  # Backup of the files in a temporal folder
+  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
 
   local EXIT_VALUE=1 # Error by default
 
@@ -598,8 +618,6 @@ function rtux_winunlock () {
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
-  # Backup of the files in a temporal folder
-      rtux_backup_windows_config "${SAM_FILE}"
   # Ask the user which password to reset
       CHOOSEN_USER=$(rtux_Choose_Sam_User \
       "Choose Windows user to unlock")
@@ -618,6 +636,7 @@ function rtux_winunlock () {
 # Get SAM Users
 # 1 parametre = Selected partition
 # It sets global variable SAM_USERS
+# It sets global variable SAM_FILE
 function rtux_Get_Sam_Users () {
 
   local EXIT_VALUE=1 # Error by default
