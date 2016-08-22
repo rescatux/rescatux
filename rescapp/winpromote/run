@@ -20,17 +20,9 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
-
-
-
-
-
 # TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
 
 # MAIN PROGRAM
-
-# TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
-
 
 SAM_USER_STR="Windows user"
 
