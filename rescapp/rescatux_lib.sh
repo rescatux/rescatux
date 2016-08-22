@@ -626,17 +626,15 @@ function rtux_winpromote () {
 
 } # function rtux_winpromote ()
 
-# Unlock windows user
+# Unlock windows user payload
 # 1 parametre = Selected partition
-function rtux_winunlock () {
+# 2 parametre = SAM file
+# 3 parametre = Choosen user
+function rtux_winunlock_payload () {
 
   local SELECTED_PARTITION="$1"
-  rtux_Get_Sam_Users ${SELECTED_PARTITION}
-  # Backup of the files in a temporal folder
-  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
-  # Ask the user which password to reset
-  CHOOSEN_USER=$(rtux_Choose_Sam_User \
-    "Choose Windows user to unlock")
+  local SAM_FILE="$2"
+  local CHOOSEN_USER="$3"
 
   local EXIT_VALUE=1 # Error by default
 
@@ -656,6 +654,22 @@ function rtux_winunlock () {
   fi # Partition was mounted ok
 
   return ${EXIT_VALUE};
+
+} # function rtux_winunlock ()
+
+# Unlock windows user
+# 1 parametre = Selected partition
+function rtux_winunlock () {
+
+  local SELECTED_PARTITION="$1"
+  rtux_Get_Sam_Users ${SELECTED_PARTITION}
+  # Backup of the files in a temporal folder
+  rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
+  # Ask the user which password to reset
+  CHOOSEN_USER=$(rtux_Choose_Sam_User \
+    "Choose Windows user to unlock")
+
+  return rtux_winunlock_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
 
 } # function rtux_winunlock ()
 
