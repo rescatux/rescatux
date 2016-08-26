@@ -811,6 +811,70 @@ function rtux_Grub_Install () {
 
 } # function rtux_Grub_Install ()
 
+# Update Grub configuration file from the choosen Linux partition
+# 1 parametre = Selected partition
+# 2 parametre = Rescatux Device Map File Path
+# While it is being run user is shown the hard disks
+# and it is asked to order them
+function rtux_Grub_Update_Config () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  local EXIT_VALUE=1 # Error by default
+  local SELECTED_PARTITION=$1;
+  local DEVICE_MAP_RESCATUX_FILE_TMP_PATH=$2;
+  local n_partition=${SELECTED_PARTITION}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+    mount -o bind /dev ${TMP_MNT_PARTITION}/dev
+    mount -o bind /proc ${TMP_MNT_PARTITION}/proc
+    mount -o bind /sys ${TMP_MNT_PARTITION}/sys
+
+    # Generate tmp fstab
+    TMP_FSTAB=$(rtux_make_tmp_fstab "${TMP_MNT_PARTITION}")
+
+    if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
+      cp ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
+
+
+      # TODO: Improve with a cat command ended with a EOF mark
+      local TMP_SCRIPT="/tmp/$$.sh"
+      local TMP_MNT_PARTITION_SCRIPT="${TMP_MNT_PARTITION}${TMP_SCRIPT}"
+
+      rtux_File_Chroot_Script_Device_Map \
+      "if ${UPDATE_GRUB_BINARY} --version ; then " \
+      "${UPDATE_GRUB_BINARY} ; "\
+      "elif update-grub2 --version ; " \
+      "then update-grub2 ; " \
+      "elif grub2-mkconfig --version ; " \
+      "then grub2-mkconfig -o /boot/grub2/grub.cfg ;"\
+      "else grub-mkconfig -o /boot/grub/grub.cfg ; "\
+      "fi" \
+      > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
+
+      chmod +x ${TMP_MNT_PARTITION_SCRIPT}
+
+      # TODO: Let the user use other than now hard-coded /bin/bash
+      mount -a --fstab "${TMP_FSTAB}"
+      chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT}
+      EXIT_VALUE=$?
+      mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
+      rm ${TMP_MNT_PARTITION_SCRIPT}
+
+
+    fi # Linux detector was found
+    umount --recursive "${TMP_MNT_PARTITION}"
+  fi # Partition was mounted ok
+
+  return ${EXIT_VALUE}
+
+} # function rtux_Grub_Update_Config ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
