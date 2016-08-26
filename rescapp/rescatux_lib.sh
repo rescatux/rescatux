@@ -808,6 +808,7 @@ TMP_FOLDER="/tmp"
 DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
 DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
 
+UPDATE_GRUB_BINARY=update-grub
 
 
 

@@ -19,7 +19,6 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
-
 # Update Grub configuration file from the choosen Linux partition
 # 1 parametre = Selected partition
 # 2 parametre = Rescatux Device Map File Path
@@ -89,7 +88,6 @@ function rtux_Grub_Update_Config () {
 
 
 
-UPDATE_GRUB_BINARY=update-grub
 
 # MAIN PROGRAM
 
