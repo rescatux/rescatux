@@ -732,6 +732,22 @@ function rtux_Get_Sam_Users () {
 
 }
 
+# Reorder hard disks according to BIOS hard disk order
+# 1 parametre = Selected partition
+# While it is being run user is shown the hard disks
+# and it is asked to order them
+# Returns filepath where the temporary rescatux's device.map is saved.
+function rtux_Order_Hard_Disks () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  DEVICE_MAP_RESCATUX_FILE_TMP_PATH="/tmp/device_map_rescatux_$$"
+  rtux_File_Reordered_Device_Map \
+      > ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH}
+  echo "${DEVICE_MAP_RESCATUX_FILE_TMP_PATH}"
+
+} # function rtux_Order_Hard_Disks ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"

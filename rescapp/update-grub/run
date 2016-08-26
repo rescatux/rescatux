@@ -22,6 +22,7 @@ set -v
 
 # Update Grub configuration file from the choosen Linux partition
 # 1 parametre = Selected partition
+# 2 parametre = Rescatux Device Map File Path
 # While it is being run user is shown the hard disks
 # and it is asked to order them
 function rtux_Grub_Update_Config () {
@@ -30,6 +31,7 @@ function rtux_Grub_Update_Config () {
 
   local EXIT_VALUE=1 # Error by default
   local SELECTED_PARTITION=$1;
+  local DEVICE_MAP_RESCATUX_FILE_TMP_PATH=$2;
   local n_partition=${SELECTED_PARTITION}
 
   local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
@@ -46,8 +48,7 @@ function rtux_Grub_Update_Config () {
     TMP_FSTAB=$(rtux_make_tmp_fstab "${TMP_MNT_PARTITION}")
 
     if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
-      rtux_File_Reordered_Device_Map \
-      > ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
+      cp ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
 
 
       # TODO: Improve with a cat command ended with a EOF mark
@@ -96,7 +97,7 @@ UPDATE_GRUB_BINARY=update-grub
 UPDATE_GRUB_OK_STR="Grub configuration was updated OK! :)"
 UPDATE_GRUB_KO_STR="Grub configuration update went wrong! :("
 
-if rtux_Grub_Update_Config $(rtux_Choose_Linux_partition) ; then
+if rtux_Grub_Update_Config $(rtux_Choose_Linux_partition) $(rtux_Order_Hard_Disks) ; then
   rtux_Message_Success ${UPDATE_GRUB_OK_STR}
 else
   rtux_Message_Failure ${UPDATE_GRUB_KO_STR}

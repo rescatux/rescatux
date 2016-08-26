@@ -23,6 +23,7 @@ set -v
 # Install Grub from the choosen Linux partition to the choosen hard disk
 # 1 parametre = Selected hard disk
 # 2 parametre = Selected partition
+# 3 parametre = Rescatux Device Map File Path
 # While it is being run user is shown the hard disks
 # and it is asked to order them
 function rtux_Grub_Install () {
@@ -30,6 +31,7 @@ function rtux_Grub_Install () {
   local EXIT_VALUE=1 # Error by default
   local SELECTED_HARD_DISK="$1"
   local SELECTED_PARTITION="$2"
+  local DEVICE_MAP_RESCATUX_FILE_TMP_PATH="$3";
 
   local SELECTED_HARD_DISK_DEV="/dev/${SELECTED_HARD_DISK}"
   local n_partition=${SELECTED_PARTITION}
@@ -47,8 +49,7 @@ function rtux_Grub_Install () {
     TMP_FSTAB=$(rtux_make_tmp_fstab "${TMP_MNT_PARTITION}")
 
     if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
-       rtux_File_Reordered_Device_Map \
-      > ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
+       cp ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
 
 
       # TODO: Improve with a cat command ended with a EOF mark
@@ -96,7 +97,7 @@ SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
 SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
 
-if rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ; then
+if rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} $(rtux_Order_Hard_Disks) ; then
   rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
 else
   rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
