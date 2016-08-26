@@ -1,0 +1,144 @@
+#!/bin/bash
+# Rescapp Grub-install run script
+# Copyright (C) 2012 Adrian Gibanel Lopez
+#
+# Rescapp is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Rescapp is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+# Install Grub from the choosen Linux partition to the choosen hard disk
+# 1 parametre = Selected hard disk
+# 2 parametre = Selected partition
+# 3 parametre = Rescatux Device Map File Path
+# While it is being run user is shown the hard disks
+# and it is asked to order them
+function rtux_Grub_Install () {
+
+  local EXIT_VALUE=1 # Error by default
+  local SELECTED_HARD_DISK="$1"
+  local SELECTED_PARTITION="$2"
+  local DEVICE_MAP_RESCATUX_FILE_TMP_PATH="$3";
+
+  local SELECTED_HARD_DISK_DEV="/dev/${SELECTED_HARD_DISK}"
+  local n_partition=${SELECTED_PARTITION}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+    mount -o bind /dev ${TMP_MNT_PARTITION}/dev
+    mount -o bind /proc ${TMP_MNT_PARTITION}/proc
+    mount -o bind /sys ${TMP_MNT_PARTITION}/sys
+
+    # Generate tmp fstab
+    TMP_FSTAB=$(rtux_make_tmp_fstab "${TMP_MNT_PARTITION}")
+
+    if [[ -e ${TMP_MNT_PARTITION}${LINUX_OS_DETECTOR} ]] ; then
+       cp ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ${TMP_MNT_PARTITION}/${DEVICE_MAP_RESCATUX_STR}
+
+
+      # TODO: Improve with a cat command ended with a EOF mark
+      local TMP_SCRIPT="/tmp/$$.sh"
+      local TMP_MNT_PARTITION_SCRIPT="${TMP_MNT_PARTITION}${TMP_SCRIPT}"
+
+      rtux_File_Chroot_Script_Device_Map \
+      "if ${GRUB_INSTALL_BINARY}.unsupported --version ; then " \
+      "${GRUB_INSTALL_BINARY}.unsupported ${SELECTED_HARD_DISK_DEV} ;"\
+      " elif ${GRUB_INSTALL_BINARY} --version ; then " \
+      "${GRUB_INSTALL_BINARY} ${SELECTED_HARD_DISK_DEV} ;" \
+      " else " \
+      "grub2-install ${SELECTED_HARD_DISK_DEV} ;" \
+      "fi" \
+      > ${TMP_MNT_PARTITION}${TMP_SCRIPT}
+
+      chmod +x ${TMP_MNT_PARTITION_SCRIPT}
+
+      # TODO: Let the user use other than now hard-coded /bin/bash
+      mount -a --fstab "${TMP_FSTAB}"
+      chroot ${TMP_MNT_PARTITION} /bin/bash ${TMP_SCRIPT}
+      EXIT_VALUE=$?
+      mount -t auto -o remount,rw ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} # Workaround
+      rm ${TMP_MNT_PARTITION_SCRIPT}
+
+    fi # Linux detector was found
+    umount --recursive "${TMP_MNT_PARTITION}"
+  fi # Partition was mounted ok
+
+  return ${EXIT_VALUE}
+
+} # function rtux_Grub_Install ()
+
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+# MAIN PROGRAM
+
+GRUB_INSTALLED_OK_STR="Grub was installed OK! :)"
+GRUB_NOT_INSTALLED_STR="Grub was not installed. Something went wrong! :("
+WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
+
+UPDATE_GRUB_OK_STR="Grub configuration was updated OK! :)"
+UPDATE_GRUB_KO_STR="Grub configuration update went wrong! :("
+
+FSCK_FORCED_OK_STR="Filesystem check with automatic fix was OK! :)"
+FSCK_FORCED_KO_STR="Filesystem check with automatic fix went wrong! :("
+
+GRUBEASY_OK_STR="Easy GNU/Linux Boot Fix (Fsck partition, update grub menues and Restore GRUB into the MBR) was OK! :)"
+GRUBEASY_NOT_OK_STR="Easy GNU/Linux Boot Fix (Fsck partition, update grub menues and Restore GRUB into the MBR) was not fully completed. Something went wrong! :("
+
+SELECTED_PARTITION=$(rtux_Choose_Partition)
+
+
+SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
+
+DEVICE_MAP_RESCATUX_FILE_TMP_PATH=$(rtux_Order_Hard_Disks)
+
+EXIT_SUM=0
+
+if ( rtux_Fsck_Forced ${SELECTED_PARTITION} ) ; then
+  rtux_Message_Success ${FSCK_FORCED_OK_STR}
+else
+  rtux_Message_Failure ${FSCK_FORCED_KO_STR}
+fi
+
+GRUBFSCK_EXIT_VALUE=$?
+EXIT_SUM=$((EXIT_SUM+GRUBFSCK_EXIT_VALUE))
+
+if rtux_Grub_Update_Config ${SELECTED_PARTITION} ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ; then
+  rtux_Message_Success ${UPDATE_GRUB_OK_STR}
+else
+  rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
+fi
+
+GRUBUPDATE_EXIT_VALUE=$?
+EXIT_SUM=$((EXIT_SUM+GRUBUPDATE_EXIT_VALUE))
+
+if rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ; then
+  rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
+else
+  rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
+fi
+
+GRUBINSTALL_EXIT_VALUE=$?
+EXIT_SUM=$((EXIT_SUM+GRUBINSTALL_EXIT_VALUE))
+
+if [ ${EXIT_SUM} -eq 0 ] ; then
+  rtux_Message_Success ${GRUBEASY_OK_STR}
+else
+  rtux_Message_Failure ${GRUBEASY_NOT_OK_STR}
+fi
+
