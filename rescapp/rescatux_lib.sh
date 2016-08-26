@@ -875,6 +875,23 @@ function rtux_Grub_Update_Config () {
 
 } # function rtux_Grub_Update_Config ()
 
+# Forces a fsck of a partition
+# 1 parametre = Selected partition
+function rtux_Fsck_Forced () {
+  local SELECTED_PARTITION=$1
+  local EXIT_VALUE=1 # Error by default
+
+  fsck -fy /dev/${SELECTED_PARTITION} \
+  | tee >(zenity ${ZENITY_COMMON_OPTIONS} \
+	--text "${RUNNING_STR}" \
+	--progress \
+	--pulsate \
+	--auto-close) >> /dev/stdout
+  EXIT_VALUE=${PIPESTATUS[0]}
+  return ${EXIT_VALUE}
+
+} # rtux_Fsck_Forced ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
