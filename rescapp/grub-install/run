@@ -31,8 +31,6 @@ function rtux_Grub_Install () {
   local SELECTED_HARD_DISK="$1"
   local SELECTED_PARTITION="$2"
 
-  local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
-
   local SELECTED_HARD_DISK_DEV="/dev/${SELECTED_HARD_DISK}"
   local n_partition=${SELECTED_PARTITION}
 
