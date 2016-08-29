@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Rescapp Generate logo
-# Copyright (C) 2012 Adrian Gibanel Lopez
+# Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
 #
 # Rescapp is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
