@@ -1,3 +1,5 @@
+# April Fools Day 2 Script
+# Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
 afd2_app = QtGui.QApplication(sys.argv)
 
 
