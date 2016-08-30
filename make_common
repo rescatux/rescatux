@@ -195,9 +195,6 @@ if [ "x${RESCATUX_LIVE_CONFIG_SOURCE_OPTIONS}" != "x" ] ; then
 fi
 cd ${RESCATUX_RELEASE_DIR}
 md5sum ${BASE_FILENAME}.${FILE_EXTENSION} > ${BASE_FILENAME}.${FILE_EXTENSION}.md5
-cd "source-code"
-md5sum ${BASE_FILENAME}-source.debian.tar > ${BASE_FILENAME}-source.debian.tar.md5
-md5sum ${BASE_FILENAME}-source.live.tar > ${BASE_FILENAME}-source.live.tar.md5
 echo "${BASE_FILENAME}.${FILE_EXTENSION} (and md5sum) DONE!"
 cd ${CURRENT_FOLDER}
 
