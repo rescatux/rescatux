@@ -58,3 +58,19 @@ CHNTPW_GIT_NAME="chntpw"
 
 get_Git_Tar_Gz "${CHNTPW_GIT_URL}" "${CHNTPW_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${CHNTPW_GIT_NAME}-${CHNTPW_GIT_COMMIT}.tar.gz"
 
+# tails-greeter
+
+TAILSGREETER_GIT_URL="https://github.com/rescatux/tails-greeter.git"
+TAILSGREETER_GIT_COMMIT="rescatux_0.40b8"
+TAILSGREETER_GIT_NAME="tails-greeter"
+
+get_Git_Tar_Gz "${TAILSGREETER_GIT_URL}" "${TAILSGREETER_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${TAILSGREETER_GIT_NAME}-${TAILSGREETER_GIT_COMMIT}.tar.gz"
+
+# live-build
+
+LIVEBUILD_GIT_URL="https://github.com/rescatux/live-build/"
+LIVEBUILD_GIT_COMMIT="rescatux-0.40b7"
+LIVEBUILD_GIT_NAME="live-build"
+
+get_Git_Tar_Gz "${LIVEBUILD_GIT_URL}" "${LIVEBUILD_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${LIVEBUILD_GIT_NAME}-${LIVEBUILD_GIT_COMMIT}.tar.gz"
+
