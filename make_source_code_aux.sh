@@ -48,7 +48,8 @@ function get_Git_Tar_Gz () {
 
 RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 BASE_FILENAME="rescatux-`head -n 1 VERSION`"
-git archive HEAD | gzip > ${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}.tar.gz
+RESCATUX_GIT_COMMIT="$(git rev-parse HEAD)"
+git archive HEAD | gzip > "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-main-rescatux-repo-${RESCATUX_GIT_COMMIT}.tar.gz"
 
 # chntpw
 
