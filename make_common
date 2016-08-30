@@ -175,6 +175,7 @@ lb config noauto \\
   --iso-application "${LB_ISO_APPLICATION}" \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
   --iso-volume "${LB_ISO_VOLUME}" \\
+  ${RESCATUX_LIVE_CONFIG_SOURCE_OPTIONS} \\
   --bootappend-live "boot=live config quiet splash selinux=1 security=selinux enforcing=0 locales=en_US.UTF-8 live-config.nox11autologin" \\
         "\${@}"
 EOF
@@ -185,7 +186,15 @@ sudo bash -c "lb clean"
 sudo bash -c "lb build 2>&1 | tee ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}_build.log"
 mv live-image-i386${IS_HYBRID}.${FILE_EXTENSION} ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.${FILE_EXTENSION}
 mv live-image-i386.packages ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.packages
+if [ "x${RESCATUX_LIVE_CONFIG_SOURCE_OPTIONS}" != "x" ] ; then
+  mv live-image-source.debian.tar ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}-source.debian.tar
+  mv live-image-source.live.tar ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}-source.live.tar
+fi
 cd ${RESCATUX_RELEASE_DIR}
 md5sum ${BASE_FILENAME}.${FILE_EXTENSION} > ${BASE_FILENAME}.${FILE_EXTENSION}.md5
+md5sum ${BASE_FILENAME}-source.debian.tar > ${BASE_FILENAME}-source.debian.tar.md5
+md5sum ${BASE_FILENAME}-source.live.tar > ${BASE_FILENAME}-source.live.tar.md5
 echo "${BASE_FILENAME}.${FILE_EXTENSION} (and md5sum) DONE!"
 cd ${CURRENT_FOLDER}
+
+./make_source_code_aux.sh
