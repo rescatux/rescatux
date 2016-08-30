@@ -18,6 +18,8 @@ imagemagick # Needed for logo generation
 syslinux # Needed for logo generation
 syslinux-utils # Needed for logo generation
 
+If you want to build also source code you need the git package to be installed.
+
 == About chntpw build ==
 
 Till the current bug in sampasswd (it does not save its changes)
@@ -111,15 +113,11 @@ This will generate an image like:
 
 Just run:
 
-  ./make_source_code.sh
+  make_rescatux_and_source_code.sh
 
-in order to generate a file like:
+which will generate many source code files at:
 
-  rescatux_source_code_0.30b6.tar.gz
-
-which will be found on:
-
-rescatux-release directory.
+rescatux-release/source-code directory.
 
 === Release ===
 

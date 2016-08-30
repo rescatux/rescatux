@@ -187,11 +187,15 @@ sudo bash -c "lb build 2>&1 | tee ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}_build
 mv live-image-i386${IS_HYBRID}.${FILE_EXTENSION} ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.${FILE_EXTENSION}
 mv live-image-i386.packages ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.packages
 if [ "x${RESCATUX_LIVE_CONFIG_SOURCE_OPTIONS}" != "x" ] ; then
-  mv live-image-source.debian.tar ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}-source.debian.tar
-  mv live-image-source.live.tar ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}-source.live.tar
+  if [ ! -d "${RESCATUX_RELEASE_DIR}/source-code" ] ; then
+    mkdir --parents "${RESCATUX_RELEASE_DIR}/source-code"
+  fi
+  mv live-image-source.debian.tar ${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-source.debian.tar
+  mv live-image-source.live.tar ${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-source.live.tar
 fi
 cd ${RESCATUX_RELEASE_DIR}
 md5sum ${BASE_FILENAME}.${FILE_EXTENSION} > ${BASE_FILENAME}.${FILE_EXTENSION}.md5
+cd "source-code"
 md5sum ${BASE_FILENAME}-source.debian.tar > ${BASE_FILENAME}-source.debian.tar.md5
 md5sum ${BASE_FILENAME}-source.live.tar > ${BASE_FILENAME}-source.live.tar.md5
 echo "${BASE_FILENAME}.${FILE_EXTENSION} (and md5sum) DONE!"
