@@ -25,10 +25,11 @@ set -v
 
 FSCK_FORCED_OK_STR="Filesystem check with automatic fix was OK! :)"
 FSCK_FORCED_KO_STR="Filesystem check with automatic fix went wrong! :("
+FSCK_FORCED_RUNNING_STR="Performing Filesystem check with automatic fix"
 
 SELECTED_PARTITION=$(rtux_Choose_Partition)
 
-if ( rtux_Fsck_Forced ${SELECTED_PARTITION} ) ; then
+if ( rtux_Run_Show_Progress "${FSCK_FORCED_RUNNING_STR}" rtux_Fsck_Forced ${SELECTED_PARTITION} ) ; then
   rtux_Message_Success ${FSCK_FORCED_OK_STR}
 else 
   rtux_Message_Failure ${FSCK_FORCED_KO_STR}

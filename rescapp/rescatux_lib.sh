@@ -881,13 +881,8 @@ function rtux_Fsck_Forced () {
   local SELECTED_PARTITION=$1
   local EXIT_VALUE=1 # Error by default
 
-  fsck -fy /dev/${SELECTED_PARTITION} \
-  | tee >(zenity ${ZENITY_COMMON_OPTIONS} \
-	--text "${RUNNING_STR}" \
-	--progress \
-	--pulsate \
-	--auto-close) >> /dev/stdout
-  EXIT_VALUE=${PIPESTATUS[0]}
+  fsck -fy /dev/${SELECTED_PARTITION}
+  EXIT_VALUE=$?
   return ${EXIT_VALUE}
 
 } # rtux_Fsck_Forced ()
