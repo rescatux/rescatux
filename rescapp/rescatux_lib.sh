@@ -892,6 +892,25 @@ function rtux_Fsck_Forced () {
 
 } # rtux_Fsck_Forced ()
 
+# Shows progress when running a task
+# 1st parametre = Running Message
+# All parametre = What to be run
+function rtux_Run_Show_Progress () {
+  local EXIT_VALUE=1 # Error by default
+  local RUNNING_STR="$1"
+  shift
+  $@ \
+  | tee >(zenity ${ZENITY_COMMON_OPTIONS} \
+	--text "${RUNNING_STR}" \
+	--progress \
+	--pulsate \
+	--auto-close) >> /dev/stdout
+  EXIT_VALUE=${PIPESTATUS[0]}
+  return ${EXIT_VALUE}
+
+} # rtux_Run_Show_Progress ()
+
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
