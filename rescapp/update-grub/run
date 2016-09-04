@@ -31,8 +31,9 @@ set -v
 
 UPDATE_GRUB_OK_STR="Grub configuration was updated OK! :)"
 UPDATE_GRUB_KO_STR="Grub configuration update went wrong! :("
+UPDATE_GRUB_RUNNING_STR="Updating Grub configuration."
 
-if rtux_Grub_Update_Config $(rtux_Choose_Linux_partition) $(rtux_Order_Hard_Disks) ; then
+if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_Grub_Update_Config $(rtux_Choose_Linux_partition) $(rtux_Order_Hard_Disks) ; then
   rtux_Message_Success ${UPDATE_GRUB_OK_STR}
 else
   rtux_Message_Failure ${UPDATE_GRUB_KO_STR}

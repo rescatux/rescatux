@@ -104,6 +104,8 @@ FSCK_FORCED_RUNNING_STR="Performing Filesystem check with automatic fix"
 
 GRUB_INSTALLED_RUNNING_STR="Installing Grub."
 
+UPDATE_GRUB_RUNNING_STR="Updating Grub configuration."
+
 SELECTED_PARTITION=$(rtux_Choose_Partition)
 
 
@@ -122,7 +124,7 @@ fi
 GRUBFSCK_EXIT_VALUE=$?
 EXIT_SUM=$((EXIT_SUM+GRUBFSCK_EXIT_VALUE))
 
-if rtux_Grub_Update_Config ${SELECTED_PARTITION} ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ; then
+if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_Grub_Update_Config ${SELECTED_PARTITION} ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ; then
   rtux_Message_Success ${UPDATE_GRUB_OK_STR}
 else
   rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
