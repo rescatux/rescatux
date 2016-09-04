@@ -556,6 +556,7 @@ function rtux_winpass_reset_payload () {
 function rtux_winpass_reset () {
 
   local SELECTED_PARTITION="$1"
+  WINPASS_RESET_RUNNING_STR="Resetting Windows password."
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
   # Backup of the files in a temporal folder
   rtux_backup_windows_config ${SELECTED_PARTITION} "${SAM_FILE}"
@@ -563,7 +564,7 @@ function rtux_winpass_reset () {
   CHOOSEN_USER=$(rtux_Choose_Sam_User \
     "Choose Windows user to reset its password")
   local PAYLOAD_EXIT_VALUE=1;
-  rtux_winpass_reset_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  rtux_Run_Show_Progress "${WINPASS_RESET_RUNNING_STR}" rtux_winpass_reset_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
   PAYLOAD_EXIT_VALUE=$?
   return ${PAYLOAD_EXIT_VALUE};
 

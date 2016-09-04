@@ -36,6 +36,8 @@ WINUNLOCK_NOT_OK_STR="User was not unlocked. Something went wrong! :("
 WINEASY_OK_STR="Easy Windows (promote, reset and unlock) was OK! :)"
 WINEASY_NOT_OK_STR="Easy Windows (promote, reset and unlock) was not fully completed. Something went wrong! :("
 
+WINPASS_RESET_RUNNING_STR="Resetting Windows password."
+
 SELECTED_PARTITION=$(rtux_Choose_Windows_partition);
 
 rtux_Get_Sam_Users ${SELECTED_PARTITION}
@@ -65,7 +67,7 @@ fi
 WINPROMOTE_EXIT_VALUE=$?
 EXIT_SUM=$((EXIT_SUM+WINPROMOTE_EXIT_VALUE))
 
-if rtux_winpass_reset_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER} ; then
+if rtux_Run_Show_Progress "${WINPASS_RESET_RUNNING_STR}" rtux_winpass_reset_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER} ; then
   rtux_Message_Success ${WINPASS_RESET_OK_STR}
 else
   rtux_Message_Failure ${WINPASS_NOT_RESET_STR}
