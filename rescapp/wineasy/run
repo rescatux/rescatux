@@ -38,6 +38,7 @@ WINEASY_NOT_OK_STR="Easy Windows (promote, reset and unlock) was not fully compl
 
 WINPASS_RESET_RUNNING_STR="Resetting Windows password."
 WINPROMOTE_RUNNING_STR="Promoting Windows user to Admin"
+WINUNLOCK_RUNNING_STR="Unlocking Windows user"
 
 SELECTED_PARTITION=$(rtux_Choose_Windows_partition);
 
@@ -50,7 +51,7 @@ CHOOSEN_USER=$(rtux_Choose_Sam_User \
 
 EXIT_SUM=0
 
-if rtux_winunlock_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER} ; then
+if rtux_Run_Show_Progress "${WINUNLOCK_RUNNING_STR}" rtux_winunlock_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER} ; then
   rtux_Message_Success ${WINUNLOCK_OK_STR}
 else
   rtux_Message_Failure ${WINUNLOCK_NOT_OK_STR}

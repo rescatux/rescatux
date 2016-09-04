@@ -667,6 +667,7 @@ function rtux_winunlock_payload () {
 # Unlock windows user
 # 1 parametre = Selected partition
 function rtux_winunlock () {
+  WINUNLOCK_RUNNING_STR="Unlocking Windows user"
 
   local SELECTED_PARTITION="$1"
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
@@ -677,7 +678,7 @@ function rtux_winunlock () {
     "Choose Windows user to unlock")
 
   local PAYLOAD_EXIT_VALUE=1;
-  rtux_winunlock_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  rtux_Run_Show_Progress "${WINUNLOCK_RUNNING_STR}" rtux_winunlock_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
   PAYLOAD_EXIT_VALUE=$?
   return ${PAYLOAD_EXIT_VALUE};
 
