@@ -51,18 +51,18 @@ CHOOSEN_USER=$(rtux_Choose_Sam_User \
 EXIT_SUM=0
 
 if rtux_winunlock_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER} ; then
-  rtux_Message_Success ${WINPROMOTE_OK_STR}
+  rtux_Message_Success ${WINUNLOCK_OK_STR}
 else
-  rtux_Message_Failure ${WINPROMOTE_NOT_OK_STR}
+  rtux_Message_Failure ${WINUNLOCK_NOT_OK_STR}
 fi
 
 WINUNLOCK_EXIT_VALUE=$?
 EXIT_SUM=$((EXIT_SUM+WINUNLOCK_EXIT_VALUE))
 
 if rtux_Run_Show_Progress "${WINPROMOTE_RUNNING_STR}" rtux_winpromote_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER} ; then
-  rtux_Message_Success ${WINUNLOCK_OK_STR}
+  rtux_Message_Success ${WINPROMOTE_OK_STR}
 else
-  rtux_Message_Failure ${WINUNLOCK_NOT_OK_STR}
+  rtux_Message_Failure ${WINPROMOTE_NOT_OK_STR}
 fi
 
 WINPROMOTE_EXIT_VALUE=$?
