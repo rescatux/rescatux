@@ -64,6 +64,7 @@ function rtux_Chpasswd () {
 
 PASSWD_CHANGED_OK_STR="Password was changed OK! :). We recommend to change it once you're back in your system to use your system default encryption."
 PASSWD_NOT_CHANGED_STR="Password was not changed. Something went wrong! :("
+PASSWD_RUNNING_STR="Changing GNU/Linux password."
 WHICH_USER_PASS_STR="Which user do you want to change its password?"
 
 SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
@@ -78,7 +79,7 @@ umount ${TMP_MNT_PARTITION};
 SELECTED_USER=$(rtux_Choose_User ${SYSTEM_USERS});
 CHOOSEN_PASS=$(rtux_Enter_Pass ${SELECTED_USER})
 
-if rtux_Chpasswd ${SELECTED_PARTITION} ${SELECTED_USER} ${CHOOSEN_PASS}; then
+if rtux_Run_Show_Progress "${PASSWD_RUNNING_STR}" rtux_Chpasswd ${SELECTED_PARTITION} ${SELECTED_USER} ${CHOOSEN_PASS}; then
   rtux_Message_Success ${PASSWD_CHANGED_OK_STR}
 else
   rtux_Message_Failure ${PASSWD_NOT_CHANGED_STR}
