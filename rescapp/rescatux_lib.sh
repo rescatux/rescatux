@@ -616,6 +616,7 @@ function rtux_winpromote_payload () {
 # Promote windows user
 # 1 parametre = Selected partition
 function rtux_winpromote () {
+  WINPROMOTE_RUNNING_STR="Promoting Windows user to Admin"
 
   local SELECTED_PARTITION="$1"
   rtux_Get_Sam_Users ${SELECTED_PARTITION}
@@ -626,7 +627,7 @@ function rtux_winpromote () {
     "Choose Windows user to promote to Admin")
 
   local PAYLOAD_EXIT_VALUE=1;
-  rtux_winpromote_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
+  rtux_Run_Show_Progress "${WINPROMOTE_RUNNING_STR}" rtux_winpromote_payload ${SELECTED_PARTITION} ${SAM_FILE} ${CHOOSEN_USER};
   PAYLOAD_EXIT_VALUE=$?
   return ${PAYLOAD_EXIT_VALUE};
 
