@@ -28,6 +28,7 @@ set -v
 GRUB_INSTALLED_OK_STR="Grub was installed OK! :)"
 GRUB_NOT_INSTALLED_STR="Grub was not installed. Something went wrong! :("
 WHICH_HARD_DISK_INSTALL_GRUB_STR="Which hard disk to install Grub on?"
+GRUB_INSTALLED_RUNNING_STR="Installing Grub."
 
 SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
@@ -35,7 +36,7 @@ SELECTED_PARTITION=$(rtux_Choose_Linux_partition);
 
 SELECTED_HARD_DISK=$(rtux_Choose_Hard_Disk ${WHICH_HARD_DISK_INSTALL_GRUB_STR});
 
-if rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} $(rtux_Order_Hard_Disks) ; then
+if rtux_Run_Show_Progress "${GRUB_INSTALLED_RUNNING_STR}" rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} $(rtux_Order_Hard_Disks) ; then
   rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
 else
   rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
