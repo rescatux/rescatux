@@ -43,9 +43,10 @@ BOOT_INFO_SCRIPT_OK_STR="Boot Info Script was run OK! :)"
 BOOT_INFO_SCRIPT_KO_STR="Boot Info Script had a problem. Something went wrong! :("
 
 BOOT_INFO_SCRIPT_EXPLANATION="Check the Support menu in order to see how you can show, share, share on forums, etc. the Boot Info Script log."
+BOOT_INFO_SCRIPT_STR="Generating Boot Info File."
 
 
-if rtux_Boot_Info_Script ; then
+if rtux_Run_Show_Progress "${BOOT_INFO_SCRIPT_STR}" rtux_Boot_Info_Script ; then
   rtux_Message_Success ${BOOT_INFO_SCRIPT_OK_STR}
   rtux_Message_Success ${BOOT_INFO_SCRIPT_EXPLANATION}
 else
