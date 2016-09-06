@@ -20,9 +20,8 @@ source ${RESCATUX_LIB_FILE}
 function rtux_share_log () {
 local SELECTED_FILE="$1"
 
-cat ${RESCATUX_PATH}${LOG_DIRECTORY}\
-/${SELECTED_FILE} |\
-pastebinit -b ${RESCATUX_PASTEBIN_URL} \
+pastebinit -i "${RESCATUX_PATH}${LOG_DIRECTORY}\
+/${SELECTED_FILE}" -b ${RESCATUX_PASTEBIN_URL} \
 -a resc_$$ -f bash
 
 }
