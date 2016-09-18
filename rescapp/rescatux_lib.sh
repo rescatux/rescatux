@@ -29,11 +29,13 @@ function rtux_Get_Etc_Issue_Content_payload() {
       echo $(head -n 1 ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} |\
 	sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /_/g' -e 's/\ \ /_/g' -e 's/\n/_/g' -e 's/--/_/g')
     else
-      echo "${NOT_DETECTED_STR}"
+      echo "${NOT_DETECTED_STR}" |\
+	sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /_/g' -e 's/\ \ /_/g' -e 's/\n/_/g' -e 's/--/_/g'
     fi
     umount ${TMP_MNT_PARTITION};
   else
-    echo "${CANT_MOUNT_STR}"
+    echo "${CANT_MOUNT_STR}" |\
+	sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /_/g' -e 's/\ \ /_/g' -e 's/\n/_/g' -e 's/--/_/g'
   fi
 } # function rtux_Get_Etc_Issue_Content_payload()
 
