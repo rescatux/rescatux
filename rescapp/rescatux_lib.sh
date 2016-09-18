@@ -426,9 +426,14 @@ function rtux_File_Reordered_Device_Map() {
 
 # 1 parametre = Passwd filename
 # Return users list from passwd
-function rtux_User_List() {
+function rtux_User_List_payload() {
   PASSWD_FILENAME="$1"
   awk -F : '{print $1}' "${PASSWD_FILENAME}" | tr '\n' ' '
+} # rtux_User_List_payload()
+
+function rtux_User_List() {
+  USER_LIST_RUNNING_STR="Getting users from passwd file."
+  rtux_Run_Show_Progress "${USER_LIST_RUNNING_STR}" rtux_User_List_payload $@
 } # rtux_User_List()
 
 # Let the user choose an user
