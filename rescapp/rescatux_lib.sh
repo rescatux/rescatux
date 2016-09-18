@@ -508,7 +508,7 @@ function rtux_make_tmp_fstab() {
 
 # 1 parametre = Selected partition
 # 2 parametre = SAM file
-function rtux_backup_windows_config () {
+function rtux_backup_windows_config_payload () {
 
   local SELECTED_PARTITION="$1"
   local SAM_FILE="$2"
@@ -532,6 +532,11 @@ function rtux_backup_windows_config () {
   fi # Partition was mounted ok
 
 
+}
+
+function rtux_backup_windows_config () {
+  BACKUP_WINDOWS_CONFIG_RUNNING_STR="Performing backup of Windows registry files."
+  rtux_Run_Show_Progress "${BACKUP_WINDOWS_CONFIG_RUNNING_STR}" rtux_backup_windows_config_payload $@
 }
 
 # TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
