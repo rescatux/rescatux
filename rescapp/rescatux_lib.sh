@@ -43,8 +43,14 @@ function rtux_Get_Etc_Issue_Content() {
 } # function rtux_Get_Etc_Issue_Content()
 
 # Return partitions detected on the system
-function rtux_Get_System_Partitions () {
+function rtux_Get_System_Partitions_payload () {
   awk '{ if ( ( NR>2 ) && ( $4 ~ "[0-9]$" ) ) {print $4} }' ${PROC_PARTITIONS_FILE}
+} # function rtux_Get_System_Partitions_payload ()
+
+# Return partitions detected on the system
+function rtux_Get_System_Partitions () {
+  GET_SYSTEM_PARTITIONS_RUNNING_STR="Getting System partitions."
+  rtux_Run_Show_Progress "${GET_SYSTEM_PARTITIONS_RUNNING_STR}" rtux_Get_System_Partitions_payload $@
 } # function rtux_Get_System_Partitions ()
 
 # Return partitions which are primary partitions
