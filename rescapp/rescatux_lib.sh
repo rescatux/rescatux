@@ -740,6 +740,7 @@ function rtux_winunlock () {
 # 1 parametre = Selected partition
 # It sets global variable SAM_USERS
 # It sets global variable SAM_FILE
+# It sets global variable sam_line_total
 function rtux_Get_Sam_Users () {
 
   local EXIT_VALUE=1 # Error by default
