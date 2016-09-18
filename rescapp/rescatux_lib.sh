@@ -128,8 +128,14 @@ function rtux_Get_Windows_Os_Partitions() {
 } # rtux_Get_Windows_Os_Partitions ()
 
 # Return hard disks detected on the system
-function rtux_Get_System_HardDisks () {
+function rtux_Get_System_HardDisks_payload () {
   awk '{ if ( ( NR>2 ) && ( $4 ~ "[[:alpha:]]$" ) ) {print $4} }' ${PROC_PARTITIONS_FILE}
+} # function rtux_Get_System_HardDisks_payload ()
+
+# Return hard disks detected on the system
+function rtux_Get_System_HardDisks () {
+  GET_SYSTEM_HARDDISKS_RUNNING_STR="Getting system hard disks."
+  rtux_Run_Show_Progress "${GET_SYSTEM_HARDDISKS_RUNNING_STR}" rtux_Get_System_HardDisks_payload $@
 } # function rtux_Get_System_HardDisks ()
 
 # Informs the user about an operation that has been successful
