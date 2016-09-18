@@ -17,7 +17,7 @@
 
 # Given a partition it returns its etc issue content
 # Format is modified so that zenity does not complain
-function rtux_Get_Etc_Issue_Content() {
+function rtux_Get_Etc_Issue_Content_payload() {
   local PARTITION_TO_MOUNT=$1
   local n_partition=${PARTITION_TO_MOUNT}
 
@@ -35,6 +35,11 @@ function rtux_Get_Etc_Issue_Content() {
   else
     echo "${CANT_MOUNT_STR}"
   fi
+} # function rtux_Get_Etc_Issue_Content_payload()
+
+function rtux_Get_Etc_Issue_Content() {
+  GET_ETC_ISSUE_CONTENT_RUNNING_STR="Parsing /etc/issue file."
+  rtux_Run_Show_Progress "${GET_ETC_ISSUE_CONTENT_RUNNING_STR}" rtux_Get_Etc_Issue_Content_payload $@
 } # function rtux_Get_Etc_Issue_Content()
 
 # Return partitions detected on the system
