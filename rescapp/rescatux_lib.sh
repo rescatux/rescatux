@@ -67,7 +67,7 @@ function rtux_Get_Primary_Partitions() {
 } # function rtux_Get_Primary_Partitions ()
 
 # Return partitions which have Linux os detector on them
-function rtux_Get_Linux_Os_Partitions() {
+function rtux_Get_Linux_Os_Partitions_payload() {
   local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
   local SBIN_GRUB_PARTITIONS=""
 
@@ -86,6 +86,11 @@ function rtux_Get_Linux_Os_Partitions() {
   done
 
   echo "${SBIN_GRUB_PARTITIONS}"
+} # function rtux_Get_Linux_Os_Partitions_payload ()
+
+function rtux_Get_Linux_Os_Partitions() {
+  GET_LINUX_OS_PARTITIONS_RUNNING_STR="Getting GNU/Linux OS partitions."
+  rtux_Run_Show_Progress "${GET_LINUX_OS_PARTITIONS_RUNNING_STR}" rtux_Get_Linux_Os_Partitions_payload $@
 } # function rtux_Get_Linux_Os_Partitions ()
 
 # Return partitions which have Windows os detector on them
