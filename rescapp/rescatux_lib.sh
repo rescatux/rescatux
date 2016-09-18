@@ -54,12 +54,17 @@ function rtux_Get_System_Partitions () {
 } # function rtux_Get_System_Partitions ()
 
 # Return partitions which are primary partitions
-function rtux_Get_Primary_Partitions() {
+function rtux_Get_Primary_Partitions_payload() {
   local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
 
   echo "${TARGET_PARTITIONS}" | awk '$1 ~ "[[:alpha:]][1-4]$" { printf $1 " " }'
-} # function rtux_Get_Primary_Partitions ()
+} # function rtux_Get_Primary_Partitions_payload ()
 
+# Return partitions which are primary partitions
+function rtux_Get_Primary_Partitions() {
+  GET_PRIMARY_PARTITIONS_RUNNING_STR="Getting Primary partitions."
+  rtux_Run_Show_Progress "${GET_PRIMARY_PARTITIONS_RUNNING_STR}" rtux_Get_Primary_Partitions_payload $@
+} # function rtux_Get_Primary_Partitions ()
 
 # Return partitions which have Linux os detector on them
 function rtux_Get_Linux_Os_Partitions() {
