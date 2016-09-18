@@ -478,7 +478,7 @@ function rtux_Enter_Pass() {
 
 # 1 parametre = Temporal mount point
 # Return temporal fstab path
-function rtux_make_tmp_fstab() {
+function rtux_make_tmp_fstab_payload() {
 
   local TMP_MNT_PARTITION="$1"
   local ORIGINAL_FSTAB="${TMP_MNT_PARTITION}/etc/fstab"
@@ -499,6 +499,11 @@ function rtux_make_tmp_fstab() {
 
   echo "${TMP_FSTAB}";
 
+} # rtux_make_tmp_fstab_payload()
+
+function rtux_make_tmp_fstab() {
+  MAKE_TMP_FSTAB_RUNNING_STR="Making temporal fstab file."
+  rtux_Run_Show_Progress "${MAKE_TMP_FSTAB_RUNNING_STR}" rtux_make_tmp_fstab_payload $@
 } # rtux_make_tmp_fstab()
 
 # 1 parametre = Selected partition
