@@ -1005,7 +1005,7 @@ ORDER_HDS_STR="Order hard disks according to boot order. Press OK to continue."
 RIGHT_HD_POSITION_STR="Which is the right position for this hard disk?"
 SUCCESS_STR="Success!"
 FAILURE_STR="Failure!"
-NOT_DETECTED_STR="Not detected"
+NOT_DETECTED_STR="Windows / Data / Other"
 CANT_MOUNT_STR="Cannot mount"
 RUNNING_STR="Running process... Please wait till finish message appears."
 
