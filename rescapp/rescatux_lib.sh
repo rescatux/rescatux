@@ -376,7 +376,7 @@ function rtux_Choose_Hard_Disk_Position() {
 # User is asked to order the hard disks
 #  so that they have their actual order
 # Outputs device.map file with ordered devices
-function rtux_File_Reordered_Device_Map() {
+function rtux_File_Reordered_Device_Map_payload() {
 
 
   local DETECTED_HARD_DISKS=$(rtux_Get_System_HardDisks);
@@ -417,6 +417,11 @@ function rtux_File_Reordered_Device_Map() {
     let n=n+1
   done
 
+} # rtux_File_Reordered_Device_Map_payload()
+
+function rtux_File_Reordered_Device_Map() {
+  GET_FILE_REORDERED_DEVICE_MAP_RUNNING_STR="Reordering device.map file."
+  rtux_Run_Show_Progress "${GET_FILE_REORDERED_DEVICE_MAP_RUNNING_STR}" rtux_File_Reordered_Device_Map_payload $@
 } # rtux_File_Reordered_Device_Map()
 
 # 1 parametre = Passwd filename
