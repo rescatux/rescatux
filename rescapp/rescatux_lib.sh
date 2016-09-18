@@ -39,7 +39,7 @@ function rtux_Get_Etc_Issue_Content_payload() {
 
 function rtux_Get_Etc_Issue_Content() {
   GET_ETC_ISSUE_CONTENT_RUNNING_STR="Parsing /etc/issue file."
-  rtux_Run_Show_Progress "${GET_ETC_ISSUE_CONTENT_RUNNING_STR}" rtux_Get_Etc_Issue_Content_payload $@
+  rtux_Run_Show_Progress "${GET_ETC_ISSUE_CONTENT_RUNNING_STR}" rtux_Get_Etc_Issue_Content_payload "$@"
 } # function rtux_Get_Etc_Issue_Content()
 
 # Return partitions detected on the system
@@ -50,7 +50,7 @@ function rtux_Get_System_Partitions_payload () {
 # Return partitions detected on the system
 function rtux_Get_System_Partitions () {
   GET_SYSTEM_PARTITIONS_RUNNING_STR="Getting System partitions."
-  rtux_Run_Show_Progress "${GET_SYSTEM_PARTITIONS_RUNNING_STR}" rtux_Get_System_Partitions_payload $@
+  rtux_Run_Show_Progress "${GET_SYSTEM_PARTITIONS_RUNNING_STR}" rtux_Get_System_Partitions_payload "$@"
 } # function rtux_Get_System_Partitions ()
 
 # Return partitions which are primary partitions
@@ -63,7 +63,7 @@ function rtux_Get_Primary_Partitions_payload() {
 # Return partitions which are primary partitions
 function rtux_Get_Primary_Partitions() {
   GET_PRIMARY_PARTITIONS_RUNNING_STR="Getting Primary partitions."
-  rtux_Run_Show_Progress "${GET_PRIMARY_PARTITIONS_RUNNING_STR}" rtux_Get_Primary_Partitions_payload $@
+  rtux_Run_Show_Progress "${GET_PRIMARY_PARTITIONS_RUNNING_STR}" rtux_Get_Primary_Partitions_payload "$@"
 } # function rtux_Get_Primary_Partitions ()
 
 # Return partitions which have Linux os detector on them
@@ -90,7 +90,7 @@ function rtux_Get_Linux_Os_Partitions_payload() {
 
 function rtux_Get_Linux_Os_Partitions() {
   GET_LINUX_OS_PARTITIONS_RUNNING_STR="Getting GNU/Linux OS partitions."
-  rtux_Run_Show_Progress "${GET_LINUX_OS_PARTITIONS_RUNNING_STR}" rtux_Get_Linux_Os_Partitions_payload $@
+  rtux_Run_Show_Progress "${GET_LINUX_OS_PARTITIONS_RUNNING_STR}" rtux_Get_Linux_Os_Partitions_payload "$@"
 } # function rtux_Get_Linux_Os_Partitions ()
 
 # Return partitions which have Windows os detector on them
@@ -124,7 +124,7 @@ function rtux_Get_Windows_Os_Partitions_payload() {
 # Return partitions which have Windows os detector on them
 function rtux_Get_Windows_Os_Partitions() {
   GET_WINDOWS_OS_PARTITIONS_RUNNING_STR="Getting Microsoft Windows OS partitions."
-  rtux_Run_Show_Progress "${GET_WINDOWS_OS_PARTITIONS_RUNNING_STR}" rtux_Get_Windows_Os_Partitions_payload $@
+  rtux_Run_Show_Progress "${GET_WINDOWS_OS_PARTITIONS_RUNNING_STR}" rtux_Get_Windows_Os_Partitions_payload "$@"
 } # rtux_Get_Windows_Os_Partitions ()
 
 # Return hard disks detected on the system
@@ -135,7 +135,7 @@ function rtux_Get_System_HardDisks_payload () {
 # Return hard disks detected on the system
 function rtux_Get_System_HardDisks () {
   GET_SYSTEM_HARDDISKS_RUNNING_STR="Getting system hard disks."
-  rtux_Run_Show_Progress "${GET_SYSTEM_HARDDISKS_RUNNING_STR}" rtux_Get_System_HardDisks_payload $@
+  rtux_Run_Show_Progress "${GET_SYSTEM_HARDDISKS_RUNNING_STR}" rtux_Get_System_HardDisks_payload "$@"
 } # function rtux_Get_System_HardDisks ()
 
 # Informs the user about an operation that has been successful
@@ -421,7 +421,7 @@ function rtux_File_Reordered_Device_Map_payload() {
 
 function rtux_File_Reordered_Device_Map() {
   GET_FILE_REORDERED_DEVICE_MAP_RUNNING_STR="Reordering device.map file."
-  rtux_Run_Show_Progress "${GET_FILE_REORDERED_DEVICE_MAP_RUNNING_STR}" rtux_File_Reordered_Device_Map_payload $@
+  rtux_Run_Show_Progress "${GET_FILE_REORDERED_DEVICE_MAP_RUNNING_STR}" rtux_File_Reordered_Device_Map_payload "$@"
 } # rtux_File_Reordered_Device_Map()
 
 # 1 parametre = Passwd filename
@@ -433,7 +433,7 @@ function rtux_User_List_payload() {
 
 function rtux_User_List() {
   USER_LIST_RUNNING_STR="Getting users from passwd file."
-  rtux_Run_Show_Progress "${USER_LIST_RUNNING_STR}" rtux_User_List_payload $@
+  rtux_Run_Show_Progress "${USER_LIST_RUNNING_STR}" rtux_User_List_payload "$@"
 } # rtux_User_List()
 
 # Let the user choose an user
@@ -503,7 +503,7 @@ function rtux_make_tmp_fstab_payload() {
 
 function rtux_make_tmp_fstab() {
   MAKE_TMP_FSTAB_RUNNING_STR="Making temporal fstab file."
-  rtux_Run_Show_Progress "${MAKE_TMP_FSTAB_RUNNING_STR}" rtux_make_tmp_fstab_payload $@
+  rtux_Run_Show_Progress "${MAKE_TMP_FSTAB_RUNNING_STR}" rtux_make_tmp_fstab_payload "$@"
 } # rtux_make_tmp_fstab()
 
 # 1 parametre = Selected partition
@@ -536,7 +536,7 @@ function rtux_backup_windows_config_payload () {
 
 function rtux_backup_windows_config () {
   BACKUP_WINDOWS_CONFIG_RUNNING_STR="Performing backup of Windows registry files."
-  rtux_Run_Show_Progress "${BACKUP_WINDOWS_CONFIG_RUNNING_STR}" rtux_backup_windows_config_payload $@
+  rtux_Run_Show_Progress "${BACKUP_WINDOWS_CONFIG_RUNNING_STR}" rtux_backup_windows_config_payload "$@"
 }
 
 # TODO: FETCH WIDTH AND HEIGHT FROM COMMAND LINE OR SO
@@ -949,7 +949,7 @@ function rtux_Run_Show_Progress () {
   local EXIT_VALUE=1 # Error by default
   local RUNNING_STR="$1"
   shift
-  $@ \
+  "$@" \
   | tee >(zenity ${ZENITY_COMMON_OPTIONS} \
 	--text "${RUNNING_STR}" \
 	--progress \
