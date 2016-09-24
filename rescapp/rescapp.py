@@ -424,9 +424,15 @@ if __name__ == "__main__":
     main_menu_support_option= RescappOption()
     main_menu_support_option.setFromDir(os.path.join(current_pwd, 'main-menu'), 'main-menu')
     
-    if ((datetime.datetime.now().month==4) and (datetime.datetime.now().day==1)):
+    lang_environment=os.environ['LANG']
+
+    if ((datetime.datetime.now().month==4) and (datetime.datetime.now().day==1) and (not (lang_environment.startswith("es_"))) ):
 		execfile(current_pwd + "/" + "afd.py")
 		execfile(current_pwd + "/" + "afd2.py")
+
+    if ((datetime.datetime.now().month==12) and (datetime.datetime.now().day==28) and (lang_environment.startswith("es_")) ):
+		execfile(current_pwd + "/" + "afd_es.py")
+		execfile(current_pwd + "/" + "afd2_es.py")
 
     app=QtGui.QApplication(sys.argv)
     url = QtCore.QUrl('file:///' + current_pwd + '/' + help_support_option.getCode() + '/' + offlinedoc_filename)
