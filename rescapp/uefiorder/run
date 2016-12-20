@@ -1,0 +1,121 @@
+#!/bin/bash
+# Rescapp Update-grub run script
+# Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
+#
+# Rescapp is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Rescapp is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
+
+source ${RESCATUX_LIB_FILE}
+set -x
+set -v
+
+
+
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+# No parametres
+# Update UEFI Boot Order
+# While it is being run user is shown the UEFI boot entries
+# and it is asked to order them
+function rtux_UEFI_Boot_Order_Update () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  local EXIT_VALUE=1 # Error by default
+
+  # TODO: Check if we are in UEFI system and warn the user
+
+
+  local COLUMN_NUMBER=2 # Determine UEFI entry id column and UEFI entry description column
+
+  local UEFI_ENTRY_NUMBER=0
+  for nline in $(${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9][0-9][0-9][0-9]') ; do
+    let UEFI_ENTRY_NUMBER=UEFI_ENTRY_NUMBER+1
+    id_arranque="$(echo $nline | cut -c 5-8)"
+  done
+
+  if [ ${UEFI_ENTRY_NUMBER} -gt 1 ] ; then
+    ARGS_ARRAY_INDEX=0
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]=${COLUMN_NUMBER}
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="${UEFIORDER_WTITLE}"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="${ORDER_UEFIORDER_STR}"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="UEFI ID"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="Description"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+
+
+    while read -r nline ; do
+      id_arranque=$(echo "${nline}" | cut -c 5-8)
+      descripcion_arranque=$(echo "${nline}" | awk '{$1="";print $0}' | awk '{$1=$1;print $0}')
+
+      ARGS_ARRAY[ARGS_ARRAY_INDEX]="${id_arranque}"
+      let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+      ARGS_ARRAY[ARGS_ARRAY_INDEX]="${descripcion_arranque}"
+      let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+
+    done < <( ${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9][0-9][0-9][0-9]' )
+    TMP_DESIRED_ORDER=`${RESCATUX_PATH}order.py "${ARGS_ARRAY[@]}"`
+    # Put commas in place - Begin
+    FIRST_ENTRY_FOUND='true'
+    DESIRED_ORDER=""
+    for nentry in ${TMP_DESIRED_ORDER} ; do
+    if [ "$FIRST_ENTRY_FOUND" == "true" ]
+        then
+          DESIRED_ORDER="${nentry}";
+          FIRST_ENTRY_FOUND='false' ;
+        else
+          DESIRED_ORDER="${DESIRED_ORDER},${nentry}";
+    fi
+    done
+    # Put commas in place - End
+
+  else
+    DESIRED_ORDER="${id_arranque}"
+  fi
+
+  ${EFIBOOTMGR_BINARY} -o ${DESIRED_ORDER}
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Boot_Order_Update ()
+
+
+# MAIN PROGRAM
+
+
+EFIBOOTMGR_BINARY=efibootmgr
+
+UEFIORDER_WTITLE="Order UEFI boot entries"
+ORDER_UEFIORDER_STR="Order UEFI boot entries in the other you want. Press OK to continue."
+RIGHT_UEFIORDER_STR="Which is the right position for this UEFI boot entry?"
+
+UEFIORDER_OK_STR="UEFI Boot order was updated OK! :)"
+UEFIORDER_KO_STR="UEFI Boot order update went wrong! :("
+UEFIORDER_RUNNING_STR="Updating UEFI Boot order."
+
+if rtux_UEFI_Boot_Order_Update ;
+#if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_UEFI_Boot_Order_Update ;
+#if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_Grub_Update_Config $(rtux_Choose_Linux_partition) $(rtux_Order_Hard_Disks) ;
+ then
+  rtux_Message_Success ${UPDATE_GRUB_OK_STR}
+else
+  rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
+fi
+
+
+#
