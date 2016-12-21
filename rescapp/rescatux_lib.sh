@@ -1124,6 +1124,7 @@ RESCATUX_ROOT_MNT=/mnt/rescatux
 LINUX_OS_DETECTOR="/etc/issue"
 GRUB_INSTALL_BINARY=grub-install
 ETC_ISSUE_PATH="/etc/issue"
+UEFI_DETECTION_DIR="/sys/firmware/efi"
 
 TMP_FOLDER="/tmp"
 
