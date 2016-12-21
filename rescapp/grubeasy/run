@@ -34,8 +34,8 @@ UPDATE_GRUB_KO_STR="Grub configuration update went wrong! :("
 FSCK_FORCED_OK_STR="Filesystem check with automatic fix was OK! :)"
 FSCK_FORCED_KO_STR="Filesystem check with automatic fix went wrong! :("
 
-GRUBEASY_OK_STR="Easy GNU/Linux Boot Fix (Fsck partition, update grub menues and Restore GRUB into the MBR) was OK! :)"
-GRUBEASY_NOT_OK_STR="Easy GNU/Linux Boot Fix (Fsck partition, update grub menues and Restore GRUB into the MBR) was not fully completed. Something went wrong! :("
+GRUBEASY_OK_STR="Easy GNU/Linux Boot Fix (Fsck partition, update grub menues, restore GRUB into the MBR and order UEFI entries) was OK! :)"
+GRUBEASY_NOT_OK_STR="Easy GNU/Linux Boot Fix (Fsck partition, update grub menues, restore GRUB into the MBR and order UEFI entries) was not fully completed. Something went wrong! :("
 
 UEFIORDER_OK_STR="UEFI Boot order was updated OK! :)"
 UEFIORDER_KO_STR="UEFI Boot order update went wrong! :("
