@@ -56,6 +56,7 @@ if ( rtux_Run_Show_Progress "${FSCK_FORCED_RUNNING_STR}" rtux_Fsck_Forced ${SELE
   rtux_Message_Success ${FSCK_FORCED_OK_STR}
 else
   rtux_Message_Failure ${FSCK_FORCED_KO_STR}
+  false
 fi
 
 GRUBFSCK_EXIT_VALUE=$?
@@ -65,6 +66,7 @@ if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_Grub_Update_Config $
   rtux_Message_Success ${UPDATE_GRUB_OK_STR}
 else
   rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
+  false
 fi
 
 GRUBUPDATE_EXIT_VALUE=$?
@@ -74,6 +76,7 @@ if rtux_Run_Show_Progress "${GRUB_INSTALLED_RUNNING_STR}" rtux_Grub_Install ${SE
   rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
 else
   rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
+  false
 fi
 
 GRUBINSTALL_EXIT_VALUE=$?
