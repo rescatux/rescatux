@@ -24,10 +24,11 @@ set -v
 # TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
 
 # No parametres
-# Update UEFI Boot Order
+# Choose UEFI Boot Order
 # While it is being run user is shown the UEFI boot entries
 # and it is asked to order them
-function rtux_UEFI_Boot_Order_Update () {
+# Outputs desired order ( E.g.: 0002,0001,0000 )
+function rtux_Choose_UEFI_Boot_Order_Update () {
 # TODO: Extract last user interaction (Success/Failure)
 # So that this function returns being successful or not
 
@@ -87,6 +88,22 @@ function rtux_UEFI_Boot_Order_Update () {
     DESIRED_ORDER="${id_arranque}"
   fi
 
+	echo "${DESIRED_ORDER}"
+
+} # function rtux_Choose_UEFI_Boot_Order_Update ()
+
+# $1 : Uefi Boot Order (E.g: 0000,0002,001 )
+# Update UEFI Boot Order
+function rtux_UEFI_Boot_Order_Update () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  local EXIT_VALUE=1 # Error by default
+
+  local DESIRED_ORDER="$1"
+
+  # TODO: Check if we are in UEFI system and warn the user
+
   ${EFIBOOTMGR_BINARY} -o ${DESIRED_ORDER}
   EXIT_VALUE=$?
 
@@ -108,13 +125,13 @@ UEFIORDER_OK_STR="UEFI Boot order was updated OK! :)"
 UEFIORDER_KO_STR="UEFI Boot order update went wrong! :("
 UEFIORDER_RUNNING_STR="Updating UEFI Boot order."
 
-if rtux_UEFI_Boot_Order_Update ;
+if rtux_Run_Show_Progress "${UEFIORDER_RUNNING_STR}" rtux_UEFI_Boot_Order_Update $(rtux_Choose_UEFI_Boot_Order_Update);
 #if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_UEFI_Boot_Order_Update ;
 #if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_Grub_Update_Config $(rtux_Choose_Linux_partition) $(rtux_Order_Hard_Disks) ;
  then
-  rtux_Message_Success ${UPDATE_GRUB_OK_STR}
+  rtux_Message_Success ${UEFIORDER_OK_STR}
 else
-  rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
+  rtux_Message_Failure ${UEFIORDER_KO_STR}
 fi
 
 
