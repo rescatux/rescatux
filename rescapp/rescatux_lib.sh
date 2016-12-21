@@ -150,6 +150,16 @@ function rtux_Message_Success () {
     --text="${text_to_show}";
 } # function rtux_Message_Success ()
 
+# Informs the user about anything
+# Every parametre is treated as the message to be shown to the user.
+function rtux_Message_Info () {
+  local text_to_show="$@"
+  zenity ${ZENITY_COMMON_OPTIONS} \
+    --info \
+    --title="${INFO_STR}" \
+    --text="${text_to_show}";
+} # function rtux_Message_Success ()
+
 # Informs the user about an operation that has been not successful
 # Every parametre is treated as the message to be shown to the user.
 function rtux_Message_Failure () {
@@ -1097,6 +1107,7 @@ ORDER_HDS_WTITLE="Order hard disks"
 ORDER_HDS_STR="Order hard disks according to boot order. Press OK to continue."
 RIGHT_HD_POSITION_STR="Which is the right position for this hard disk?"
 SUCCESS_STR="Success!"
+INFO_STR="Information"
 FAILURE_STR="Failure!"
 NOT_DETECTED_STR="Windows / Data / Other"
 CANT_MOUNT_STR="Cannot mount"
