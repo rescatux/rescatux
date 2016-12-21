@@ -963,6 +963,97 @@ function rtux_Run_Show_Progress () {
 
 } # rtux_Run_Show_Progress ()
 
+# TODO: Program check runtime (Maybe to be stolen from bootinfoscript)
+
+# No parametres
+# Choose UEFI Boot Order
+# While it is being run user is shown the UEFI boot entries
+# and it is asked to order them
+# Outputs desired order ( E.g.: 0002,0001,0000 )
+function rtux_Choose_UEFI_Boot_Order_Update () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  local EXIT_VALUE=1 # Error by default
+
+  # TODO: Check if we are in UEFI system and warn the user
+
+
+  local COLUMN_NUMBER=2 # Determine UEFI entry id column and UEFI entry description column
+
+  local UEFI_ENTRY_NUMBER=0
+  for nline in $(${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9][0-9][0-9][0-9]') ; do
+    let UEFI_ENTRY_NUMBER=UEFI_ENTRY_NUMBER+1
+    id_arranque="$(echo $nline | cut -c 5-8)"
+  done
+
+  if [ ${UEFI_ENTRY_NUMBER} -gt 1 ] ; then
+    ARGS_ARRAY_INDEX=0
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]=${COLUMN_NUMBER}
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="${UEFIORDER_WTITLE}"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="${ORDER_UEFIORDER_STR}"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="UEFI ID"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+    ARGS_ARRAY[ARGS_ARRAY_INDEX]="Description"
+    let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+
+
+    while read -r nline ; do
+      id_arranque=$(echo "${nline}" | cut -c 5-8)
+      descripcion_arranque=$(echo "${nline}" | awk '{$1="";print $0}' | awk '{$1=$1;print $0}')
+
+      ARGS_ARRAY[ARGS_ARRAY_INDEX]="${id_arranque}"
+      let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+      ARGS_ARRAY[ARGS_ARRAY_INDEX]="${descripcion_arranque}"
+      let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
+
+    done < <( ${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9][0-9][0-9][0-9]' )
+    TMP_DESIRED_ORDER=`${RESCATUX_PATH}order.py "${ARGS_ARRAY[@]}"`
+    # Put commas in place - Begin
+    FIRST_ENTRY_FOUND='true'
+    DESIRED_ORDER=""
+    for nentry in ${TMP_DESIRED_ORDER} ; do
+    if [ "$FIRST_ENTRY_FOUND" == "true" ]
+        then
+          DESIRED_ORDER="${nentry}";
+          FIRST_ENTRY_FOUND='false' ;
+        else
+          DESIRED_ORDER="${DESIRED_ORDER},${nentry}";
+    fi
+    done
+    # Put commas in place - End
+
+  else
+    DESIRED_ORDER="${id_arranque}"
+  fi
+
+	echo "${DESIRED_ORDER}"
+
+} # function rtux_Choose_UEFI_Boot_Order_Update ()
+
+# $1 : Uefi Boot Order (E.g: 0000,0002,001 )
+# Update UEFI Boot Order
+function rtux_UEFI_Boot_Order_Update () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  local EXIT_VALUE=1 # Error by default
+
+  local DESIRED_ORDER="$1"
+
+  # TODO: Check if we are in UEFI system and warn the user
+
+  ${EFIBOOTMGR_BINARY} -o ${DESIRED_ORDER}
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Boot_Order_Update ()
+
+
 
 # Rescatux lib main variables
 
@@ -1011,6 +1102,10 @@ NOT_DETECTED_STR="Windows / Data / Other"
 CANT_MOUNT_STR="Cannot mount"
 RUNNING_STR="Running process... Please wait till finish message appears."
 
+UEFIORDER_WTITLE="Order UEFI boot entries"
+ORDER_UEFIORDER_STR="Order UEFI boot entries in the other you want. Press OK to continue."
+RIGHT_UEFIORDER_STR="Which is the right position for this UEFI boot entry?"
+
 
 PROC_PARTITIONS_FILE=/proc/partitions
 
@@ -1025,6 +1120,7 @@ DEVICE_MAP_RESCATUX_STR="device.map.rescatux"
 DEVICE_MAP_BACKUP_STR="device.map.rescatux.backup"
 
 UPDATE_GRUB_BINARY=update-grub
+EFIBOOTMGR_BINARY=efibootmgr
 
 
 
