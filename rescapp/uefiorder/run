@@ -126,9 +126,7 @@ UEFIORDER_KO_STR="UEFI Boot order update went wrong! :("
 UEFIORDER_RUNNING_STR="Updating UEFI Boot order."
 
 if rtux_Run_Show_Progress "${UEFIORDER_RUNNING_STR}" rtux_UEFI_Boot_Order_Update $(rtux_Choose_UEFI_Boot_Order_Update);
-#if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_UEFI_Boot_Order_Update ;
-#if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_Grub_Update_Config $(rtux_Choose_Linux_partition) $(rtux_Order_Hard_Disks) ;
- then
+then
   rtux_Message_Success ${UEFIORDER_OK_STR}
 else
   rtux_Message_Failure ${UEFIORDER_KO_STR}
