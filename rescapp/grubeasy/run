@@ -103,16 +103,16 @@ EXIT_SUM=$((EXIT_SUM+GRUBINSTALL_EXIT_VALUE))
 
 if [ "${UEFI_SYSTEM_DETECTED}" == "TRUE" ] ; then
 
-if rtux_Run_Show_Progress "${UEFIORDER_RUNNING_STR}" rtux_UEFI_Boot_Order_Update ${UEFI_DESIRED_ORDER};
-then
-  rtux_Message_Success ${UEFIORDER_OK_STR}
-else
-  rtux_Message_Failure ${UEFIORDER_KO_STR}
-  false
-fi
+  if rtux_Run_Show_Progress "${UEFIORDER_RUNNING_STR}" rtux_UEFI_Boot_Order_Update ${UEFI_DESIRED_ORDER};
+  then
+    rtux_Message_Success ${UEFIORDER_OK_STR}
+  else
+    rtux_Message_Failure ${UEFIORDER_KO_STR}
+    false
+  fi
 
-UEFIORDER_EXIT_VALUE=$?
-EXIT_SUM=$((EXIT_SUM+UEFIORDER_EXIT_VALUE))
+  UEFIORDER_EXIT_VALUE=$?
+  EXIT_SUM=$((EXIT_SUM+UEFIORDER_EXIT_VALUE))
 
 fi
 
