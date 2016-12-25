@@ -158,7 +158,7 @@ function rtux_Message_Info () {
     --info \
     --title="${INFO_STR}" \
     --text="${text_to_show}";
-} # function rtux_Message_Success ()
+} # function rtux_Message_Info ()
 
 # Informs the user about an operation that has been not successful
 # Every parametre is treated as the message to be shown to the user.
