@@ -24,11 +24,7 @@ function rtux_Get_Etc_Issue_Content_payload() {
   local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
   local TMP_DEV_PARTITION=/dev/${n_partition}
 
-  local n_hard_disk="$(echo ${n_partition} | sed 's/[0-9]*$//g' 2> /dev/null)"
-  if fdisk -lu /dev/${n_hard_disk} \
-       | grep '^/dev/'"${n_partition}"'\+[[:space:]]\+' \
-       | grep "${FDISK_EFI_SYSTEM_DETECTOR}"'$' \
-       > /dev/null 2>&1 ; then
+  if rtux_UEFI_Check_Is_EFI_System_Partition ${n_partition} ; then
     echo "${EFI_SYSTEM_STR}"
   else
     mkdir --parents ${TMP_MNT_PARTITION}
