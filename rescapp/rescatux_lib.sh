@@ -1072,6 +1072,23 @@ function rtux_UEFI_Boot_Order_Update () {
 
 } # function rtux_UEFI_Boot_Order_Update ()
 
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition is an EFI System partition
+function rtux_UEFI_Check_Is_EFI_System_Partition () {
+
+  local EXIT_VALUE=1 # Error by default
+
+  local efi_partition_to_check="$1"
+  local efi_partition_hard_disk="$(echo ${efi_partition_to_check} | sed 's/[0-9]*$//g' 2> /dev/null)"
+  fdisk -lu /dev/${efi_partition_hard_disk} \
+       | grep '^/dev/'"${efi_partition_to_check}"'\+[[:space:]]\+' \
+       | grep "${FDISK_EFI_SYSTEM_DETECTOR}"'$' \
+       > /dev/null 2>&1
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Boot_Order_Update ()
 
 
 # Rescatux lib main variables
