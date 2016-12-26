@@ -19,6 +19,37 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
+# Let the user choose his main EFI System partition
+# It outputs choosen partition
+function rtux_Choose_EFI_System_partition () {
+  rtux_Abstract_Choose_Partition $(rtux_Get_EFI_System_Partitions)
+} # function rtux_Choose_EFI_System_partition ()
+
+function rtux_Get_EFI_System_Partitions() {
+  GET_EFI_SYSTEM_PARTITIONS_RUNNING_STR="Getting EFI System partitions."
+  rtux_Run_Show_Progress "${GET_EFI_SYSTEM_PARTITIONS_RUNNING_STR}" rtux_Get_EFI_System_Partitions_payload "$@"
+} # function rtux_Get_EFI_System_Partitions ()
+
+
+# Return partitions which are EFI System partitions
+function rtux_Get_EFI_System_Partitions_payload() {
+  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
+  local EFI_SYSTEM_PARTITIONS=""
+
+  for n_partition in ${TARGET_PARTITIONS}; do
+    n_hard_disk="$(echo ${n_partition} | sed 's/[0-9]*$//g' 2> /dev/null)"
+    if fdisk -lu /dev/${n_hard_disk} \
+         | grep '^/dev/'"${n_partition}"'\+[[:space:]]\+' \
+         | grep "${FDISK_EFI_SYSTEM_DETECTOR}"'$' \
+         > /dev/null 2>&1 ; then
+      EFI_SYSTEM_PARTITIONS="${EFI_SYSTEM_PARTITIONS} ${n_partition}"
+    fi
+  done
+
+  echo "${EFI_SYSTEM_PARTITIONS}"
+} # function rtux_Get_EFI_System_Partitions_payload ()
+
+
 # $1 : Uefi EFI Partition # sda2
 # $2 : EFI relative Complete File path # EFI/Boot/bootx64.efi
 # Update UEFI Boot Order
@@ -68,7 +99,9 @@ UEFICREATE_KO_STR="New UEFI Boot entry addition went wrong! :("
 UEFICREATE_RUNNING_STR="Adding new UEFI Boot entry."
 UEFICREATE_BOOT_ENTRY_PREFIX="(Rescapp added) "
 
-if rtux_Run_Show_Progress "${UEFICREATE_RUNNING_STR}" rtux_UEFI_Add_Boot_Entry "sda2" "EFI/Boot/bootx64.efi";
+FDISK_EFI_SYSTEM_DETECTOR="EFI System"
+
+if rtux_Run_Show_Progress "${UEFICREATE_RUNNING_STR}" rtux_UEFI_Add_Boot_Entry "$(rtux_Choose_EFI_System_partition)" "EFI/Boot/bootx64.efi";
 # if rtux_Run_Show_Progress "${UEFICREATE_RUNNING_STR}" rtux_UEFI_Add_Boot_Entry $(rtux_Choose_UEFI_Add_Boot_Entry);
 then
   rtux_Message_Success ${UEFICREATE_OK_STR}
