@@ -23,6 +23,15 @@ function rtux_Get_Etc_Issue_Content_payload() {
 
   local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
   local TMP_DEV_PARTITION=/dev/${n_partition}
+
+    local n_hard_disk="$(echo ${n_partition} | sed 's/[0-9]*$//g' 2> /dev/null)"
+    if fdisk -lu /dev/${n_hard_disk} \
+         | grep '^/dev/'"${n_partition}"'\+[[:space:]]\+' \
+         | grep "${FDISK_EFI_SYSTEM_DETECTOR}"'$' \
+         > /dev/null 2>&1 ; then
+      echo "${EFI_SYSTEM_STR}"
+    else
+
   mkdir --parents ${TMP_MNT_PARTITION}
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
     if [[ -e ${TMP_MNT_PARTITION}${ETC_ISSUE_PATH} ]] ; then
@@ -37,6 +46,8 @@ function rtux_Get_Etc_Issue_Content_payload() {
     echo "${CANT_MOUNT_STR}" |\
 	sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /_/g' -e 's/\ \ /_/g' -e 's/\n/_/g' -e 's/--/_/g'
   fi
+
+   fi
 } # function rtux_Get_Etc_Issue_Content_payload()
 
 function rtux_Get_Etc_Issue_Content() {
@@ -1110,6 +1121,7 @@ SUCCESS_STR="Success!"
 INFO_STR="Information"
 FAILURE_STR="Failure!"
 NOT_DETECTED_STR="Windows / Data / Other"
+EFI_SYSTEM_STR="EFI System"
 CANT_MOUNT_STR="Cannot mount"
 RUNNING_STR="Running process... Please wait till finish message appears."
 
