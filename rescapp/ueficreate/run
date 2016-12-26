@@ -99,8 +99,6 @@ UEFICREATE_KO_STR="New UEFI Boot entry addition went wrong! :("
 UEFICREATE_RUNNING_STR="Adding new UEFI Boot entry."
 UEFICREATE_BOOT_ENTRY_PREFIX="(Rescapp added) "
 
-FDISK_EFI_SYSTEM_DETECTOR="EFI System"
-
 if rtux_Run_Show_Progress "${UEFICREATE_RUNNING_STR}" rtux_UEFI_Add_Boot_Entry "$(rtux_Choose_EFI_System_partition)" "EFI/Boot/bootx64.efi";
 # if rtux_Run_Show_Progress "${UEFICREATE_RUNNING_STR}" rtux_UEFI_Add_Boot_Entry $(rtux_Choose_UEFI_Add_Boot_Entry);
 then

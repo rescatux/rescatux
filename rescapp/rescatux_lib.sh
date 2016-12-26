@@ -1125,6 +1125,7 @@ LINUX_OS_DETECTOR="/etc/issue"
 GRUB_INSTALL_BINARY=grub-install
 ETC_ISSUE_PATH="/etc/issue"
 UEFI_DETECTION_DIR="/sys/firmware/efi"
+FDISK_EFI_SYSTEM_DETECTOR="EFI System"
 
 TMP_FOLDER="/tmp"
 
