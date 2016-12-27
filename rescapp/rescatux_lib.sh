@@ -1086,6 +1086,115 @@ function rtux_UEFI_Check_Is_EFI_System_Partition () {
 
 } # function rtux_UEFI_Boot_Order_Update ()
 
+# Let the user choose his main EFI System partition
+# It outputs choosen partition
+function rtux_Choose_EFI_System_partition () {
+  rtux_Abstract_Choose_Partition $(rtux_Get_EFI_System_Partitions)
+} # function rtux_Choose_EFI_System_partition ()
+
+function rtux_Get_EFI_System_Partitions() {
+  GET_EFI_SYSTEM_PARTITIONS_RUNNING_STR="Getting EFI System partitions."
+  rtux_Run_Show_Progress "${GET_EFI_SYSTEM_PARTITIONS_RUNNING_STR}" rtux_Get_EFI_System_Partitions_payload "$@"
+} # function rtux_Get_EFI_System_Partitions ()
+
+# Return partitions which are EFI System partitions
+function rtux_Get_EFI_System_Partitions_payload() {
+  local TARGET_PARTITIONS=$(rtux_Get_System_Partitions)
+  local EFI_SYSTEM_PARTITIONS=""
+
+  for n_partition in ${TARGET_PARTITIONS}; do
+    if rtux_UEFI_Check_Is_EFI_System_Partition ${n_partition} ; then
+      EFI_SYSTEM_PARTITIONS="${EFI_SYSTEM_PARTITIONS} ${n_partition}"
+    fi
+  done
+
+  echo "${EFI_SYSTEM_PARTITIONS}"
+} # function rtux_Get_EFI_System_Partitions_payload ()
+
+# $1 : Uefi EFI Partition # sda2
+# $2 : EFI relative Complete File path # EFI/Boot/bootx64.efi
+# Update UEFI Boot Order
+function rtux_UEFI_Add_Boot_Entry () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  local EXIT_VALUE=1 # Error by default
+
+  local UEFI_EFI_PARTITION="$1"
+  local UEFI_EFI_RELATIVE_FILEPATH="$2"
+
+  # TODO: Check if we are in UEFI system and warn the user
+
+  # Convert EFI PARTITION into EFI disk
+  local TMP_UEFI_EFI_DISK="$(echo ${UEFI_EFI_PARTITION} | sed 's/[0-9]*$//g')" # sda21 -> sda
+  local UEFI_EFI_DISK="/dev/${TMP_UEFI_EFI_DISK}"
+
+  # Convert EFI PARTITION into partition number
+  local UEFI_EFI_PARTITION_NUMBER="$(echo ${UEFI_EFI_PARTITION} | grep -o '[0-9]*$')"
+  # Convert File path into EFI ready file path
+  local UEFI_EFI_READY_FILEPATH="\\$(echo ${UEFI_EFI_RELATIVE_FILEPATH} \
+                                       | sed 's~/~\\~g' \
+                                       | tr '[:upper:]' '[:lower:]')" # EFI/Boot/bootx64.efi -> \efi\boot\bootx64.efi
+  # Convert File path into EFI label
+  local UEFI_EFI_LABEL="${UEFICREATE_BOOT_ENTRY_PREFIX}${UEFI_EFI_READY_FILEPATH}"
+
+  ${EFIBOOTMGR_BINARY} \
+    -c \
+    -d "${UEFI_EFI_DISK}" \
+    -p ${UEFI_EFI_PARTITION_NUMBER} \
+    -L "${UEFI_EFI_LABEL}" \
+    -l "${UEFI_EFI_READY_FILEPATH}"
+
+  # efibootmgr -c -d /dev/sda -p 2 -L "Gentoo" -l "\efi\boot\bootx64.efi"
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Add_Boot_Entry ()
+
+# $1 : Uefi EFI Partition # sda2
+function rtux_UEFI_Choose_EFI_File () {
+
+  UEFI_EFI_FILE_CHOOSE_STR="Please choose a EFI file"
+  UEFI_FILE_STR="EFI file"
+
+  local UEFI_EFI_PARTITION="$1"
+  local n_partition=${UEFI_EFI_PARTITION}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
+
+    m=1
+
+    while read -r ffile ; do
+      BFILE="$ffile"
+      if [[ m -eq 1 ]] ; then
+        UEFI_EFI_LIST_VALUES="TRUE ${BFILE}"
+      else
+        UEFI_EFI_LIST_VALUES="${UEFI_EFI_LIST_VALUES} FALSE ${BFILE}"
+      fi
+      let m=m+1
+    done < <( find ${TMP_MNT_PARTITION} -iname '*\.efi' | sed 's~^'"${TMP_MNT_PARTITION}"'/~~g' )
+
+    SELECTED_FILE=$(zenity ${ZENITY_COMMON_OPTIONS} \
+      --list  \
+      --text "${LOG_CHOOSE_STR}" \
+      --radiolist  \
+      --column "${SELECT_STR}" \
+      --column "${UEFI_FILE_STR}" \
+      ${UEFI_EFI_LIST_VALUES});
+
+    umount ${TMP_MNT_PARTITION} > /dev/null 2>&1
+    echo "${SELECTED_FILE}"
+
+  fi
+
+
+} # function rtux_UEFI_Choose_EFI_File ()
+
 
 # Rescatux lib main variables
 
@@ -1139,6 +1248,7 @@ RUNNING_STR="Running process... Please wait till finish message appears."
 UEFIORDER_WTITLE="Order UEFI boot entries"
 ORDER_UEFIORDER_STR="Order UEFI boot entries in the other you want. Press OK to continue."
 RIGHT_UEFIORDER_STR="Which is the right position for this UEFI boot entry?"
+UEFICREATE_BOOT_ENTRY_PREFIX="(Rescapp added) "
 
 
 PROC_PARTITIONS_FILE=/proc/partitions
