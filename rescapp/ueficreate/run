@@ -87,6 +87,49 @@ function rtux_UEFI_Add_Boot_Entry () {
 
 } # function rtux_UEFI_Add_Boot_Entry ()
 
+# $1 : Uefi EFI Partition # sda2
+function rtux_UEFI_Choose_EFI_File () {
+
+  UEFI_EFI_FILE_CHOOSE_STR="Please choose a EFI file"
+  UEFI_FILE_STR="EFI file"
+
+  local UEFI_EFI_PARTITION="$1"
+  local n_partition=${UEFI_EFI_PARTITION}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ; then
+
+    m=1
+
+    while read -r ffile ; do
+      BFILE="$ffile"
+      if [[ m -eq 1 ]] ; then
+        UEFI_EFI_LIST_VALUES="TRUE ${BFILE}"
+      else
+        UEFI_EFI_LIST_VALUES="${UEFI_EFI_LIST_VALUES} FALSE ${BFILE}"
+      fi
+      let m=m+1
+    done < <( find ${TMP_MNT_PARTITION} -iname '*\.efi' | sed 's~^'"${TMP_MNT_PARTITION}"'/~~g' )
+
+    SELECTED_FILE=$(zenity ${ZENITY_COMMON_OPTIONS} \
+      --list  \
+      --text "${LOG_CHOOSE_STR}" \
+      --radiolist  \
+      --column "${SELECT_STR}" \
+      --column "${UEFI_FILE_STR}" \
+      ${UEFI_EFI_LIST_VALUES});
+
+    umount ${TMP_MNT_PARTITION} > /dev/null 2>&1
+    echo "${SELECTED_FILE}"
+
+  fi
+
+
+} # function rtux_UEFI_Choose_EFI_File ()
+
 
 # MAIN PROGRAM
 
@@ -95,7 +138,8 @@ UEFICREATE_KO_STR="New UEFI Boot entry addition went wrong! :("
 UEFICREATE_RUNNING_STR="Adding new UEFI Boot entry."
 UEFICREATE_BOOT_ENTRY_PREFIX="(Rescapp added) "
 
-if rtux_Run_Show_Progress "${UEFICREATE_RUNNING_STR}" rtux_UEFI_Add_Boot_Entry "$(rtux_Choose_EFI_System_partition)" "EFI/Boot/bootx64.efi";
+SELECTED_EFI_PARTITION="$(rtux_Choose_EFI_System_partition)"
+if rtux_Run_Show_Progress "${UEFICREATE_RUNNING_STR}" rtux_UEFI_Add_Boot_Entry "${SELECTED_EFI_PARTITION}" "$(rtux_UEFI_Choose_EFI_File ${SELECTED_EFI_PARTITION})";
 # if rtux_Run_Show_Progress "${UEFICREATE_RUNNING_STR}" rtux_UEFI_Add_Boot_Entry $(rtux_Choose_UEFI_Add_Boot_Entry);
 then
   rtux_Message_Success ${UEFICREATE_OK_STR}
