@@ -1084,7 +1084,7 @@ function rtux_UEFI_Check_Is_EFI_System_Partition () {
 
   return ${EXIT_VALUE}
 
-} # function rtux_UEFI_Boot_Order_Update ()
+} # function rtux_UEFI_Check_Is_EFI_System_Partition ()
 
 # Let the user choose his main EFI System partition
 # It outputs choosen partition
