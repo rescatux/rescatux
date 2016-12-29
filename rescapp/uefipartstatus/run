@@ -1,0 +1,129 @@
+#!/bin/bash
+# Rescapp Fsck run script
+# Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
+#
+# Rescapp is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Rescapp is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition is has an esp flag
+# TODO: Rewrite with Python bindings to parted library so that it works
+function rtux_UEFI_Part_Check_esp_Flag () {
+
+  local EXIT_VALUE=1 # Error by default
+
+  local efi_partition_to_check="$1"
+  local efi_partition_hard_disk="$(echo ${efi_partition_to_check} | sed 's/[0-9]*$//g' 2> /dev/null)"
+  fdisk -lu /dev/${efi_partition_hard_disk} \
+       | grep '^/dev/'"${efi_partition_to_check}"'\+[[:space:]]\+' \
+       | grep "${FDISK_EFI_SYSTEM_DETECTOR}"'$' \
+       > /dev/null 2>&1
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Part_Check_esp_Flag ()
+
+
+# fsck Main program
+
+UEFIPARTCHECK_OK_STR="EFI partition status was OK (EFI System detected, esp flag found, boot flag found, this was vfat and it can be mounted)! :)"
+UEFIPARTCHECK_KO_STR="This might not be a valid EFI partition. At least one test failed. :("
+UEFIPARTCHECK_RUNNING_STR="Performing EFI partition status checks"
+
+UEFIPARTCHECK_EFI_SYSTEM_DETECTED_OK_STR="EFI partition has been detected as EFI partition by fdisk :)"
+UEFIPARTCHECK_EFI_SYSTEM_DETECTED_KO_STR="EFI partition has NOT been detected as EFI partition by fdisk. :("
+UEFIPARTCHECK_EFI_SYSTEM_DETECTED_RUNNING_STR="Performing EFI partition detection by fdisk"
+
+UEFIPARTCHECK_ESP_FLAG_OK_STR="EFI partition has an esp flag :)"
+UEFIPARTCHECK_ESP_FLAG_KO_STR="EFI partition does not have an esp flag. :("
+UEFIPARTCHECK_ESP_FLAG_RUNNING_STR="Performing EFI partition esp flag check"
+
+
+
+
+SELECTED_PARTITION=$(rtux_Choose_Partition)
+
+
+
+
+
+
+EXIT_SUM=0
+
+
+if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_EFI_SYSTEM_DETECTED_RUNNING_STR}" rtux_UEFI_Check_Is_EFI_System_Partition ${SELECTED_PARTITION} ) ; then
+  rtux_Message_Success ${UEFIPARTCHECK_EFI_SYSTEM_DETECTED_OK_STR}
+else
+  rtux_Message_Failure ${UEFIPARTCHECK_EFI_SYSTEM_DETECTED_KO_STR}
+  false
+fi
+
+UEFIPARTCHECK_EFI_SYSTEM_DETECTED_EXIT_VALUE=$?
+EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_EFI_SYSTEM_DETECTED_EXIT_VALUE))
+
+
+#if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_ESP_FLAG_RUNNING_STR}" rtux_UEFI_Part_Check_esp_Flag ${SELECTED_PARTITION} ) ; then
+#  rtux_Message_Success ${UEFIPARTCHECK_ESP_FLAG_OK_STR}
+#else
+#  rtux_Message_Failure ${UEFIPARTCHECK_ESP_FLAG_KO_STR}
+#  false
+#fi
+#
+#UEFIPARTCHECK_ESP_FLAG_EXIT_VALUE=$?
+#EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_ESP_FLAG_EXIT_VALUE))
+
+#if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_Grub_Update_Config ${SELECTED_PARTITION} ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ; then
+#  rtux_Message_Success ${UPDATE_GRUB_OK_STR}
+#else
+#  rtux_Message_Failure ${UPDATE_GRUB_KO_STR}
+#  false
+#fi
+#
+#GRUBUPDATE_EXIT_VALUE=$?
+#EXIT_SUM=$((EXIT_SUM+GRUBUPDATE_EXIT_VALUE))
+
+#if rtux_Run_Show_Progress "${GRUB_INSTALLED_RUNNING_STR}" rtux_Grub_Install ${SELECTED_HARD_DISK} ${SELECTED_PARTITION} ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ; then
+#  rtux_Message_Success ${GRUB_INSTALLED_OK_STR}
+#else
+#  rtux_Message_Failure ${GRUB_NOT_INSTALLED_STR}
+#  false
+#fi
+#
+#GRUBINSTALL_EXIT_VALUE=$?
+#EXIT_SUM=$((EXIT_SUM+GRUBINSTALL_EXIT_VALUE))
+
+#
+#if rtux_Run_Show_Progress "${UEFIORDER_RUNNING_STR}" rtux_UEFI_Boot_Order_Update ${UEFI_DESIRED_ORDER};
+#then
+#  rtux_Message_Success ${UEFIORDER_OK_STR}
+#else
+#  rtux_Message_Failure ${UEFIORDER_KO_STR}
+#  false
+#fi
+#
+#UEFIORDER_EXIT_VALUE=$?
+#EXIT_SUM=$((EXIT_SUM+UEFIORDER_EXIT_VALUE))
+#
+
+
+if [ ${EXIT_SUM} -eq 0 ] ; then
+  rtux_Message_Success ${UEFIPARTCHECK_OK_STR}
+else 
+  rtux_Message_Failure ${UEFIPARTCHECK_KO_STR}
+fi
