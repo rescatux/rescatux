@@ -302,20 +302,20 @@ function rtux_Abstract_Choose_Partition () {
   local SBIN_GRUB_PARTITIONS="$@"
   for n_partition in ${SBIN_GRUB_PARTITIONS}; do
     local issue_value=`rtux_Get_Etc_Issue_Content ${n_partition}`
-    issue_value=$(echo $issue_value | sed 's/\ /\-/')
-    issue_value=$(echo $issue_value | sed 's/ /\-/')
+    issue_value=$(echo $issue_value | sed 's/\ /\-/g')
+    issue_value=$(echo $issue_value | sed 's/ /\-/g')
 
     local partition_filesystem="$(rtux_Get_Partition_Filesystem ${n_partition})"
-    partition_filesystem=$(echo $partition_filesystem | sed 's/\ /\-/')
-    partition_filesystem=$(echo $partition_filesystem | sed 's/ /\-/')
+    partition_filesystem=$(echo $partition_filesystem | sed 's/\ /\-/g')
+    partition_filesystem=$(echo $partition_filesystem | sed 's/ /\-/g')
 
     local partition_flags="$(rtux_Get_Partition_Flags ${n_partition})"
-    partition_flags=$(echo $partition_flags | sed 's/\ /\-/')
-    partition_flags=$(echo $partition_flags | sed 's/ /\-/')
+    partition_flags=$(echo $partition_flags | sed 's/\ /\-/g')
+    partition_flags=$(echo $partition_flags | sed 's/ /\-/g')
 
     local partition_osprober_longname="$(rtux_Get_Partition_Osprober_Longname ${n_partition})"
-    partition_osprober_longname=$(echo $partition_osprober_longname | sed 's/\ /\-/')
-    partition_osprober_longname=$(echo $partition_osprober_longname | sed 's/ /\-/')
+    partition_osprober_longname=$(echo $partition_osprober_longname | sed 's/\ /\-/g')
+    partition_osprober_longname=$(echo $partition_osprober_longname | sed 's/ /\-/g')
     
     if [[ n -eq 0 ]] ; then
       LIST_VALUES="TRUE ${n_partition} ${issue_value} ${partition_filesystem} ${partition_flags} ${partition_osprober_longname}"
