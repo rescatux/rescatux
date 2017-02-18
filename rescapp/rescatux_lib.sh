@@ -84,6 +84,26 @@ function rtux_Get_Partition_Flags_payload() {
 
 } # function rtux_Get_Partition_Flags_payload()
 
+# Given a partition it returns its os-prober long name
+# Format is modified so that zenity does not complain
+function rtux_Get_Partition_Osprober_Longname_payload() {
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  local partition_osprober_longname
+  os-prober | grep -E '^'${TMP_DEV_PARTITION}'[@:]' | awk -F ':' '{print $2}' > /dev/null 2>&1
+  SHOW_PARTITION_OSPROBER_LONGNAME_EXIT_VALUE=${PIPESTATUS[1]} # TODO: Improve error handling when os-prober fails
+  if [ ${SHOW_PARTITION_OSPROBER_LONGNAME_EXIT_VALUE} -eq 0 ] ; then
+    partition_osprober_longname="$(os-prober | grep -E '^'${TMP_DEV_PARTITION}'[@:]' | awk -F ':' '{print $2}')"
+    echo "${partition_osprober_longname}" |\
+        sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /_/g' -e 's/\ \ /_/g' -e 's/\n/_/g' -e 's/--/_/g'
+  else
+    echo "${NO_OSPROBER_LONGNAME_STR}"
+  fi
+
+} # function rtux_Get_Partition_Osprober_Longname_payload()
+
 function rtux_Get_Etc_Issue_Content() {
   GET_ETC_ISSUE_CONTENT_RUNNING_STR="Parsing /etc/issue file."
   rtux_Run_Show_Progress "${GET_ETC_ISSUE_CONTENT_RUNNING_STR}" rtux_Get_Etc_Issue_Content_payload "$@"
@@ -98,6 +118,11 @@ function rtux_Get_Partition_Flags() {
   GET_PARTITION_FLAGS_RUNNING_STR="Getting partition flags."
   rtux_Run_Show_Progress "${GET_PARTITION_FLAGS_RUNNING_STR}" rtux_Get_Partition_Flags_payload "$@"
 } # function rtux_Get_Partition_Flags()
+
+function rtux_Get_Partition_Osprober_Longname() {
+  GET_PARTITION_OSPROBER_LONGNAME_RUNNING_STR="Getting os-prober long name."
+  rtux_Run_Show_Progress "${GET_PARTITION_OSPROBER_LONGNAME_RUNNING_STR}" rtux_Get_Partition_Osprober_Longname_payload "$@"
+} # function rtux_Get_Partition_Osprober_Longname()
 
 # Return partitions detected on the system
 function rtux_Get_System_Partitions_payload () {
@@ -287,11 +312,15 @@ function rtux_Abstract_Choose_Partition () {
     local partition_flags="$(rtux_Get_Partition_Flags ${n_partition})"
     partition_flags=$(echo $partition_flags | sed 's/\ /\-/')
     partition_flags=$(echo $partition_flags | sed 's/ /\-/')
+
+    local partition_osprober_longname="$(rtux_Get_Partition_Osprober_Longname ${n_partition})"
+    partition_osprober_longname=$(echo $partition_osprober_longname | sed 's/\ /\-/')
+    partition_osprober_longname=$(echo $partition_osprober_longname | sed 's/ /\-/')
     
     if [[ n -eq 0 ]] ; then
-      LIST_VALUES="TRUE ${n_partition} ${issue_value} ${partition_filesystem} ${partition_flags}"
+      LIST_VALUES="TRUE ${n_partition} ${issue_value} ${partition_filesystem} ${partition_flags} ${partition_osprober_longname}"
     else
-      LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value} ${partition_filesystem} ${partition_flags}"
+      LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value} ${partition_filesystem} ${partition_flags} ${partition_osprober_longname}"
     fi
   let n=n+1
   done
@@ -305,6 +334,7 @@ function rtux_Abstract_Choose_Partition () {
 	--column "${DESCRIPTION_STR}" \
 	--column "${FILESYSTEM_STR}" \
 	--column "${FLAGS_STR}" \
+	--column "${OSPROBER_LONGNAME_STR}" \
 	${LIST_VALUES} \
 	)";
 } # function rtux_Abstract_Choose_Partition ()
@@ -1295,6 +1325,8 @@ FILESYSTEM_STR="File system"
 NO_FILESYSTEM_STR="No file system"
 FLAGS_STR="Flags"
 NO_FLAGS_STR="No flags"
+OSPROBER_LONGNAME_STR="Guessed long name"
+NO_OSPROBER_LONGNAME_STR="No long name guessed"
 USER_STR="User"
 POSITION_STR="Position"
 HARDDISK_STR="Hard Disk"
