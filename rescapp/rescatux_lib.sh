@@ -44,10 +44,35 @@ function rtux_Get_Etc_Issue_Content_payload() {
   fi
 } # function rtux_Get_Etc_Issue_Content_payload()
 
+# Given a partition it returns its filesystem type
+# Format is modified so that zenity does not complain
+function rtux_Get_Partition_Filesystem_payload() {
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  local partition_filesystem
+
+  partition_filesystem="$(${RESCATUX_PATH}show_partition_filesystem.py ${TMP_DEV_PARTITION})"
+  SHOW_PARTITION_FILESYSTEM_EXIT_VALUE=$?
+  if [ $SHOW_PARTITION_FILESYSTEM_EXIT_VALUE -eq 0 ] ; then
+    echo "${partition_filesystem}" |\
+        sed -e 's/\\. //g' -e 's/\\.//g' -e 's/^[ \t]*//' -e 's/\ /_/g' -e 's/\ \ /_/g' -e 's/\n/_/g' -e 's/--/_/g'
+  else
+    echo "${NO_FILESYSTEM_STR}"
+  fi
+
+} # function rtux_Get_Partition_Filesystem_payload()
+
 function rtux_Get_Etc_Issue_Content() {
   GET_ETC_ISSUE_CONTENT_RUNNING_STR="Parsing /etc/issue file."
   rtux_Run_Show_Progress "${GET_ETC_ISSUE_CONTENT_RUNNING_STR}" rtux_Get_Etc_Issue_Content_payload "$@"
 } # function rtux_Get_Etc_Issue_Content()
+
+function rtux_Get_Partition_Filesystem() {
+  GET_PARTITION_FILESYSTEM_RUNNING_STR="Getting partition filesystem."
+  rtux_Run_Show_Progress "${GET_PARTITION_FILESYSTEM_RUNNING_STR}" rtux_Get_Partition_Filesystem_payload "$@"
+} # function rtux_Get_Partition_Filesystem()
 
 # Return partitions detected on the system
 function rtux_Get_System_Partitions_payload () {
@@ -229,11 +254,15 @@ function rtux_Abstract_Choose_Partition () {
     local issue_value=`rtux_Get_Etc_Issue_Content ${n_partition}`
     issue_value=$(echo $issue_value | sed 's/\ /\-/')
     issue_value=$(echo $issue_value | sed 's/ /\-/')
+
+    local partition_filesystem="$(rtux_Get_Partition_Filesystem ${n_partition})"
+    partition_filesystem=$(echo $partition_filesystem | sed 's/\ /\-/')
+    partition_filesystem=$(echo $partition_filesystem | sed 's/ /\-/')
     
     if [[ n -eq 0 ]] ; then
-      LIST_VALUES="TRUE ${n_partition} ${issue_value}"
+      LIST_VALUES="TRUE ${n_partition} ${issue_value} ${partition_filesystem}"
     else
-      LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value}"
+      LIST_VALUES="${LIST_VALUES} FALSE ${n_partition} ${issue_value} ${partition_filesystem}"
     fi
   let n=n+1
   done
@@ -244,7 +273,8 @@ function rtux_Abstract_Choose_Partition () {
 	--radiolist  \
 	--column "${SELECT_STR}" \
 	--column "${PARTITION_STR}" \
-	--column "${DESCRIPTION_STR}" ${LIST_VALUES})";
+	--column "${DESCRIPTION_STR}" \
+	--column "${FILESYSTEM_STR}" ${LIST_VALUES})";
 } # function rtux_Abstract_Choose_Partition ()
 
 # Let the user choose his main GNU/Linux partition
@@ -1229,6 +1259,8 @@ WHICH_USER_STR="Which user?"
 SELECT_STR="Select"
 ENTER_PASS_STR="Enter password"
 PARTITION_STR="Partition"
+FILESYSTEM_STR="File system"
+NO_FILESYSTEM_STR="No file system"
 USER_STR="User"
 POSITION_STR="Position"
 HARDDISK_STR="Hard Disk"
