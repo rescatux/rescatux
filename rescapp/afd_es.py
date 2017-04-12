@@ -7,7 +7,7 @@ class CloseOnClickQWidget(QtGui.QWidget):
 		self.close()
 
 
-afd_gobierno_espana_image_path = images_path + "/" + "gobierno_espana_custom.png"
+afd_gobierno_espana_image_path = images_path + "/" + "policia-iberoamericana-logo.png"
 afd_cnp_main_badge_image_path = images_path + "/" + "Badge_of_the_National_Police_Corps_of_Spain.svg"
 afd_cnp_logo_image_path = images_path + "/" + "Logo_CNP.svg"
 afd_app = QtGui.QApplication(sys.argv)
@@ -30,7 +30,7 @@ afd_subtitle_font = QtGui.QFont()
 afd_subtitle_font.setPointSize(14)
 afd_subtitle.setFont(afd_subtitle_font)
 
-afd_brigada = QtGui.QLabel(u"BRIGADA DE INVESTIGACIÓN\nTECNOLÓGICA")
+afd_brigada = QtGui.QLabel(u"BRIGADA DE INVESTIGACIÓN\nTECNOLÓGICA IBEROAMERICANA")
 afd_brigada_font = QtGui.QFont()
 afd_brigada_font.setPointSize(20)
 afd_brigada.setFont(afd_brigada_font)
@@ -72,7 +72,7 @@ afd_message.setPalette(afd_message_palette)
 
 next_year = str(datetime.datetime.now().year + 1)
 
-afd_fine = QtGui.QLabel(u"Según la disposición adicional de la Ley 21 del año "+next_year+u" <br>usted puede conmutar la pena de carcel por <b>100 euros</b>.")
+afd_fine = QtGui.QLabel(u"Según la disposición adicional de la Ley 21 del año "+next_year+u" <br>usted puede conmutar la pena de carcel por <b>100 euros (150 sucres)</b>.")
 afd_fine_font = QtGui.QFont()
 afd_fine_font.setPointSize(14)
 afd_fine.setFont(afd_fine_font)
@@ -100,7 +100,7 @@ afd_pay.setPalette(afd_pay_palette)
 
 afd_gobierno_espana = QtGui.QLabel()
 afd_gobierno_espana_pixmap = QtGui.QPixmap(afd_gobierno_espana_image_path)
-afd_gobierno_espana.resize(240,180)
+afd_gobierno_espana.resize(384,288)
 afd_gobierno_espana_scaled_pixmap = afd_gobierno_espana_pixmap.scaled(afd_gobierno_espana.size(),QtCore.Qt.KeepAspectRatio)
 afd_gobierno_espana.setPixmap(afd_gobierno_espana_scaled_pixmap)
 
@@ -125,10 +125,8 @@ afd_cnp_logo.setPixmap(afd_cnp_logo_scaled_pixmap)
 #afd_fbi.setPixmap(afd_pixmap)
 
 
-afd_top_grid.addWidget(afd_gobierno_espana,0,0,1,1)
-afd_top_grid.addWidget(afd_cnp_main_badge,0,2,1,1)
-afd_top_grid.addWidget(afd_brigada,0,3,1,1)
-afd_top_grid.addWidget(afd_cnp_logo,0,4,1,1)
+afd_top_grid.addWidget(afd_gobierno_espana,0,0,3,3)
+afd_top_grid.addWidget(afd_brigada,0,3,2,2)
 
 afd_grid.addWidget(afd_title,0,2,1,0)
 afd_grid.addWidget(afd_subtitle,1,0,1,0)
