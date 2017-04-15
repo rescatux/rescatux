@@ -1287,6 +1287,23 @@ function rtux_UEFI_Choose_EFI_File () {
 
 } # function rtux_UEFI_Choose_EFI_File ()
 
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition is has an esp flag
+function rtux_UEFI_Part_Check_esp_Flag () {
+
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+
+  local EXIT_VALUE=1 # Error by default
+
+  ${RESCATUX_PATH}check_partition_flag.py ${TMP_DEV_PARTITION} 'esp'
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Part_Check_esp_Flag ()
 
 # Rescatux lib main variables
 
