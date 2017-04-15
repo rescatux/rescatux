@@ -22,17 +22,16 @@ set -v
 
 # $1 : Partition to check (E.g. sda2)
 # Check if a partition is has an esp flag
-# TODO: Rewrite with Python bindings to parted library so that it works
 function rtux_UEFI_Part_Check_esp_Flag () {
+
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
 
   local EXIT_VALUE=1 # Error by default
 
-  local efi_partition_to_check="$1"
-  local efi_partition_hard_disk="$(echo ${efi_partition_to_check} | sed 's/[0-9]*$//g' 2> /dev/null)"
-  fdisk -lu /dev/${efi_partition_hard_disk} \
-       | grep '^/dev/'"${efi_partition_to_check}"'\+[[:space:]]\+' \
-       | grep "${FDISK_EFI_SYSTEM_DETECTOR}"'$' \
-       > /dev/null 2>&1
+  ${RESCATUX_PATH}check_partition_flag.py ${TMP_DEV_PARTITION} 'esp'
   EXIT_VALUE=$?
 
   return ${EXIT_VALUE}
@@ -78,15 +77,15 @@ UEFIPARTCHECK_EFI_SYSTEM_DETECTED_EXIT_VALUE=$?
 EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_EFI_SYSTEM_DETECTED_EXIT_VALUE))
 
 
-#if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_ESP_FLAG_RUNNING_STR}" rtux_UEFI_Part_Check_esp_Flag ${SELECTED_PARTITION} ) ; then
-#  rtux_Message_Success ${UEFIPARTCHECK_ESP_FLAG_OK_STR}
-#else
-#  rtux_Message_Failure ${UEFIPARTCHECK_ESP_FLAG_KO_STR}
-#  false
-#fi
-#
-#UEFIPARTCHECK_ESP_FLAG_EXIT_VALUE=$?
-#EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_ESP_FLAG_EXIT_VALUE))
+if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_ESP_FLAG_RUNNING_STR}" rtux_UEFI_Part_Check_esp_Flag ${SELECTED_PARTITION} ) ; then
+  rtux_Message_Success ${UEFIPARTCHECK_ESP_FLAG_OK_STR}
+else
+  rtux_Message_Failure ${UEFIPARTCHECK_ESP_FLAG_KO_STR}
+  false
+fi
+
+UEFIPARTCHECK_ESP_FLAG_EXIT_VALUE=$?
+EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_ESP_FLAG_EXIT_VALUE))
 
 #if rtux_Run_Show_Progress "${UPDATE_GRUB_RUNNING_STR}" rtux_Grub_Update_Config ${SELECTED_PARTITION} ${DEVICE_MAP_RESCATUX_FILE_TMP_PATH} ; then
 #  rtux_Message_Success ${UPDATE_GRUB_OK_STR}
