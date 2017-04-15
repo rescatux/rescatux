@@ -1323,6 +1323,33 @@ function rtux_UEFI_Part_Check_boot_Flag () {
 
 } # function rtux_UEFI_Part_Check_boot_Flag ()
 
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition is has a valid uefi filesystem
+function rtux_UEFI_Part_Check_uefi_filesystem () {
+
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+
+  local EXIT_VALUE=1 # Error by default
+
+  if ${RESCATUX_PATH}check_partition_filesystem.py ${TMP_DEV_PARTITION} 'fat32' ; then
+    return 0
+  fi
+
+  if ${RESCATUX_PATH}check_partition_filesystem.py ${TMP_DEV_PARTITION} 'fat16' ; then
+    return 0
+  fi
+
+  if ${RESCATUX_PATH}check_partition_filesystem.py ${TMP_DEV_PARTITION} 'fat12' ; then
+    return 0
+  fi
+
+  return 1
+
+} # function rtux_UEFI_Part_Check_uefi_filesystem ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"

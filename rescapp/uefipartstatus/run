@@ -21,33 +21,6 @@ set -x
 set -v
 
 
-# $1 : Partition to check (E.g. sda2)
-# Check if a partition is has a valid uefi filesystem
-function rtux_UEFI_Part_Check_uefi_filesystem () {
-
-  local PARTITION_TO_MOUNT=$1
-  local n_partition=${PARTITION_TO_MOUNT}
-
-  local TMP_DEV_PARTITION=/dev/${n_partition}
-
-  local EXIT_VALUE=1 # Error by default
-
-  if ${RESCATUX_PATH}check_partition_filesystem.py ${TMP_DEV_PARTITION} 'fat32' ; then
-    return 0
-  fi
-
-  if ${RESCATUX_PATH}check_partition_filesystem.py ${TMP_DEV_PARTITION} 'fat16' ; then
-    return 0
-  fi
-
-  if ${RESCATUX_PATH}check_partition_filesystem.py ${TMP_DEV_PARTITION} 'fat12' ; then
-    return 0
-  fi
-
-  return 1
-
-} # function rtux_UEFI_Part_Check_uefi_filesystem ()
-
 # fsck Main program
 
 UEFIPARTCHECK_OK_STR="EFI partition status was OK (EFI System detected, esp flag found, boot flag found, this was a valid uefi filesystem and it can be mounted)! :)"
