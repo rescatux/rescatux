@@ -21,6 +21,24 @@ set -x
 set -v
 
 
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition disk type is gpt
+function rtux_UEFI_Part_Check_disk_type_is_gpt() {
+
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+
+  local EXIT_VALUE=1 # Error by default
+
+  ${RESCATUX_PATH}check_partition_disk_type.py ${TMP_DEV_PARTITION} 'gpt'
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Part_Check_disk_type_is_gpt ()
+
 # fsck Main program
 
 UEFIPARTCHECK_OK_STR="EFI partition status was OK (Every test passed successfully.) ! :)"
@@ -46,6 +64,10 @@ UEFIPARTCHECK_UEFI_FILESYSTEM_RUNNING_STR="Performing EFI partition valid uefi f
 UEFIPARTCHECK_PARTITION_MOUNT_OK_STR="EFI partition can be mount :)"
 UEFIPARTCHECK_PARTITION_MOUNT_KO_STR="EFI partition cannot be mount. :("
 UEFIPARTCHECK_PARTITION_MOUNT_RUNNING_STR="Performing EFI partition mount check"
+
+UEFIPARTCHECK_DISK_TYPE_IS_GPT_OK_STR="EFI partition disk type is gpt :)"
+UEFIPARTCHECK_DISK_TYPE_IS_GPT_KO_STR="EFI partition disk type is not gpt. :("
+UEFIPARTCHECK_DISK_TYPE_IS_GPT_RUNNING_STR="Performing EFI partition disk type check"
 
 SELECTED_PARTITION=$(rtux_Choose_Partition)
 
@@ -110,6 +132,17 @@ fi
 
 UEFIPARTCHECK_PARTITION_MOUNT_EXIT_VALUE=$?
 EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_PARTITION_MOUNT_EXIT_VALUE))
+
+
+if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_DISK_TYPE_IS_GPT_RUNNING_STR}" rtux_UEFI_Part_Check_disk_type_is_gpt ${SELECTED_PARTITION} ) ; then
+  rtux_Message_Success ${UEFIPARTCHECK_DISK_TYPE_IS_GPT_OK_STR}
+else
+  rtux_Message_Failure ${UEFIPARTCHECK_DISK_TYPE_IS_GPT_KO_STR}
+  false
+fi
+
+UEFIPARTCHECK_DISK_TYPE_IS_GPT_EXIT_VALUE=$?
+EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_DISK_TYPE_IS_GPT_EXIT_VALUE))
 
 
 if [ ${EXIT_SUM} -eq 0 ] ; then
