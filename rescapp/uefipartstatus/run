@@ -53,8 +53,6 @@ UEFIPARTCHECK_ESP_FLAG_OK_STR="EFI partition has an esp flag :)"
 UEFIPARTCHECK_ESP_FLAG_KO_STR="EFI partition does not have an esp flag. :("
 UEFIPARTCHECK_ESP_FLAG_RUNNING_STR="Performing EFI partition esp flag check"
 
-
-
 UEFIPARTCHECK_BOOT_FLAG_OK_STR="EFI partition has a boot flag :)"
 UEFIPARTCHECK_BOOT_FLAG_KO_STR="EFI partition does not have a boot flag. :("
 UEFIPARTCHECK_BOOT_FLAG_RUNNING_STR="Performing EFI partition boot flag check"
