@@ -1374,6 +1374,24 @@ function rtux_Partition_Can_Be_Mount() {
 
 } # function rtux_Partition_Can_Be_Mount ()
 
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition disk type is gpt
+function rtux_UEFI_Part_Check_disk_type_is_gpt() {
+
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+
+  local EXIT_VALUE=1 # Error by default
+
+  ${RESCATUX_PATH}check_partition_disk_type.py ${TMP_DEV_PARTITION} 'gpt'
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Part_Check_disk_type_is_gpt ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
