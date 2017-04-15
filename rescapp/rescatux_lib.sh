@@ -1350,6 +1350,30 @@ function rtux_UEFI_Part_Check_uefi_filesystem () {
 
 } # function rtux_UEFI_Part_Check_uefi_filesystem ()
 
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition can be mount
+# Return partitions which have Linux os detector on them
+function rtux_Partition_Can_Be_Mount() {
+
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+
+  mkdir --parents ${TMP_MNT_PARTITION}
+
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ;
+  then
+    umount ${TMP_MNT_PARTITION};
+    return 0;
+  else
+    return 1;
+  fi
+
+} # function rtux_Partition_Can_Be_Mount ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
