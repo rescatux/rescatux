@@ -21,9 +21,33 @@ set -x
 set -v
 
 
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition can be mount
+# Return partitions which have Linux os detector on them
+function rtux_Partition_Can_Be_Mount() {
+
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+
+  mkdir --parents ${TMP_MNT_PARTITION}
+
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null) ;
+  then
+    umount ${TMP_MNT_PARTITION};
+    return 0;
+  else
+    return 1;
+  fi
+
+} # function rtux_Partition_Can_Be_Mount ()
+
 # fsck Main program
 
-UEFIPARTCHECK_OK_STR="EFI partition status was OK (EFI System detected, esp flag found, boot flag found, this was a valid uefi filesystem and it can be mounted)! :)"
+UEFIPARTCHECK_OK_STR="EFI partition status was OK (Every test passed successfully.) ! :)"
 UEFIPARTCHECK_KO_STR="This might not be a valid EFI partition. At least one test failed. :("
 UEFIPARTCHECK_RUNNING_STR="Performing EFI partition status checks"
 
@@ -42,6 +66,10 @@ UEFIPARTCHECK_BOOT_FLAG_RUNNING_STR="Performing EFI partition boot flag check"
 UEFIPARTCHECK_UEFI_FILESYSTEM_OK_STR="EFI partition has a valid uefi filesystem :)"
 UEFIPARTCHECK_UEFI_FILESYSTEM_KO_STR="EFI partition does not have a valid uefi filesystem. :("
 UEFIPARTCHECK_UEFI_FILESYSTEM_RUNNING_STR="Performing EFI partition valid uefi filesystem check"
+
+UEFIPARTCHECK_PARTITION_MOUNT_OK_STR="EFI partition can be mount :)"
+UEFIPARTCHECK_PARTITION_MOUNT_KO_STR="EFI partition cannot be mount. :("
+UEFIPARTCHECK_PARTITION_MOUNT_RUNNING_STR="Performing EFI partition mount check"
 
 SELECTED_PARTITION=$(rtux_Choose_Partition)
 
@@ -95,6 +123,17 @@ fi
 
 UEFIPARTCHECK_UEFI_FILESYSTEM_EXIT_VALUE=$?
 EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_UEFI_FILESYSTEM_EXIT_VALUE))
+
+
+if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_PARTITION_MOUNT_RUNNING_STR}" rtux_Partition_Can_Be_Mount ${SELECTED_PARTITION} ) ; then
+  rtux_Message_Success ${UEFIPARTCHECK_PARTITION_MOUNT_OK_STR}
+else
+  rtux_Message_Failure ${UEFIPARTCHECK_PARTITION_MOUNT_KO_STR}
+  false
+fi
+
+UEFIPARTCHECK_PARTITION_MOUNT_EXIT_VALUE=$?
+EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_PARTITION_MOUNT_EXIT_VALUE))
 
 
 if [ ${EXIT_SUM} -eq 0 ] ; then
