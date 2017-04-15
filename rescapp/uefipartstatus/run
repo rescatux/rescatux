@@ -20,6 +20,24 @@ source ${RESCATUX_LIB_FILE}
 set -x
 set -v
 
+# $1 : Partition to check (E.g. sda2)
+# Check if a partition is has a boot flag
+function rtux_UEFI_Part_Check_boot_Flag () {
+
+  local PARTITION_TO_MOUNT=$1
+  local n_partition=${PARTITION_TO_MOUNT}
+
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+
+  local EXIT_VALUE=1 # Error by default
+
+  ${RESCATUX_PATH}check_partition_flag.py ${TMP_DEV_PARTITION} 'boot'
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Part_Check_boot_Flag ()
+
 
 # fsck Main program
 
@@ -37,6 +55,9 @@ UEFIPARTCHECK_ESP_FLAG_RUNNING_STR="Performing EFI partition esp flag check"
 
 
 
+UEFIPARTCHECK_BOOT_FLAG_OK_STR="EFI partition has a boot flag :)"
+UEFIPARTCHECK_BOOT_FLAG_KO_STR="EFI partition does not have a boot flag. :("
+UEFIPARTCHECK_BOOT_FLAG_RUNNING_STR="Performing EFI partition boot flag check"
 
 SELECTED_PARTITION=$(rtux_Choose_Partition)
 
@@ -68,6 +89,17 @@ fi
 
 UEFIPARTCHECK_ESP_FLAG_EXIT_VALUE=$?
 EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_ESP_FLAG_EXIT_VALUE))
+
+
+if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_BOOT_FLAG_RUNNING_STR}" rtux_UEFI_Part_Check_boot_Flag ${SELECTED_PARTITION} ) ; then
+  rtux_Message_Success ${UEFIPARTCHECK_BOOT_FLAG_OK_STR}
+else
+  rtux_Message_Failure ${UEFIPARTCHECK_BOOT_FLAG_KO_STR}
+  false
+fi
+
+UEFIPARTCHECK_BOOT_FLAG_EXIT_VALUE=$?
+EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_BOOT_FLAG_EXIT_VALUE))
 
 
 if [ ${EXIT_SUM} -eq 0 ] ; then
