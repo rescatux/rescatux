@@ -1225,8 +1225,7 @@ function rtux_UEFI_Add_Boot_Entry () {
   local UEFI_EFI_PARTITION_NUMBER="$(echo ${UEFI_EFI_PARTITION} | grep -o '[0-9]*$')"
   # Convert File path into EFI ready file path
   local UEFI_EFI_READY_FILEPATH="\\$(echo ${UEFI_EFI_RELATIVE_FILEPATH} \
-                                       | sed 's~/~\\~g' \
-                                       | tr '[:upper:]' '[:lower:]')" # EFI/Boot/bootx64.efi -> \efi\boot\bootx64.efi
+                                       | sed 's~/~\\~g' )" # EFI/Boot/bootx64.efi -> \EFI\Boot\bootx64.efi
   # Convert File path into EFI label
   local UEFI_EFI_LABEL="${UEFICREATE_BOOT_ENTRY_PREFIX}${UEFI_EFI_READY_FILEPATH}"
 
@@ -1464,8 +1463,7 @@ function rtux_UEFI_Fake_Microsoft_Boot_Entry () {
   local UEFI_EFI_PARTITION_NUMBER="$(echo ${UEFI_EFI_PARTITION} | grep -o '[0-9]*$')"
   # Convert File path into EFI ready file path
   local UEFI_EFI_READY_FILEPATH="\\$(echo ${DEFAULT_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH} \
-                                       | sed 's~/~\\~g' \
-                                       | tr '[:upper:]' '[:lower:]')" # EFI/Boot/bootx64.efi -> \efi\boot\bootx64.efi
+                                       | sed 's~/~\\~g' )" # EFI/Boot/bootx64.efi -> \EFI\Boot\bootx64.efi
   # Convert File path into EFI label
   local UEFI_EFI_LABEL="Windows Boot Manager"
 
