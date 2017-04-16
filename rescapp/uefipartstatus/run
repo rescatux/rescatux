@@ -47,8 +47,8 @@ UEFIPARTCHECK_PARTITION_MOUNT_OK_STR="EFI partition can be mount :)"
 UEFIPARTCHECK_PARTITION_MOUNT_KO_STR="EFI partition cannot be mount. :("
 UEFIPARTCHECK_PARTITION_MOUNT_RUNNING_STR="Performing EFI partition mount check"
 
-UEFIPARTCHECK_DISK_TYPE_IS_GPT_OK_STR="EFI partition disk type is gpt :)"
-UEFIPARTCHECK_DISK_TYPE_IS_GPT_KO_STR="EFI partition disk type is not gpt. :("
+UEFIPARTCHECK_DISK_TYPE_IS_GPT_OK_STR="EFI partition disk type is either gpt or msdos :)"
+UEFIPARTCHECK_DISK_TYPE_IS_GPT_KO_STR="EFI partition disk type is neither gpt nor msdos. :("
 UEFIPARTCHECK_DISK_TYPE_IS_GPT_RUNNING_STR="Performing EFI partition disk type check"
 
 SELECTED_PARTITION=$(rtux_Choose_Partition)
@@ -116,7 +116,7 @@ UEFIPARTCHECK_PARTITION_MOUNT_EXIT_VALUE=$?
 EXIT_SUM=$((EXIT_SUM+UEFIPARTCHECK_PARTITION_MOUNT_EXIT_VALUE))
 
 
-if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_DISK_TYPE_IS_GPT_RUNNING_STR}" rtux_UEFI_Part_Check_disk_type_is_gpt ${SELECTED_PARTITION} ) ; then
+if ( rtux_Run_Show_Progress "${UEFIPARTCHECK_DISK_TYPE_IS_GPT_RUNNING_STR}" rtux_UEFI_Part_Check_disk_type_is_gpt_or_msdos ${SELECTED_PARTITION} ) ; then
   rtux_Message_Success ${UEFIPARTCHECK_DISK_TYPE_IS_GPT_OK_STR}
 else
   rtux_Message_Failure ${UEFIPARTCHECK_DISK_TYPE_IS_GPT_KO_STR}

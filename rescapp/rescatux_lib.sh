@@ -1375,8 +1375,8 @@ function rtux_Partition_Can_Be_Mount() {
 } # function rtux_Partition_Can_Be_Mount ()
 
 # $1 : Partition to check (E.g. sda2)
-# Check if a partition disk type is gpt
-function rtux_UEFI_Part_Check_disk_type_is_gpt() {
+# Check if a partition disk type is gpt or msdos
+function rtux_UEFI_Part_Check_disk_type_is_gpt_or_msdos() {
 
   local PARTITION_TO_MOUNT=$1
   local n_partition=${PARTITION_TO_MOUNT}
@@ -1385,12 +1385,17 @@ function rtux_UEFI_Part_Check_disk_type_is_gpt() {
 
   local EXIT_VALUE=1 # Error by default
 
-  ${RESCATUX_PATH}check_partition_disk_type.py ${TMP_DEV_PARTITION} 'gpt'
-  EXIT_VALUE=$?
+  if ${RESCATUX_PATH}check_partition_disk_type.py ${TMP_DEV_PARTITION} 'gpt' ; then
+    return 0
+  fi
 
-  return ${EXIT_VALUE}
+  if ${RESCATUX_PATH}check_partition_disk_type.py ${TMP_DEV_PARTITION} 'msdos' ; then
+    return 0
+  fi
 
-} # function rtux_UEFI_Part_Check_disk_type_is_gpt ()
+  return 1
+
+} # function rtux_UEFI_Part_Check_disk_type_is_gpt_or_msdos ()
 
 # Rescatux lib main variables
 
