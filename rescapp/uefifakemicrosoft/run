@@ -1,0 +1,40 @@
+#!/bin/bash
+# Rescapp Fsck run script
+# Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
+#
+# Rescapp is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Rescapp is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+
+# fsck Main program
+
+UEFIFAKEMICROSOFT_OK_STR="Faking UEFI Microsoft Windows boot entry was OK ! :)"
+UEFIFAKEMICROSOFT_KO_STR="Faking UEFI Microsoft Windows boot entry was not ok :("
+UEFIFAKEMICROSOFT_RUNNING_STR="Faking UEFI Microsoft Windows boot entry"
+
+
+SELECTED_EFI_PARTITION="$(rtux_Choose_EFI_System_partition)"
+if rtux_Run_Show_Progress "${UEFIFAKEMICROSOFT_RUNNING_STR}" rtux_UEFI_Fake_Microsoft_Boot_Entry "${SELECTED_EFI_PARTITION}" "$(rtux_UEFI_Choose_EFI_File ${SELECTED_EFI_PARTITION})";
+then
+  rtux_Message_Success ${UEFIFAKEMICROSOFT_OK_STR}
+else
+  rtux_Message_Failure ${UEFIFAKEMICROSOFT_KO_STR}
+fi
+
+
+
