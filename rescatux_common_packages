@@ -247,6 +247,12 @@ GPT_PACKAGES="\
  gdisk \
 "
 
+UEFI_PACKAGES="\
+ efibootmgr \
+ libefivar1 \
+ libefiboot1 \
+"
+
 PYTHON_PARTED_PACKAGES="python-parted"
 
 COMMON_PACKAGES="${LXDE_PACKAGES} \
@@ -264,6 +270,7 @@ COMMON_PACKAGES="${LXDE_PACKAGES} \
  ${GPT_PACKAGES} \
  ${TAILSGREETER_PACKAGES} \
  ${PYTHON_PARTED_PACKAGES} \
+ ${UEFI_PACKAGES} \
  zenity \
  iceweasel \
  xchat \

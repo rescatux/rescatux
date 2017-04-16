@@ -65,6 +65,7 @@ SKEL_FOLDER="config/includes.chroot/etc/skel"
 CHROOT_SOURCES_FOLDER="config/archives"
 SID_CHROOT_CONFIG="config/archives/sid.list.chroot"
 JESSIE_CHROOT_CONFIG="config/archives/jessie.list.chroot"
+STRETCH_CHROOT_CONFIG="config/archives/stretch.list.chroot"
 BOOTREPAIR_CHROOT_CONFIG="config/archives/bootrepair.list.chroot"
 CHROOT_APT_CONFIG_FOLDER1="config/apt/"
 APT_PREFERENCES1="config/apt/preferences"
@@ -72,6 +73,8 @@ CHROOT_APT_CONFIG_FOLDER2="config/archives/"
 APT_PREFERENCES2="config/archives/sid.pref"
 CHROOT_APT_CONFIG_FOLDER3="config/archives/"
 APT_PREFERENCES3="config/archives/sid.pref.chroot"
+CHROOT_APT_CONFIG_FOLDER4="config/archives/"
+APT_PREFERENCES4="config/archives/stretch.pref.chroot"
 PACKAGES_CHROOT_FOLDER="config/packages.chroot"
 
 
@@ -136,6 +139,7 @@ sudo bash -c "echo \"${SELINUX_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LIST
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
 echo -e -n "deb ${JESSIE_MIRROR} jessie main" > $TEMP_FOLDER/${JESSIE_CHROOT_CONFIG}
+echo -e -n "deb ${JESSIE_MIRROR} stretch main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
 echo -e -n "deb ${BOOTREPAIR_MIRROR} trusty main" > $TEMP_FOLDER/${BOOTREPAIR_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
@@ -147,6 +151,25 @@ $TEMP_FOLDER/${APT_PREFERENCES2} \
 $TEMP_FOLDER/${APT_PREFERENCES3} <<END
 Package: *
 Pin: release n=sid
+Pin-Priority: 2
+END
+
+tee $TEMP_FOLDER/${APT_PREFERENCES4} \
+ <<END
+Package: libefiboot1
+Pin: release n=stretch
+Pin-Priority: 600
+
+Package: libefivar1
+Pin: release n=stretch
+Pin-Priority: 600
+
+Package: efibootmgr
+Pin: release n=stretch
+Pin-Priority: 600
+
+Package: *
+Pin: release n=stretch
 Pin-Priority: 1
 END
 
