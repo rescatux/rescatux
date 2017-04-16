@@ -21,6 +21,8 @@ set -x
 set -v
 
 
+# TODO:According to the wikipedia: The globally unique identifier (GUID) for the EFI system partition in the GUID Partition Table (GPT) scheme is C12A7328-F81F-11D2-BA4B-00A0C93EC93B, while its ID in the master boot record (MBR) partition-table scheme is 0xEF. I wanted to search for both of them but I don't know how to use pyparted to tell me partition types. So I am asumming that getting the esp flag is the same thing as having either the C12A7328-F81F-11D2-BA4B-00A0C93EC93B guid type on GPT partition table or the 0xEF type in msdos partition table.
+
 # fsck Main program
 
 UEFIPARTCHECK_OK_STR="EFI partition status was OK (Every test passed successfully.) ! :)"
