@@ -304,6 +304,9 @@ function rtux_Abstract_Choose_Partition () {
     local issue_value=`rtux_Get_Etc_Issue_Content ${n_partition}`
     issue_value=$(echo $issue_value | sed 's/\ /\-/g')
     issue_value=$(echo $issue_value | sed 's/ /\-/g')
+    if [ "x${issue_value}" == "x" ] ; then
+      issue_value="${UNKNOWN_GNULINUX_DISTRO}"
+    fi
 
     local partition_filesystem="$(rtux_Get_Partition_Filesystem ${n_partition})"
     partition_filesystem=$(echo $partition_filesystem | sed 's/\ /\-/g')
@@ -1599,4 +1602,5 @@ DEFAULT_UEFI_BOOT_ENTRY_RELATIVE_PATH="EFI/Boot/bootx64.efi"
 DEFAULT_NON_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH="EFI/Microsoft/Boot/bootmgr.efi"
 DEFAULT_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH="EFI/Microsoft/Boot/bootmgfw.efi"
 
+UNKNOWN_GNULINUX_DISTRO="Unknown GNU/Linux distro"
 
