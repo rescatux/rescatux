@@ -64,7 +64,7 @@ class MainWindow(QtGui.QWidget):
         
         self.refresh_harddisks()
         
-        self.harddisks_tablewidget.setCurrentCell(self.harddisks_tablewidget.rowCount()-1,self.harddisks_tablewidget.currentColumn())
+        self.harddisks_tablewidget.setCurrentCell((current-1),0)
     def move_down_button_clicked(self):
 	global harddisks
         current = self.harddisks_tablewidget.currentRow()
@@ -77,7 +77,7 @@ class MainWindow(QtGui.QWidget):
         
         self.refresh_harddisks()
         
-        self.harddisks_tablewidget.setCurrentCell(self.harddisks_tablewidget.rowCount()+1,self.harddisks_tablewidget.currentColumn())
+        self.harddisks_tablewidget.setCurrentCell((current+1),0)
 
     def selected_harddisk_changed(self):                       
 
