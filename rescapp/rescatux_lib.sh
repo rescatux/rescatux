@@ -1092,7 +1092,7 @@ function rtux_Choose_UEFI_Boot_Order_Update () {
   local COLUMN_NUMBER=2 # Determine UEFI entry id column and UEFI entry description column
 
   local UEFI_ENTRY_NUMBER=0
-  for nline in $(${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9][0-9][0-9][0-9]') ; do
+  for nline in $(${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9A-F][0-9A-F][0-9A-F][0-9A-F]') ; do
     let UEFI_ENTRY_NUMBER=UEFI_ENTRY_NUMBER+1
     id_arranque="$(echo $nline | cut -c 5-8)"
   done
@@ -1120,7 +1120,7 @@ function rtux_Choose_UEFI_Boot_Order_Update () {
       ARGS_ARRAY[ARGS_ARRAY_INDEX]="${descripcion_arranque}"
       let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
 
-    done < <( ${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9][0-9][0-9][0-9]' )
+    done < <( ${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9A-F][0-9A-F][0-9A-F][0-9A-F]' )
     TMP_DESIRED_ORDER=`${RESCATUX_PATH}order.py "${ARGS_ARRAY[@]}"`
     # Put commas in place - Begin
     FIRST_ENTRY_FOUND='true'
