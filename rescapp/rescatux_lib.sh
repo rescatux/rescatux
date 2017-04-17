@@ -1518,6 +1518,95 @@ function rtux_backup_efi_partition () {
   rtux_Run_Show_Progress "${BACKUP_EFI_PARTITION_RUNNING_STR}" rtux_backup_efi_partition_payload "$@"
 }
 
+# $1 : Uefi EFI Partition # sda2
+# $2 : EFI relative Complete File path # EFI/Boot/bootx64.efi
+# Update UEFI Boot Order
+function rtux_UEFI_Hide_Microsoft_Boot_Entry () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  local EXIT_VALUE=1 # Error by default
+
+  local UEFI_EFI_PARTITION="$1"
+  local UEFI_EFI_RELATIVE_FILEPATH="$2"
+
+  # Step 1: Backup EFI files just in case
+
+  if rtux_backup_efi_partition ${UEFI_EFI_PARTITION} ; then
+    :
+  else
+    return 1;
+  fi
+
+  # TODO: Check if we are in UEFI system and warn the user
+
+  # Step 2: Overwrite default files with the ones we have choosen
+
+  local n_partition=${UEFI_EFI_PARTITION}
+  local TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${TMP_MNT_PARTITION}
+  if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
+    then
+      # Step 2.A: Overwrite default files with the ones we have choosen
+
+      TMP_CHECK_AND_CREATE_DIRECTORY="$(dirname ${TMP_MNT_PARTITION}/${DEFAULT_UEFI_BOOT_ENTRY_RELATIVE_PATH})"
+      if [ ! -d "${TMP_CHECK_AND_CREATE_DIRECTORY}" ] ; then
+        if mkdir --parents "${TMP_CHECK_AND_CREATE_DIRECTORY}" ; then
+          :
+        else
+         umount ${TMP_MNT_PARTITION};
+         return 1
+        fi
+      fi
+
+      if cp "${TMP_MNT_PARTITION}/${UEFI_EFI_RELATIVE_FILEPATH}" "${TMP_MNT_PARTITION}/${DEFAULT_UEFI_BOOT_ENTRY_RELATIVE_PATH}" ; then
+        :
+      else
+         umount ${TMP_MNT_PARTITION};
+         return 1
+      fi
+      # Step 2.B: Delete Microsoft entries
+      if rm -rf "${TMP_MNT_PARTITION}/${DEFAULT_MICROSOFT_UEFI_BOOT_DIRECTORY_RELATIVE_PATH}" ; then
+        :
+      else
+         umount ${TMP_MNT_PARTITION};
+         return 1
+      fi
+
+      # Umount the partition
+
+      umount ${TMP_MNT_PARTITION};
+  fi # Partition was mounted ok
+
+  # Step 3: Define the default level to the default filename and label
+
+  # Convert EFI PARTITION into EFI disk
+  local TMP_UEFI_EFI_DISK="$(echo ${UEFI_EFI_PARTITION} | sed 's/[0-9]*$//g')" # sda21 -> sda
+  local UEFI_EFI_DISK="/dev/${TMP_UEFI_EFI_DISK}"
+
+  # Convert EFI PARTITION into partition number
+  local UEFI_EFI_PARTITION_NUMBER="$(echo ${UEFI_EFI_PARTITION} | grep -o '[0-9]*$')"
+  # Convert File path into EFI ready file path
+  local UEFI_EFI_READY_FILEPATH="\\$(echo ${DEFAULT_UEFI_BOOT_ENTRY_RELATIVE_PATH} \
+                                       | sed 's~/~\\~g' )" # EFI/Boot/bootx64.efi -> \EFI\Boot\bootx64.efi
+  # Convert File path into EFI label
+  local UEFI_EFI_LABEL="Windows Boot Manager"
+
+  ${EFIBOOTMGR_BINARY} \
+    -c \
+    -d "${UEFI_EFI_DISK}" \
+    -p ${UEFI_EFI_PARTITION_NUMBER} \
+    -L "${UEFI_EFI_LABEL}" \
+    -l "${UEFI_EFI_READY_FILEPATH}"
+
+  # efibootmgr -c -d /dev/sda -p 2 -L "Gentoo" -l "\efi\boot\bootx64.efi"
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Hide_Microsoft_Boot_Entry ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
@@ -1601,6 +1690,7 @@ EFIBOOTMGR_BINARY=efibootmgr
 DEFAULT_UEFI_BOOT_ENTRY_RELATIVE_PATH="EFI/Boot/bootx64.efi"
 DEFAULT_NON_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH="EFI/Microsoft/Boot/bootmgr.efi"
 DEFAULT_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH="EFI/Microsoft/Boot/bootmgfw.efi"
+DEFAULT_MICROSOFT_UEFI_BOOT_DIRECTORY_RELATIVE_PATH="EFI/Microsoft"
 
 UNKNOWN_GNULINUX_DISTRO="Unknown GNU/Linux distro"
 
