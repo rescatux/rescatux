@@ -1637,6 +1637,125 @@ function rtux_UEFI_Hide_Microsoft_Boot_Entry () {
 
 } # function rtux_UEFI_Hide_Microsoft_Boot_Entry ()
 
+# $1 : Uefi EFI Partition # sda2
+# $2 : Windows Partition # sda4
+# Update UEFI Boot Order
+function rtux_UEFI_Reinstall_Microsoft_Boot_Entries () {
+# TODO: Extract last user interaction (Success/Failure)
+# So that this function returns being successful or not
+
+  local EXIT_VALUE=1 # Error by default
+
+  local UEFI_EFI_PARTITION="$1"
+  local WINDOWS_PARTITION="$2"
+
+  # Step 1: Backup EFI files just in case
+
+  if rtux_backup_efi_partition ${UEFI_EFI_PARTITION} ; then
+    :
+  else
+    return 1;
+  fi
+
+  # TODO: Check if we are in UEFI system and warn the user
+
+  # Step 2: Mount the Windows partition
+
+  local n_partition=${WINDOWS_PARTITION}
+  local WINDOWS_TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local WINDOWS_TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${WINDOWS_TMP_MNT_PARTITION}
+  if $(mount -t auto ${WINDOWS_TMP_DEV_PARTITION} ${WINDOWS_TMP_MNT_PARTITION} 2> /dev/null)
+    then
+    :
+  else
+    umount ${WINDOWS_TMP_MNT_PARTITION};
+    return 1
+  fi
+
+  # Step 3: Mount the UEFI partition
+
+  local n_partition=${UEFI_EFI_PARTITION}
+  local EFI_TMP_MNT_PARTITION=${RESCATUX_ROOT_MNT}/${n_partition}
+  local EFI_TMP_DEV_PARTITION=/dev/${n_partition}
+  mkdir --parents ${EFI_TMP_MNT_PARTITION}
+  if $(mount -t auto ${EFI_TMP_DEV_PARTITION} ${EFI_TMP_MNT_PARTITION} 2> /dev/null)
+    then
+    :
+  else
+    umount ${EFI_TMP_MNT_PARTITION};
+    return 1
+  fi
+
+  # Step 4: Prepare destination directory
+
+  TMP_CHECK_AND_CREATE_DIRECTORY="$(dirname ${EFI_TMP_MNT_PARTITION}/${DEFAULT_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH})"
+  if [ ! -d "${TMP_CHECK_AND_CREATE_DIRECTORY}" ] ; then
+    if mkdir --parents "${TMP_CHECK_AND_CREATE_DIRECTORY}" ; then
+	    :
+    else
+	  umount ${WINDOWS_TMP_MNT_PARTITION};
+	  umount ${EFI_TMP_MNT_PARTITION};
+	  return 1
+    fi
+  fi
+
+  # Step 5.A: Copy Secure Windows EFI File
+
+  if cp "${WINDOWS_TMP_MNT_PARTITION}/${DEFAULT_SECURE_MICROSOFT_UEFI_FILE_RELATIVE_PATH}" \
+          "${EFI_TMP_MNT_PARTITION}/${DEFAULT_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH}" ; then
+  :
+  else
+	  umount ${WINDOWS_TMP_MNT_PARTITION};
+	  umount ${EFI_TMP_MNT_PARTITION};
+	  return 1
+  fi
+
+  # Step 5.B: Copy Non Secure Windows EFI File
+
+  if cp "${WINDOWS_TMP_MNT_PARTITION}/${DEFAULT_NON_SECURE_MICROSOFT_UEFI_FILE_RELATIVE_PATH}" \
+          "${EFI_TMP_MNT_PARTITION}/${DEFAULT_NON_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH}" ; then
+  :
+  else
+	  umount ${WINDOWS_TMP_MNT_PARTITION};
+	  umount ${EFI_TMP_MNT_PARTITION};
+	  return 1
+  fi
+
+  # Umount the partitions
+
+  umount ${WINDOWS_TMP_MNT_PARTITION};
+  umount ${EFI_TMP_MNT_PARTITION};
+
+
+  # Step 6: Define the default level to the default filename and label
+
+  # Convert EFI PARTITION into EFI disk
+  local TMP_UEFI_EFI_DISK="$(echo ${UEFI_EFI_PARTITION} | sed 's/[0-9]*$//g')" # sda21 -> sda
+  local UEFI_EFI_DISK="/dev/${TMP_UEFI_EFI_DISK}"
+
+  # Convert EFI PARTITION into partition number
+  local UEFI_EFI_PARTITION_NUMBER="$(echo ${UEFI_EFI_PARTITION} | grep -o '[0-9]*$')"
+  # Convert File path into EFI ready file path
+  local UEFI_EFI_READY_FILEPATH="\\$(echo ${DEFAULT_SECURE_MICROSOFT_UEFI_FILE_RELATIVE_PATH} \
+                                       | sed 's~/~\\~g' )" # EFI/Boot/bootx64.efi -> \EFI\Boot\bootx64.efi
+  # Convert File path into EFI label
+  local UEFI_EFI_LABEL="Windows Boot Manager"
+
+  ${EFIBOOTMGR_BINARY} \
+    -c \
+    -d "${UEFI_EFI_DISK}" \
+    -p ${UEFI_EFI_PARTITION_NUMBER} \
+    -L "${UEFI_EFI_LABEL}" \
+    -l "${UEFI_EFI_READY_FILEPATH}"
+
+  # efibootmgr -c -d /dev/sda -p 2 -L "Gentoo" -l "\efi\boot\bootx64.efi"
+  EXIT_VALUE=$?
+
+  return ${EXIT_VALUE}
+
+} # function rtux_UEFI_Reinstall_Microsoft_Boot_Entries ()
+
 # Rescatux lib main variables
 
 RESCATUX_URL="http://www.supergrubdisk.org/rescatux/"
@@ -1724,3 +1843,5 @@ DEFAULT_MICROSOFT_UEFI_BOOT_DIRECTORY_RELATIVE_PATH="EFI/Microsoft"
 
 UNKNOWN_GNULINUX_DISTRO="Unknown GNU/Linux distro"
 
+DEFAULT_NON_SECURE_MICROSOFT_UEFI_FILE_RELATIVE_PATH="Windows/Boot/EFI/bootmgr.efi"
+DEFAULT_SECURE_MICROSOFT_UEFI_FILE_RELATIVE_PATH="Windows/Boot/EFI/bootmgfw.efi"

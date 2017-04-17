@@ -1,0 +1,41 @@
+#!/bin/bash
+# Rescapp Fsck run script
+# Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
+#
+# Rescapp is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Rescapp is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
+
+source ${RESCATUX_LIB_FILE}
+
+set -x
+set -v
+
+
+# fsck Main program
+
+UEFIREINSTALLMICROSOFT_OK_STR="Reinstall Microsoft Windows UEFI boot entries was OK ! :)"
+UEFIREINSTALLMICROSOFT_KO_STR="Reinstall Microsoft Windows UEFI boot entries was not ok :("
+UEFIREINSTALLMICROSOFT_RUNNING_STR="Reinstalling Microsoft Windows UEFI boot entries"
+
+
+SELECTED_EFI_PARTITION="$(rtux_Choose_EFI_System_partition)"
+SELECTED_PARTITION=$(rtux_Choose_Windows_partition);
+if rtux_Run_Show_Progress "${UEFIREINSTALLMICROSOFT_RUNNING_STR}" rtux_UEFI_Reinstall_Microsoft_Boot_Entries "${SELECTED_EFI_PARTITION}" "${SELECTED_PARTITION}";
+then
+  rtux_Message_Success ${UEFIREINSTALLMICROSOFT_OK_STR}
+else
+  rtux_Message_Failure ${UEFIREINSTALLMICROSOFT_KO_STR}
+fi
+
+
+
