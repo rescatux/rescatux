@@ -1430,6 +1430,16 @@ function rtux_UEFI_Fake_Microsoft_Boot_Entry () {
   if $(mount -t auto ${TMP_DEV_PARTITION} ${TMP_MNT_PARTITION} 2> /dev/null)
     then
 
+      TMP_CHECK_AND_CREATE_DIRECTORY="$(dirname ${TMP_MNT_PARTITION}/${DEFAULT_UEFI_BOOT_ENTRY_RELATIVE_PATH})"
+      if [ ! -d "${TMP_CHECK_AND_CREATE_DIRECTORY}" ] ; then
+        if mkdir --parents "${TMP_CHECK_AND_CREATE_DIRECTORY}" ; then
+          :
+        else
+         umount ${TMP_MNT_PARTITION};
+         return 1
+        fi
+      fi
+
       if cp "${TMP_MNT_PARTITION}/${UEFI_EFI_RELATIVE_FILEPATH}" "${TMP_MNT_PARTITION}/${DEFAULT_UEFI_BOOT_ENTRY_RELATIVE_PATH}" ; then
         :
       else
@@ -1437,11 +1447,31 @@ function rtux_UEFI_Fake_Microsoft_Boot_Entry () {
          return 1
       fi
 
+      TMP_CHECK_AND_CREATE_DIRECTORY="$(dirname ${TMP_MNT_PARTITION}/${DEFAULT_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH})"
+      if [ ! -d "${TMP_CHECK_AND_CREATE_DIRECTORY}" ] ; then
+        if mkdir --parents "${TMP_CHECK_AND_CREATE_DIRECTORY}" ; then
+          :
+        else
+         umount ${TMP_MNT_PARTITION};
+         return 1
+        fi
+      fi
+
       if cp "${TMP_MNT_PARTITION}/${UEFI_EFI_RELATIVE_FILEPATH}" "${TMP_MNT_PARTITION}/${DEFAULT_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH}" ; then
         :
       else
          umount ${TMP_MNT_PARTITION};
          return 1
+      fi
+
+      TMP_CHECK_AND_CREATE_DIRECTORY="$(dirname ${TMP_MNT_PARTITION}/${DEFAULT_NON_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH})"
+      if [ ! -d "${TMP_CHECK_AND_CREATE_DIRECTORY}" ] ; then
+        if mkdir --parents "${TMP_CHECK_AND_CREATE_DIRECTORY}" ; then
+          :
+        else
+         umount ${TMP_MNT_PARTITION};
+         return 1
+        fi
       fi
 
       if cp "${TMP_MNT_PARTITION}/${UEFI_EFI_RELATIVE_FILEPATH}" "${TMP_MNT_PARTITION}/${DEFAULT_NON_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH}" ; then
