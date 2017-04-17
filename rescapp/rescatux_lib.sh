@@ -1120,7 +1120,7 @@ function rtux_Choose_UEFI_Boot_Order_Update () {
       ARGS_ARRAY[ARGS_ARRAY_INDEX]="${descripcion_arranque}"
       let ARGS_ARRAY_INDEX=${ARGS_ARRAY_INDEX}+1
 
-    done < <( ${EFIBOOTMGR_BINARY} | grep -E '^Boot[0-9A-F][0-9A-F][0-9A-F][0-9A-F]' )
+    done < <( ${EFIBOOTMGR_BINARY} --verbose | grep -E '^Boot[0-9A-F][0-9A-F][0-9A-F][0-9A-F]' )
     TMP_DESIRED_ORDER=`${RESCATUX_PATH}order.py "${ARGS_ARRAY[@]}"`
     # Put commas in place - Begin
     FIRST_ENTRY_FOUND='true'
