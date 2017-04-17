@@ -1737,7 +1737,7 @@ function rtux_UEFI_Reinstall_Microsoft_Boot_Entries () {
   # Convert EFI PARTITION into partition number
   local UEFI_EFI_PARTITION_NUMBER="$(echo ${UEFI_EFI_PARTITION} | grep -o '[0-9]*$')"
   # Convert File path into EFI ready file path
-  local UEFI_EFI_READY_FILEPATH="\\$(echo ${DEFAULT_SECURE_MICROSOFT_UEFI_FILE_RELATIVE_PATH} \
+  local UEFI_EFI_READY_FILEPATH="\\$(echo ${DEFAULT_SECURE_MICROSOFT_UEFI_BOOT_ENTRY_RELATIVE_PATH} \
                                        | sed 's~/~\\~g' )" # EFI/Boot/bootx64.efi -> \EFI\Boot\bootx64.efi
   # Convert File path into EFI label
   local UEFI_EFI_LABEL="Windows Boot Manager"
