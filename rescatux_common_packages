@@ -24,7 +24,7 @@ RAID_PACKAGES="dmraid"
 LVM_PACKAGES="lvm2"
 SYNAPTIC_PACKAGES="synaptic"
 GKSU_PACKAGES="gksu"
-GPARTED_PACKAGES="gparted gpart"
+GPARTED_PACKAGES="gparted gpart dosfstools"
 BOOTREPAIR_PACKAGES="boot-repair \
  boot-sav \
  gawk \
