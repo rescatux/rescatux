@@ -1230,7 +1230,7 @@ function rtux_UEFI_Add_Boot_Entry () {
   local UEFI_EFI_READY_FILEPATH="\\$(echo ${UEFI_EFI_RELATIVE_FILEPATH} \
                                        | sed 's~/~\\~g' )" # EFI/Boot/bootx64.efi -> \EFI\Boot\bootx64.efi
   # Convert File path into EFI label
-  local UEFI_EFI_LABEL="${UEFICREATE_BOOT_ENTRY_PREFIX}${UEFI_EFI_READY_FILEPATH}"
+  local UEFI_EFI_LABEL="${UEFICREATE_BOOT_ENTRY_PREFIX}$(basename ${UEFI_EFI_RELATIVE_FILEPATH})"
 
   ${EFIBOOTMGR_BINARY} \
     -c \
@@ -1814,7 +1814,7 @@ RUNNING_STR="Running process... Please wait till finish message appears."
 UEFIORDER_WTITLE="Order UEFI boot entries"
 ORDER_UEFIORDER_STR="Order UEFI boot entries in the other you want. Press OK to continue."
 RIGHT_UEFIORDER_STR="Which is the right position for this UEFI boot entry?"
-UEFICREATE_BOOT_ENTRY_PREFIX="(Rescapp added) "
+UEFICREATE_BOOT_ENTRY_PREFIX="(Rescapp) "
 
 
 PROC_PARTITIONS_FILE=/proc/partitions
