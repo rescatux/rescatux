@@ -183,16 +183,8 @@ COMMON_PACKAGES="${LXDE_PACKAGES} \
  ${TAILSGREETER_PACKAGES} \
  ${GDDRESCUE_PACKAGES} \
  ${MYRESCUE_PACKAGES} \
- zenity \
  iceweasel \
- xchat \
  syslinux \
- pastebinit \
- lilo \
- ntfs-3g \
- chntpw \
- samdump2 \
- bkhive \
  gawk\
  extundelete\
  locales \
