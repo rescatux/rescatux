@@ -18,65 +18,12 @@
 # This script assumes apt-get install live-helper has been done
 # This script assumes that the user has sudo permissions on lh build
 
+RESCAPP_PACKAGES="rescapp"
+
 LXDE_PACKAGES="network-manager-gnome feh"
-PYTHON_PACKAGES="python-sip python-qt4"
-RAID_PACKAGES="dmraid"
-LVM_PACKAGES="lvm2"
 SYNAPTIC_PACKAGES="synaptic"
 GKSU_PACKAGES="gksu"
-GPARTED_PACKAGES="gparted gpart dosfstools"
-BOOTREPAIR_PACKAGES="boot-repair \
- boot-sav \
- gawk \
- pastebinit \
- xz-utils \
- gettext-base \
- glade2script \
- os-prober \
- parted \
- xdg-utils \
- zenity \
- boot-sav-extra \
- gksu \
- lsb-release \
- zip \
- dmraid \
- lvm2 \
- mbr \
- mdadm \
- os-uninstaller \
- clean-ubiquity \
- python \
- gir1.2-gtk-3.0 \
- python-gi \
- ntfs-3g \
- efibootmgr \
- syslinux-common \
- cryptsetup \
- boot-info \
- "
-TESTDISK_PACKAGES="testdisk \
- e2fslibs \
- libc6 \
- libcomerr2 \
- libjpeg62-turbo \
- libncursesw5 \
- libntfs-3g852 \
- libtinfo5 \
- libuuid1 \
- zlib1g \
- ntfs-3g \
- "
-CRYPTSETUP_PACKAGES="cryptsetup \
- libcryptsetup4 \
- cryptsetup-bin \
- "
-FILESYSTEM_PACKAGES="reiserfsprogs \
- reiser4progs \
- btrfs-tools \
- xfsprogs \
- xfsdump \
- "
+
 
 TAILSGREETER_PACKAGES="\
  accountsservice \
@@ -226,53 +173,15 @@ TAILSGREETER_PACKAGES="\
  metacity-common \
  sgml-base \
 "
-SELINUX_PACKAGES="\
- libapol4 \
- libqpol1 \
- policycoreutils \
- python-ipy \
- python-selinux \
- python-semanage \
- python-sepolgen \
- python-sepolicy \
- python-setools \
- selinux-utils \
- selinux-basics \
- auditd \
- selinux-policy-default \
- setools \
-"
 
-GPT_PACKAGES="\
- gdisk \
-"
-
-UEFI_PACKAGES="\
- efibootmgr \
- libefivar1 \
- libefiboot1 \
-"
-
-PYTHON_PARTED_PACKAGES="python-parted"
+#PYTHON_PARTED_PACKAGES="python-parted"
 GDDRESCUE_PACKAGES="gddrescue"
 MYRESCUE_PACKAGES="myrescue"
 
 COMMON_PACKAGES="${LXDE_PACKAGES} \
- ${PYTHON_PACKAGES} \
- ${RAID_PACKAGES} \
- ${LVM_PACKAGES} \
  ${SYNAPTIC_PACKAGES} \
  ${GKSU_PACKAGES} \
- ${GPARTED_PACKAGES} \
- ${BOOTREPAIR_PACKAGES} \
- ${TESTDISK_PACKAGES} \
- ${CRYPTSETUP_PACKAGES} \
- ${FILESYSTEM_PACKAGES} \
- ${SELINUX_PACKAGES} \
- ${GPT_PACKAGES} \
  ${TAILSGREETER_PACKAGES} \
- ${PYTHON_PARTED_PACKAGES} \
- ${UEFI_PACKAGES} \
  ${GDDRESCUE_PACKAGES} \
  ${MYRESCUE_PACKAGES} \
  zenity \
