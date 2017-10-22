@@ -174,7 +174,6 @@ TAILSGREETER_PACKAGES="\
  sgml-base \
 "
 
-#PYTHON_PARTED_PACKAGES="python-parted"
 GDDRESCUE_PACKAGES="gddrescue"
 MYRESCUE_PACKAGES="myrescue"
 
