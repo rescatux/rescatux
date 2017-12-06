@@ -47,6 +47,7 @@ SID_MIRROR="http://snapshot.debian.org/archive/debian/20151017T100905Z/"
 JESSIE_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
 RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/subproyectos/tails_greeter/tails-greeter_0.8.22_all.deb"
+RESCATUX_CHNTPW="/home/adrian/gnu/rescatux/subproyectos/chntpw-rescatux-binary-package/chntpw_1.0-2_i386.deb"
 
 ARCH="i386"
 DISTRIBUTION="jessie" # Todo: Select with a switch
@@ -112,6 +113,7 @@ mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 # Backported passwd no longer needed in jessie
 #cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 cp ${RESCATUX_TAILS_GREETER} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
+cp ${RESCATUX_CHNTPW} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
