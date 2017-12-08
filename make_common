@@ -45,6 +45,7 @@ MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 SID_MIRROR="http://snapshot.debian.org/archive/debian/20151017T100905Z/"
 JESSIE_MIRROR="http://127.0.0.1:9999/debian/"
 BOOTREPAIR_MIRROR="http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu"
+RESCATUX_MIRROR="http://rescatux.sourceforge.net/repo/"
 RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/subproyectos/tails_greeter/tails-greeter_0.8.22_all.deb"
 
 ARCH="i386"
@@ -66,6 +67,7 @@ SID_CHROOT_CONFIG="config/archives/sid.list.chroot"
 JESSIE_CHROOT_CONFIG="config/archives/jessie.list.chroot"
 STRETCH_CHROOT_CONFIG="config/archives/stretch.list.chroot"
 BOOTREPAIR_CHROOT_CONFIG="config/archives/bootrepair.list.chroot"
+RESCATUX_CHROOT_CONFIG="config/archives/rescatux.list.chroot"
 CHROOT_APT_CONFIG_FOLDER1="config/apt/"
 APT_PREFERENCES1="config/apt/preferences"
 CHROOT_APT_CONFIG_FOLDER2="config/archives/"
@@ -137,6 +139,7 @@ echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
 echo -e -n "deb ${JESSIE_MIRROR} jessie main" > $TEMP_FOLDER/${JESSIE_CHROOT_CONFIG}
 echo -e -n "deb ${JESSIE_MIRROR} stretch main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
 echo -e -n "deb ${BOOTREPAIR_MIRROR} trusty main" > $TEMP_FOLDER/${BOOTREPAIR_CHROOT_CONFIG}
+echo -e -n "deb ${RESCATUX_MIRROR} jessie-dev main" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER2}
