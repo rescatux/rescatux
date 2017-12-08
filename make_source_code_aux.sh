@@ -51,14 +51,6 @@ BASE_FILENAME="rescatux-`head -n 1 VERSION`"
 RESCATUX_GIT_COMMIT="$(git rev-parse HEAD)"
 git archive HEAD | gzip > "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-main-rescatux-repo-${RESCATUX_GIT_COMMIT}.tar.gz"
 
-# chntpw
-
-CHNTPW_GIT_URL="https://github.com/rescatux/chntpw"
-CHNTPW_GIT_COMMIT="chntpw-ng-1.01"
-CHNTPW_GIT_NAME="chntpw"
-
-get_Git_Tar_Gz "${CHNTPW_GIT_URL}" "${CHNTPW_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${CHNTPW_GIT_NAME}-${CHNTPW_GIT_COMMIT}.tar.gz"
-
 # tails-greeter
 
 TAILSGREETER_GIT_URL="https://github.com/rescatux/tails-greeter.git"
