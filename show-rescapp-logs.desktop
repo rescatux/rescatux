@@ -7,5 +7,5 @@ Name=Rescapp logs
 Name[en_US]=Rescapp logs
 Comment[en_US]=Show Rescapp - Rescue Tool logs
 Comment=Show Rescapp - Rescue Tool logs
-Exec=xdg-open /home/user/.rescapp/log/
+Exec=pcmanfm /home/user/.rescapp/log/
 Icon=folder.png
