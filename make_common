@@ -29,7 +29,6 @@ VERSION=`head -1 VERSION`
 RESCATUX_FILES=" \
  logos \
  "
-RESCATUX_EMPTY_DIRS="log"
 
 DESKTOP_METAPACKAGE="task-lxde-desktop"
 CORE_PACKAGES="live-tools user-setup sudo eject"
@@ -120,10 +119,6 @@ mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
-cp -r rescapp $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
-for n_empty_dir in ${RESCATUX_EMPTY_DIRS} ; do
-  mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/${n_empty_dir}
-done
 cp ${SAMUNLOCK_BINARY} ${SAMPASSWD_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
 cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
