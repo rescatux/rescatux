@@ -120,8 +120,8 @@ mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp ${SAMUNLOCK_BINARY} ${SAMPASSWD_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
-cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
-cp rescapp/rescapp.sh.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
+cp rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp.desktop
+cp rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp -r logos $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cp set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
