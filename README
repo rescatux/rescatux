@@ -20,29 +20,6 @@ syslinux-utils # Needed for logo generation
 
 If you want to build also source code you need the git package to be installed.
 
-== About chntpw build ==
-
-Till the current bug in sampasswd (it does not save its changes)
-and till samunlock is added upstream we need to build this program on our own.
-
-Get chntpw source code from:
-
-* branch : chntpw-ng-1.01
-* repository : https://github.com/rescatux/chntpw
-
-You might need to run:
-
-ln -s /usr/include/asm-generic /usr/include/asm
-
-so that the upstream source code builds ok
-
-Then run (inside a Jessie chroot):
-make
-
-so that: samunlock, sampasswd, samunlock.static and sampasswd.static are generated.
-
-Path to samunlock directory should be set at: make_common's CHNTPW_PATH variable.
-
 == About tails-greeter build ==
 
 I am using a tails-greeter fork while I try to get it integrated properly into Debian Live. Here there is how you need to build it (inside a Jessie chroot):
@@ -80,7 +57,6 @@ MIRROR_BOOTSTRAP
 MIRROR_CHROOT
 SID_MIRROR
 BACKPORTED_PASSWD
-CHNTPW_PATH
 
 Using an Jessie system or chroot run at the Rescatux source code directory:
 
