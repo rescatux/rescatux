@@ -81,10 +81,6 @@ RESCATUX_BIN_FOLDER="config/includes.chroot/usr/bin/"
 RLE_FOLDER="config/binary_syslinux"
 RLE_FILE="${RLE_FOLDER}/${RESCATUX_STR}.rle"
 
-CHNTPW_PATH="../subproyectos/chntpwsource/chntpw-NG"
-SAMPASSWD_BINARY="${CHNTPW_PATH}/sampasswd"
-SAMUNLOCK_BINARY="${CHNTPW_PATH}/samunlock"
-
 LB_ISO_APPLICATION="Rescatux Gnu/Linux ${VERSION}"
 LB_ISO_PUBLISHER="Rescatux team"
 LB_ISO_VOLUME="Rescatux${VERSION}"
