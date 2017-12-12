@@ -131,7 +131,6 @@ sudo bash -c "echo \"${SELINUX_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LIST
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
 echo -e -n "deb ${DEBIAN_MAIN_MIRROR} stretch main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
-echo -e -n "deb ${BOOTREPAIR_MIRROR} trusty main" > $TEMP_FOLDER/${BOOTREPAIR_CHROOT_CONFIG}
 echo -e -n "deb ${RESCATUX_MIRROR} stretch-dev main" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
