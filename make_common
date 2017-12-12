@@ -105,10 +105,7 @@ mkdir --parents $TEMP_FOLDER/
 
 sudo rm -rf ${TEMP_FOLDER}/config
 cp -a live-config ${TEMP_FOLDER}/config
-# Special backported passwd packages
 mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
-# Backported passwd no longer needed in jessie
-#cp ${BACKPORTED_PASSWD} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 cp ${RESCATUX_TAILS_GREETER} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
