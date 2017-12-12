@@ -35,11 +35,6 @@ CORE_PACKAGES="live-tools user-setup sudo eject"
 
 RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 
-# This was for lenny
-#MIRROR_BOOTSTRAP="http://192.168.0.50/debian/"
-#MIRROR_CHROOT="http://192.168.0.50/debian"
-
-#This is for squeeze
 MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian"
 MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 DEBIAN_MAIN_MIRROR="http://127.0.0.1:9999/debian/"
@@ -111,7 +106,6 @@ for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
     ${TEMP_FOLDER}/config/bootloaders/${n_splash_dir}/splash.svg
 done
 cd $TEMP_FOLDER
-#sudo cp ${LIVE_HELPER_LISTS_FOLDER}/gnome-core ${LIVE_HELPER_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}
 sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
 sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/rescatux_desktop.list.chroot"
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
