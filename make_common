@@ -118,7 +118,6 @@ cd $TEMP_FOLDER
 sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
 sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/rescatux_desktop.list.chroot"
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
-sudo bash -c "echo \"${SELINUX_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/selinux.list.binary"
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 echo -e -n "deb ${DEBIAN_MAIN_MIRROR} stretch main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
@@ -165,7 +164,7 @@ lb config noauto \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
   --iso-volume "${LB_ISO_VOLUME}" \\
   ${RESCATUX_LIVE_CONFIG_SOURCE_OPTIONS} \\
-  --bootappend-live "boot=live config quiet splash selinux=1 security=selinux enforcing=0 locales=en_US.UTF-8 live-config.nox11autologin" \\
+  --bootappend-live "boot=live config quiet splash locales=en_US.UTF-8 live-config.nox11autologin" \\
         "\${@}"
 EOF
 
