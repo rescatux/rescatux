@@ -141,28 +141,12 @@ mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER3}
 tee $TEMP_FOLDER/${APT_PREFERENCES1} \
 $TEMP_FOLDER/${APT_PREFERENCES2} \
 $TEMP_FOLDER/${APT_PREFERENCES3} <<END
-Package: *
-Pin: release n=sid
-Pin-Priority: 2
+
 END
 
 tee $TEMP_FOLDER/${APT_PREFERENCES4} \
  <<END
-Package: libefiboot1
-Pin: release n=stretch
-Pin-Priority: 600
 
-Package: libefivar1
-Pin: release n=stretch
-Pin-Priority: 600
-
-Package: efibootmgr
-Pin: release n=stretch
-Pin-Priority: 600
-
-Package: *
-Pin: release n=stretch
-Pin-Priority: 1
 END
 
 # Initial lb config
