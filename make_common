@@ -44,7 +44,6 @@ MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian"
 MIRROR_CHROOT="http://127.0.0.1:9999/debian"
 DEBIAN_MAIN_MIRROR="http://127.0.0.1:9999/debian/"
 RESCATUX_MIRROR="http://rescatux.sourceforge.net/repo/"
-RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/subproyectos/tails_greeter/tails-greeter_0.8.22_all.deb"
 
 ARCH="i386"
 DISTRIBUTION="stretch" # Todo: Select with a switch
@@ -98,7 +97,6 @@ mkdir --parents $TEMP_FOLDER/
 sudo rm -rf ${TEMP_FOLDER}/config
 cp -a live-config ${TEMP_FOLDER}/config
 mkdir --parents ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
-cp ${RESCATUX_TAILS_GREETER} ${TEMP_FOLDER}/${PACKAGES_CHROOT_FOLDER}
 mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
@@ -164,7 +162,7 @@ lb config noauto \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
   --iso-volume "${LB_ISO_VOLUME}" \\
   ${RESCATUX_LIVE_CONFIG_SOURCE_OPTIONS} \\
-  --bootappend-live "boot=live config quiet splash locales=en_US.UTF-8 live-config.nox11autologin" \\
+  --bootappend-live "boot=live config quiet splash locales=en_US.UTF-8" \\
         "\${@}"
 EOF
 
