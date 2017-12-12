@@ -48,7 +48,7 @@ RESCATUX_MIRROR="http://rescatux.sourceforge.net/repo/"
 RESCATUX_TAILS_GREETER="/home/adrian/gnu/rescatux/subproyectos/tails_greeter/tails-greeter_0.8.22_all.deb"
 
 ARCH="i386"
-DISTRIBUTION="jessie" # Todo: Select with a switch
+DISTRIBUTION="stretch" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
@@ -63,7 +63,6 @@ SKEL_FOLDER="config/includes.chroot/etc/skel"
 
 CHROOT_SOURCES_FOLDER="config/archives"
 SID_CHROOT_CONFIG="config/archives/sid.list.chroot"
-JESSIE_CHROOT_CONFIG="config/archives/jessie.list.chroot"
 STRETCH_CHROOT_CONFIG="config/archives/stretch.list.chroot"
 RESCATUX_CHROOT_CONFIG="config/archives/rescatux.list.chroot"
 CHROOT_APT_CONFIG_FOLDER1="config/apt/"
@@ -134,10 +133,9 @@ sudo bash -c "echo \"${SELINUX_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LIST
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 echo -e -n "deb ${SID_MIRROR} sid main" > $TEMP_FOLDER/${SID_CHROOT_CONFIG}
-echo -e -n "deb ${DEBIAN_MAIN_MIRROR} jessie main" > $TEMP_FOLDER/${JESSIE_CHROOT_CONFIG}
 echo -e -n "deb ${DEBIAN_MAIN_MIRROR} stretch main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
 echo -e -n "deb ${BOOTREPAIR_MIRROR} trusty main" > $TEMP_FOLDER/${BOOTREPAIR_CHROOT_CONFIG}
-echo -e -n "deb ${RESCATUX_MIRROR} jessie-dev main" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
+echo -e -n "deb ${RESCATUX_MIRROR} stretch-dev main" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER2}
