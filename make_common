@@ -73,7 +73,6 @@ PACKAGES_CHROOT_FOLDER="config/packages.chroot"
 
 CUSTOM_PACKAGES_LISTS_FOLDER="config/package-lists"
 
-#LIVE_HELPER_LISTS_FOLDER="/usr/share/live-helper/lists"
 LIVE_HELPER_LISTS_FOLDER="/usr/share/live/build/lists"
 RESCATUX_DATA_FOLDER="config/includes.chroot/usr/share/rescatux-data/"
 RESCATUX_BIN_FOLDER="config/includes.chroot/usr/bin/"
