@@ -19,15 +19,23 @@
 # This script assumes that the user has sudo permissions on lh build
 
 RESCAPP_PACKAGES="rescapp"
-
-LXDE_PACKAGES="network-manager-gnome feh"
+LXQT_PACKAGES="\
+ cmst \
+ feh \
+ qterminal \
+ juffed \
+ xfwm4-theme-breeze \
+ screengrab \
+ qt5-style-plugins \
+ faenza-icon-theme
+"
 SYNAPTIC_PACKAGES="synaptic"
 GKSU_PACKAGES="gksu"
 
 GDDRESCUE_PACKAGES="gddrescue"
 MYRESCUE_PACKAGES="myrescue"
 
-COMMON_PACKAGES="${LXDE_PACKAGES} \
+COMMON_PACKAGES="${LXQT_PACKAGES} \
  ${SYNAPTIC_PACKAGES} \
  ${GKSU_PACKAGES} \
  ${GDDRESCUE_PACKAGES} \

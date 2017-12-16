@@ -30,7 +30,7 @@ RESCATUX_FILES=" \
  logos \
  "
 
-DESKTOP_METAPACKAGE="task-lxde-desktop"
+DESKTOP_METAPACKAGE="lxqt task-desktop"
 CORE_PACKAGES="live-tools user-setup sudo eject"
 
 RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"

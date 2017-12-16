@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rescapp LXDE Set Background script
+# Rescapp LXQT Set Background script
 # Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
 #
 # Rescapp is free software: you can redistribute it and/or modify
@@ -17,14 +17,8 @@
 
 LIVE_HOME="/home/user"
 MAGIC_BACKGROUND_PATH="/lib/live/mount/medium/isolinux/splash.png"
-feh --bg-fill "${MAGIC_BACKGROUND_PATH}"
-pcmanfm --set-wallpaper "${MAGIC_BACKGROUND_PATH}"
-pcmanfm --desktop &disown
-sudo cp "${LIVE_HOME}/Desktop/rescapp/samunlock" "${LIVE_HOME}/Desktop/rescapp/sampasswd" /usr/sbin/
-sudo chmod +x /usr/sbin/samunlock /usr/sbin/sampasswd
-mkdir --parents ${LIVE_HOME}/.local/share/applications
-cat << EOF > ${LIVE_HOME}/.local/share/applications/mimeapps.list
-[Added Associations]
-text/plain=leafpad.desktop;
 
-EOF
+sleep 2s # Wait for the systray / desktop to come up
+pcmanfm-qt --set-wallpaper "${MAGIC_BACKGROUND_PATH}"
+pcmanfm-qt --desktop &disown
+cmst --minimized &disown

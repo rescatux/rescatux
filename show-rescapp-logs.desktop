@@ -7,5 +7,5 @@ Name=Rescapp logs
 Name[en_US]=Rescapp logs
 Comment[en_US]=Show Rescapp - Rescue Tool logs
 Comment=Show Rescapp - Rescue Tool logs
-Exec=pcmanfm /home/user/.rescapp/log/
+Exec=pcmanfm-qt /home/user/.rescapp/log/
 Icon=folder.png
