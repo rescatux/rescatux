@@ -26,10 +26,6 @@ set -v
 # Fetch version from folder directory name
 VERSION=`head -1 VERSION`
 
-RESCATUX_FILES=" \
- logos \
- "
-
 DESKTOP_METAPACKAGE="lxqt task-desktop"
 CORE_PACKAGES="live-tools user-setup sudo eject"
 
