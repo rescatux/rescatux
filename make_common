@@ -78,9 +78,13 @@ LB_ISO_APPLICATION="Rescatux Gnu/Linux ${VERSION}"
 LB_ISO_PUBLISHER="Rescatux team"
 LB_ISO_VOLUME="Rescatux${VERSION}"
 
+RESCATUX_LOGOS_SRC="logos-src"
+RESCATUX_LOGOS="logos"
+
+
 mkdir --parents $TEMP_FOLDER/${RLE_FOLDER}
 # Generate logo - Begin
-cd logo
+cd ${RESCATUX_LOGOS_SRC}
 sudo bash -c "./generate_logo.sh \"${RESCATUX_STR}\" \"${VERSION}\" \"${TEMP_FOLDER}/${RLE_FILE}\""
 cd ..
 # Generate logo - End
@@ -99,7 +103,7 @@ cp ${SAMUNLOCK_BINARY} ${SAMPASSWD_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/r
 cp rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp.desktop
 cp show-rescapp-logs.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
-cp -r logos $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
+cp -r ${RESCATUX_LOGOS} $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cp set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
   sed -i "s/@RESCATUX_VERSION@/${VERSION}/g" \
