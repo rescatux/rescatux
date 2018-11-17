@@ -78,6 +78,7 @@ RESCATUX_LOGOS_SRC="logos-src"
 RESCATUX_LOGOS="logos"
 
 RESCAPP_EXTRA_FOLDER="rescapp-extra"
+RESCATUX_EXTRA_FOLDER="rescatux-extra"
 
 
 mkdir --parents $TEMP_FOLDER/${RLE_FOLDER}
@@ -102,7 +103,7 @@ cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}
 cp ${RESCAPP_EXTRA_FOLDER}/show-rescapp-logs.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp -r ${RESCATUX_LOGOS} $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
-cp set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
+cp ${RESCATUX_EXTRA_FOLDER}/set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
   sed -i "s/@RESCATUX_VERSION@/${VERSION}/g" \
     ${TEMP_FOLDER}/config/bootloaders/${n_splash_dir}/splash.svg
