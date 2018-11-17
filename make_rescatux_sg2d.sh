@@ -18,7 +18,7 @@
 # SG2 STUFF
 SG2D_SOURCE_DIRECTORY="../../sgd/git/supergrub2/"
 RESCATUX_SOURCE_PWD=`pwd`
-SG2D_EXTRA_DIR="$(pwd)/sg2d_extra"
+SG2D_EXTRA_DIR="$(pwd)/sg2d-extra"
 RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 BOOT_ISOS_DIRECTORY="boot-isos"
 ORIGINAL_GRUB_CFG_BACKUP="original_grub_cfg_backup.cfg"
