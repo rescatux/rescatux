@@ -183,5 +183,5 @@ echo "${BASE_FILENAME}.${FILE_EXTENSION} (and md5sum) DONE!"
 cd ${CURRENT_FOLDER}
 
 if [ "x${RESCATUX_LIVE_CONFIG_SOURCE_OPTIONS}" != "x" ] ; then
-  ./make_source_code_aux.sh
+  ./make-source-code-aux.sh
 fi
