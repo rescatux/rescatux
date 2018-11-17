@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rescapp make_rescatux_sg2d_hybrid script
+# Rescapp make-rescatux-sg2d (hybrid) script
 # Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
 #
 # Rescapp is free software: you can redistribute it and/or modify
