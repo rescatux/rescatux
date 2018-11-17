@@ -147,6 +147,8 @@ lb config noauto \\
   --linux-flavours "${LINUX_FLAVOURS}" \\
   ${DISTRIBUTION_OPTION} \\
   ${ARCH_OPTION} \\
+  ${CHROOT_FILESYSTEM_OPTION} \\
+  ${CACHE_STAGES_OPTION} \\
   ${BOOT_OPTION} \\
   --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \\
   --mirror-chroot "${MIRROR_CHROOT}" \\
