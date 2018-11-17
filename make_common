@@ -77,6 +77,8 @@ LB_ISO_VOLUME="Rescatux${VERSION}"
 RESCATUX_LOGOS_SRC="logos-src"
 RESCATUX_LOGOS="logos"
 
+RESCAPP_EXTRA_FOLDER="rescapp-extra"
+
 
 mkdir --parents $TEMP_FOLDER/${RLE_FOLDER}
 # Generate logo - Begin
@@ -96,9 +98,9 @@ mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp ${SAMUNLOCK_BINARY} ${SAMPASSWD_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
-cp rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp.desktop
-cp show-rescapp-logs.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
-cp rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
+cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp.desktop
+cp ${RESCAPP_EXTRA_FOLDER}/show-rescapp-logs.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
+cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp -r ${RESCATUX_LOGOS} $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cp set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
