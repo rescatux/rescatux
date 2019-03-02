@@ -37,7 +37,7 @@ DEBIAN_MAIN_MIRROR="http://127.0.0.1:9999/debian/"
 RESCATUX_MIRROR="http://rescatux.sourceforge.net/repo/"
 
 ARCH="i386"
-DISTRIBUTION="stretch" # Todo: Select with a switch
+DISTRIBUTION="buster" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
@@ -51,14 +51,14 @@ TEMP_FOLDER="$(pwd)/live-build"
 SKEL_FOLDER="config/includes.chroot/etc/skel"
 
 CHROOT_SOURCES_FOLDER="config/archives"
-STRETCH_CHROOT_CONFIG="config/archives/stretch.list.chroot"
+STRETCH_CHROOT_CONFIG="config/archives/buster.list.chroot"
 RESCATUX_CHROOT_CONFIG="config/archives/rescatux.list.chroot"
 CHROOT_APT_CONFIG_FOLDER1="config/apt/"
 APT_PREFERENCES1="config/apt/preferences"
 CHROOT_APT_CONFIG_FOLDER2="config/archives/"
 CHROOT_APT_CONFIG_FOLDER3="config/archives/"
 CHROOT_APT_CONFIG_FOLDER4="config/archives/"
-APT_PREFERENCES4="config/archives/stretch.pref.chroot"
+APT_PREFERENCES4="config/archives/buster.pref.chroot"
 PACKAGES_CHROOT_FOLDER="config/packages.chroot"
 
 
@@ -114,8 +114,8 @@ sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_L
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
-echo -e -n "deb ${DEBIAN_MAIN_MIRROR} stretch main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
-echo -e -n "deb ${RESCATUX_MIRROR} stretch-dev main" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
+echo -e -n "deb ${DEBIAN_MAIN_MIRROR} buster main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
+echo -e -n "deb ${RESCATUX_MIRROR} buster-dev main" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER2}
