@@ -139,3 +139,11 @@ license (http://www.gnu.org/licenses/license-list.html#ccbysa).
 
 You can find it at: live-config/bootloaders/{extlinux,isolinux,pxelinux,syslinux}/splash.svg.in
 
+=== Buster i386 Chroot ===
+
+Here there is an example on how to generate a Buster i386 chroot.
+This is not strictly needed for development.
+It's here as a reference.
+
+debootstrap --arch i386 buster buster_chroot http://http.debian.net/debian/
+
