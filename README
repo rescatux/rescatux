@@ -11,7 +11,7 @@ You can obtain most recent source code from out git repository by issuing:
 
 == BUILD INSTRUCTIONS ==
 
-In order to build Rescatux in a Jessie system or Jessie chroot you need these packages:
+In order to build Rescatux in a Buster system or Buster chroot you need these packages:
 
 live-build (patched as below)
 imagemagick # Needed for logo generation
@@ -22,7 +22,7 @@ If you want to build also source code you need the git package to be installed.
 
 == About tails-greeter build ==
 
-I am using a tails-greeter fork while I try to get it integrated properly into Debian Live. Here there is how you need to build it (inside a Jessie chroot):
+I am using a tails-greeter fork while I try to get it integrated properly into Debian Live. Here there is how you need to build it (inside a Buster chroot):
 
 git clone https://github.com/rescatux/tails-greeter.git
 cd greeter
@@ -58,7 +58,7 @@ MIRROR_CHROOT
 SID_MIRROR
 BACKPORTED_PASSWD
 
-Using an Jessie system or chroot run at the Rescatux source code directory:
+Using an Buster system or chroot run at the Rescatux source code directory:
 
   ./make-rescatux.sh
 
