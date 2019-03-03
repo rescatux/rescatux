@@ -39,7 +39,7 @@ COMMON_PACKAGES="${LXQT_PACKAGES} \
  ${GDDRESCUE_PACKAGES} \
  ${MYRESCUE_PACKAGES} \
  ${RESCAPP_PACKAGES} \
- iceweasel \
+ firefox-esr \
  syslinux \
  gawk\
  extundelete\
