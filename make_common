@@ -98,7 +98,6 @@ mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
-cp ${SAMUNLOCK_BINARY} ${SAMPASSWD_BINARY} $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp/
 cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp.desktop
 cp ${RESCAPP_EXTRA_FOLDER}/show-rescapp-logs.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
