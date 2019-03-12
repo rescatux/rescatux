@@ -44,4 +44,5 @@ COMMON_PACKAGES="${LXQT_PACKAGES} \
  gawk\
  extundelete\
  locales \
+ ca-certificates \
  " # I add syslinux so that isohybrid command is recognised.
