@@ -16,7 +16,7 @@
 # along with Rescatux.  If not, see <http://www.gnu.org/licenses/>.
 
 LIVE_HOME="/home/user"
-MAGIC_BACKGROUND_PATH="/lib/live/mount/medium/isolinux/splash.png"
+MAGIC_BACKGROUND_PATH="/run/live/medium/isolinux/splash.png"
 
 sleep 2s # Wait for the systray / desktop to come up
 pcmanfm-qt --set-wallpaper "${MAGIC_BACKGROUND_PATH}"
