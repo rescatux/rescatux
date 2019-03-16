@@ -1,0 +1,20 @@
+#!/bin/sh
+# Remove lxqt-themes package contents in an automatic manner
+
+set -e
+
+for nfile in $(dpkg-query -L lxqt-themes | sort -r); do
+
+    if [ -f "${nfile}" ] ; then
+        rm -f "${nfile}"
+    else
+        if [ -d "${nfile}" ] ; then
+            # Ignore directories not being deleted
+            # and also ignore its output
+            set +e
+            rmdir "${nfile}" > /dev/null 2>&1
+            set -e
+        fi
+    fi
+
+done
