@@ -20,6 +20,11 @@
 
 RESCAPP_PACKAGES="rescapp"
 DESKTOP_METAPACKAGE="task-desktop"
+
+# Replaces Debian lxqt metapackage
+# Current buster package installs
+# too many unneeded packages
+
 LXQT_META_PACKAGE="\
 featherpad \
 lximage-qt \
@@ -30,7 +35,7 @@ xarchiver \
 xfwm4 \
 "
 
-LXQT_PACKAGES="\
+LXQT_ADDITIONAL_PACKAGES="\
  cmst \
  faenza-icon-theme
 "
@@ -39,13 +44,14 @@ SYNAPTIC_PACKAGES="synaptic"
 GDDRESCUE_PACKAGES="gddrescue"
 MYRESCUE_PACKAGES="myrescue"
 
-COMMON_PACKAGES="${LXQT_PACKAGES} \
+COMMON_PACKAGES="\
  ${SYNAPTIC_PACKAGES} \
  ${GDDRESCUE_PACKAGES} \
  ${MYRESCUE_PACKAGES} \
  ${RESCAPP_PACKAGES} \
  ${DESKTOP_METAPACKAGE} \
  ${LXQT_META_PACKAGE} \
+ ${LXQT_ADDITIONAL_PACKAGES} \
  firefox-esr \
  syslinux \
  gawk\
