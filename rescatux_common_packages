@@ -20,7 +20,16 @@
 
 RESCAPP_PACKAGES="rescapp"
 DESKTOP_METAPACKAGE="task-desktop"
-LXQT_META_PACKAGE="lxqt"
+LXQT_META_PACKAGE="\
+featherpad \
+lximage-qt \
+lxqt-core \
+qterminal \
+qttranslations5-l10n \
+xarchiver \
+xfwm4 \
+"
+
 LXQT_PACKAGES="\
  cmst \
  qterminal \
