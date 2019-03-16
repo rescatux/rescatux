@@ -2,7 +2,7 @@
 
 MYOLDPWD="$(pwd)"
 
-SYSTEM_LOGOUT_IMAGES="system-hibernate.png system-restart.png system-shutdown.png system-suspend-hibernate.png system-suspend.png system-logout.png"
+SYSTEM_LOGOUT_IMAGES="system-hibernate.png system-restart.png system-shutdown.png system-suspend-hibernate.png system-suspend.png system-log-out.png"
 
 
 # Overwrite Adwaita icons with system Faenza ones
