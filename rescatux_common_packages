@@ -32,7 +32,6 @@ xfwm4 \
 
 LXQT_PACKAGES="\
  cmst \
- qterminal \
  faenza-icon-theme
 "
 SYNAPTIC_PACKAGES="synaptic"
