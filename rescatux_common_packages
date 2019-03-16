@@ -64,4 +64,5 @@ COMMON_PACKAGES="\
  extundelete\
  locales \
  ca-certificates \
+ wmctrl \
  " # I add syslinux so that isohybrid command is recognised.
