@@ -22,7 +22,6 @@ RESCAPP_PACKAGES="rescapp"
 LXQT_PACKAGES="\
  cmst \
  qterminal \
- screengrab \
  qt5-style-plugins \
  faenza-icon-theme
 "
