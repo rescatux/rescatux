@@ -26,7 +26,6 @@ set -v
 # Fetch version from folder directory name
 VERSION=`head -1 VERSION`
 
-DESKTOP_METAPACKAGE="lxqt task-desktop"
 CORE_PACKAGES="live-tools user-setup sudo eject"
 
 RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
@@ -109,7 +108,6 @@ for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
 done
 cd $TEMP_FOLDER
 sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
-sudo bash -c "echo \"${DESKTOP_METAPACKAGE}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/rescatux_desktop.list.chroot"
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}

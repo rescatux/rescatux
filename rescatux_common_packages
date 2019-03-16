@@ -19,6 +19,7 @@
 # This script assumes that the user has sudo permissions on lh build
 
 RESCAPP_PACKAGES="rescapp"
+DESKTOP_METAPACKAGE="lxqt task-desktop"
 LXQT_PACKAGES="\
  cmst \
  qterminal \
@@ -34,6 +35,7 @@ COMMON_PACKAGES="${LXQT_PACKAGES} \
  ${GDDRESCUE_PACKAGES} \
  ${MYRESCUE_PACKAGES} \
  ${RESCAPP_PACKAGES} \
+ ${DESKTOP_METAPACKAGE} \
  firefox-esr \
  syslinux \
  gawk\
