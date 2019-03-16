@@ -22,7 +22,6 @@ RESCAPP_PACKAGES="rescapp"
 LXQT_PACKAGES="\
  cmst \
  qterminal \
- qt5-style-plugins \
  faenza-icon-theme
 "
 SYNAPTIC_PACKAGES="synaptic"
