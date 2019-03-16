@@ -23,7 +23,6 @@ LXQT_PACKAGES="\
  cmst \
  feh \
  qterminal \
- juffed \
  xfwm4-theme-breeze \
  screengrab \
  qt5-style-plugins \
