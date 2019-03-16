@@ -2,31 +2,39 @@
 
 MYOLDPWD="$(pwd)"
 
+SYSTEM_LOGOUT_IMAGES="system-hibernate.png system-restart.png system-shutdown.png system-suspend-hibernate.png system-suspend.png system-logout.png"
+
 
 # Overwrite Adwaita icons with system Faenza ones
 for nsize in 16x16 22x22 24x24 256x256 32x32 48x48 512x512 64x64 8x8 96x96 ; do
 
     n_small_size=$(echo "$nsize" | awk -F 'x' '{print $1}')
-    if [ -d /usr/share/icons/Adwaita/${nsize}/actions/ ] ; then
-        if [ -d /usr/share/icons/Faenza/actions/${n_small_size} ] ; then
-            cd /usr/share/icons/Faenza/actions/${n_small_size}
-            for nfile in system-* ; do
-                #if [ -e "/usr/share/icons/Adwaita/${nsize}/actions/${nfile}" ] ; then
-                    cp "${nfile}" "/usr/share/icons/Adwaita/${nsize}/actions/${nfile}"
-                #fi
-            done
-        else
-            # TODO: Temporal imagemagick conversion to proper dimension
-            # TODO: I postpone it because I don't know how to revert imagemagick package installation
-            # TODO: in the hook
-            cd /usr/share/icons/Faenza/actions/96
-            for nfile in system-* ; do
-                #if [ -e "/usr/share/icons/Adwaita/${nsize}/actions/${nfile}" ] ; then
-                    cp "${nfile}" "/usr/share/icons/Adwaita/${nsize}/actions/${nfile}"
-                #fi
-            done
-        fi
-    fi
+    for ndir in actions apps ; do
+    	if [ -d /usr/share/icons/Adwaita/${nsize}/${ndir}/ ] ; then
+        	if [ -d /usr/share/icons/Faenza/${ndir}/${n_small_size} ] ; then
+            	cd /usr/share/icons/Faenza/${ndir}/${n_small_size}
+            	for nfile in ${SYSTEM_LOGOUT_IMAGES} ; do
+                	if [ -e "${nfile}" ] ; then
+                    	cp "${nfile}" "/usr/share/icons/Adwaita/${nsize}/${ndir}/${nfile}"
+                	fi
+            	done
+        	else
+            	# TODO: Temporal imagemagick conversion to proper dimension
+            	# TODO: I postpone it because I don't know how to revert imagemagick package installation
+            	# TODO: in the hook
+            	cd /usr/share/icons/Faenza/${ndir}/96
+            	for nfile in ${SYSTEM_LOGOUT_IMAGES} ; do
+                	if [ -e "${nfile}" ] ; then
+                    	cp "${nfile}" "/usr/share/icons/Adwaita/${nsize}/${ndir}/${nfile}"
+                	fi
+            	done
+        	fi
+    	fi
+    	# Fix restart named reboot icons
+    	if [ -e /usr/share/icons/Adwaita/${nsize}/${ndir}/system-restart.png ] ; then
+            cp /usr/share/icons/Adwaita/${nsize}/${ndir}/system-restart.png /usr/share/icons/Adwaita/${nsize}/${ndir}/system-reboot.png
+    	fi
+    done
 
 done
 
@@ -37,4 +45,3 @@ apt-get remove --purge --yes faenza-icon-theme
 
 
 cd "${MYOLDPWD}" # Return to old path
-
