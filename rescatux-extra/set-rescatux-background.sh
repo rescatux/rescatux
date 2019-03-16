@@ -21,4 +21,4 @@ MAGIC_BACKGROUND_PATH="/run/live/medium/isolinux/splash.png"
 sleep 2s # Wait for the systray / desktop to come up
 pcmanfm-qt --set-wallpaper "${MAGIC_BACKGROUND_PATH}"
 pcmanfm-qt --desktop &disown
-cmst --minimized &disown
+cmst --wait-time 5 --minimized &disown
