@@ -21,6 +21,11 @@
 RESCAPP_PACKAGES="rescapp"
 DESKTOP_METAPACKAGE="task-desktop"
 
+# Remove non needed LXQT packages
+LXQT_REMOVE_PACKAGES="\
+lxqt-theme-debian- \
+"
+
 # Replaces Debian lxqt metapackage
 # Current buster package installs
 # too many unneeded packages
@@ -52,6 +57,7 @@ COMMON_PACKAGES="\
  ${DESKTOP_METAPACKAGE} \
  ${LXQT_META_PACKAGE} \
  ${LXQT_ADDITIONAL_PACKAGES} \
+ ${LXQT_REMOVE_PACKAGES} \
  firefox-esr \
  syslinux \
  gawk\
