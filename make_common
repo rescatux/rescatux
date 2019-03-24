@@ -97,9 +97,8 @@ mkdir --parents $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 mkdir --parents $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
-cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp.desktop
+cp ${RESCAPP_EXTRA_FOLDER}/rescapp.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp.desktop
 cp ${RESCAPP_EXTRA_FOLDER}/show-rescapp-logs.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
-cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp -r ${RESCATUX_LOGOS} $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cp ${RESCATUX_EXTRA_FOLDER}/set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 cp ${RESCATUX_EXTRA_FOLDER}/start-rescatux-tightvnc-server.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
