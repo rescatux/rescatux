@@ -8,5 +8,5 @@ Name[en_US]=Rescapp
 Comment[en_US]=Rescapp - Rescue Tool
 Comment=Rescapp - Rescue Tool
 Exec=rescapp
-X-GNOME-Autostart-enabled=true
+#X-GNOME-Autostart-enabled=true
 Icon=openbox.png

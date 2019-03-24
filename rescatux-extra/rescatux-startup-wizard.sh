@@ -41,6 +41,10 @@ RESTART_X11VNC_INFO_STR="VNC Server will be restarted with new password. Press O
 NOPASSWORD_X11VNC_ERROR_TITLE="Rescatux-Startup-Wizard (5c)"
 NOPASSWORD_X11VNC_ERROR_STR="We refuse to run X11VNC without a password or default password. It has been terminated."
 
+START_RESCAPP_INFO_TITLE="Rescatux-Startup-Wizard (3/6b/6c)"
+START_RESCAPP_INFO_STR="Rescatux startup wizard has been completed. Please press OK to start rescapp. Enjoy your recovery!"
+
+
 function rtux_run_and_center_monitor_settings() {
 
     # Set monitor settings position - BEGIN
@@ -140,6 +144,14 @@ else
     echo "Starting monitor settings was skipped"
 fi
 
+function rtux_start_rescapp_info() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${START_RESCAPP_INFO_TITLE}"\
+	  --info  \
+	  --text "${START_RESCAPP_INFO_STR}"
+
+} # rtux_restart_x11vnc_info()
 
 
 if rtux_keep_x11vnc_server_question ; then
@@ -163,3 +175,6 @@ else
     rtux_terminate_x11vnc_server
 fi
 
+rtux_start_rescapp_info
+
+rescapp > /dev/null 2>&1 &disown
