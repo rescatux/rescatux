@@ -49,6 +49,13 @@ CHANGE_KEYBOARD_LAYOUT_QUESTION_STR="Do you want to change your keyboard layout?
 
 X11VNC_LISTENING_IPS_INFO_TITLE="Rescatux-Startup-Wizard (7b/4e)"
 
+CHANGE_LOCALE_QUESTION_TITLE="Rescatux-Startup-Wizard (1)"
+CHANGE_LOCALE_QUESTION_STR="Do you want to change your language/locale?"
+
+LOCALE_LOGOUT_INFO_TITLE="Rescatux-Startup-Wizard (2f)"
+LOCALE_LOGOUT_INFO_STR="After having changed and saved locale settings. Press OK here and then press YES when they ask you if you are sure that you want to logout. Next time the wizard appears you should not need to change your locale again."
+
+
 function rtux_run_and_center_monitor_settings() {
 
     # Set monitor settings position - BEGIN
@@ -175,12 +182,40 @@ X11VNC_LISTENING_IPS_INFO_STR="TightVNC Server listens on port 5900 on these ips
 
 } # rtux_x11vnc_listening_ips_info()
 
+
+function rtux_change_locale_question() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${CHANGE_LOCALE_QUESTION_TITLE}"\
+	  --question  \
+	  --text "${CHANGE_LOCALE_QUESTION_STR}"
+
+} # rtux_change_locale_question()
+
+
+function rtux_locale_logout_info() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${LOCALE_LOGOUT_INFO_TITLE}"\
+	  --info  \
+	  --text "${LOCALE_LOGOUT_INFO_STR}"
+
+} # rtux_locale_logout_info()
+
 ###
 
 if rtux_change_monitor_settings_question ; then
     rtux_run_and_center_monitor_settings
 else
     echo "Starting monitor settings was skipped"
+fi
+
+if rtux_change_locale_question ; then
+    lxqt-config-locale > /dev/null 2>&1 &disown
+    rtux_locale_logout_info
+    lxqt-leave --logout
+else
+    echo "Changing locale was skipped"
 fi
 
 if rtux_change_keyboard_layout_question ; then
