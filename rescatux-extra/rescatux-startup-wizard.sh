@@ -44,6 +44,9 @@ NOPASSWORD_X11VNC_ERROR_STR="We refuse to run X11VNC without a password or defau
 START_RESCAPP_INFO_TITLE="Rescatux-Startup-Wizard (4/7b/7c)"
 START_RESCAPP_INFO_STR="Rescatux startup wizard has been completed. Please press OK to start rescapp. Enjoy your recovery!"
 
+CHANGE_KEYBOARD_LAYOUT_QUESTION_TITLE="Rescatux-Startup-Wizard (2)"
+CHANGE_KEYBOARD_LAYOUT_QUESTION_STR="Do you want to change your keyboard layout?"
+
 
 function rtux_run_and_center_monitor_settings() {
 
@@ -148,12 +151,27 @@ function rtux_start_rescapp_info() {
 } # rtux_restart_x11vnc_info()
 
 
+function rtux_change_keyboard_layout_question() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${CHANGE_KEYBOARD_LAYOUT_QUESTION_TITLE}"\
+	  --question  \
+	  --text "${CHANGE_KEYBOARD_LAYOUT_QUESTION_STR}"
+
+} # rtux_change_keyboard_layout_question()
+
 ###
 
 if rtux_change_monitor_settings_question ; then
     rtux_run_and_center_monitor_settings
 else
     echo "Starting monitor settings was skipped"
+fi
+
+if rtux_change_keyboard_layout_question ; then
+    lxqt-config-input -s 'Keyboard Layout' > /dev/null 2>&1 &disown
+else
+    echo "Changing keyboard layout was skipped"
 fi
 
 if rtux_keep_x11vnc_server_question ; then
