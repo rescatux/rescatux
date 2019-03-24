@@ -138,12 +138,6 @@ function rtux_nopassword_x11vnc_error() {
 } # rtux_restart_x11vnc_info()
 
 
-if rtux_change_monitor_settings_question ; then
-    rtux_run_and_center_monitor_settings
-else
-    echo "Starting monitor settings was skipped"
-fi
-
 function rtux_start_rescapp_info() {
 
     zenity ${ZENITY_COMMON_OPTIONS} \
@@ -153,6 +147,14 @@ function rtux_start_rescapp_info() {
 
 } # rtux_restart_x11vnc_info()
 
+
+###
+
+if rtux_change_monitor_settings_question ; then
+    rtux_run_and_center_monitor_settings
+else
+    echo "Starting monitor settings was skipped"
+fi
 
 if rtux_keep_x11vnc_server_question ; then
     if rtux_change_x11vnc_password_question ; then
