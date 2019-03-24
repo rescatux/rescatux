@@ -29,7 +29,7 @@ KEEP_X11VNC_QUESTION_TITLE="Rescatux-Startup-Wizard (2)"
 KEEP_X11VNC_QUESTION_STR="Do you want to keep running VNC server (recommended answer: NO)?"
 
 CHANGE_X11VNC_PASSWORD_QUESTION_TITLE="Rescatux-Startup-Wizard (3b)"
-CHANGE_X11VNC_PASSWORD_QUESTION_STR="Do you want to change VNC server password (recommended answer: YES)?"
+CHANGE_X11VNC_PASSWORD_QUESTION_STR="Do you want to change default VNC server password (rescatux) (recommended answer: YES)?"
 
 NEWPASS_X11VNC_QUESTION_TITLE="Rescatux-Startup-Wizard (4b)"
 NEWPASS_X11VNC_QUESTION_STR="Please write the VNC Server new password"
