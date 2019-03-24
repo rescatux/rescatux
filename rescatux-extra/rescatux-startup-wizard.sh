@@ -41,13 +41,13 @@ RESTART_X11VNC_INFO_STR="VNC Server will be restarted with new password. Press O
 NOPASSWORD_X11VNC_ERROR_TITLE="Rescatux-Startup-Wizard (6c)"
 NOPASSWORD_X11VNC_ERROR_STR="We refuse to run X11VNC without a password or default password. It has been terminated."
 
-START_RESCAPP_INFO_TITLE="Rescatux-Startup-Wizard (4/7b/7c)"
+START_RESCAPP_INFO_TITLE="Rescatux-Startup-Wizard (4/8b/7c)"
 START_RESCAPP_INFO_STR="Rescatux startup wizard has been completed. Please press OK to start rescapp. Enjoy your recovery!"
 
 CHANGE_KEYBOARD_LAYOUT_QUESTION_TITLE="Rescatux-Startup-Wizard (2)"
 CHANGE_KEYBOARD_LAYOUT_QUESTION_STR="Do you want to change your keyboard layout?"
 
-X11VNC_LISTENING_IPS_INFO_TITLE="Rescatux-Startup-Wizard (6.5b/4e)"
+X11VNC_LISTENING_IPS_INFO_TITLE="Rescatux-Startup-Wizard (7b/4e)"
 
 function rtux_run_and_center_monitor_settings() {
 
