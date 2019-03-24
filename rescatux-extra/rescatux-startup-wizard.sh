@@ -47,6 +47,7 @@ START_RESCAPP_INFO_STR="Rescatux startup wizard has been completed. Please press
 CHANGE_KEYBOARD_LAYOUT_QUESTION_TITLE="Rescatux-Startup-Wizard (2)"
 CHANGE_KEYBOARD_LAYOUT_QUESTION_STR="Do you want to change your keyboard layout?"
 
+X11VNC_LISTENING_IPS_INFO_TITLE="Rescatux-Startup-Wizard (6.5b/4e)"
 
 function rtux_run_and_center_monitor_settings() {
 
@@ -160,6 +161,20 @@ function rtux_change_keyboard_layout_question() {
 
 } # rtux_change_keyboard_layout_question()
 
+
+function rtux_x11vnc_listening_ips_info() {
+
+X11VNC_IPS="$(ip addr show | grep inet | awk '{print $2}' | awk -F '/' '{print $1}')"
+
+X11VNC_LISTENING_IPS_INFO_STR="TightVNC Server listens on port 5900 on these ips:\n ${X11VNC_IPS}"
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${X11VNC_LISTENING_IPS_INFO_TITLE}"\
+	  --info  \
+	  --text "${X11VNC_LISTENING_IPS_INFO_STR}"
+
+} # rtux_x11vnc_listening_ips_info()
+
 ###
 
 if rtux_change_monitor_settings_question ; then
@@ -187,9 +202,11 @@ if rtux_keep_x11vnc_server_question ; then
             rtux_terminate_x11vnc_server
             echo "Starting TightVNC server"
             /usr/bin/start-rescatux-tightvnc-server.sh > /dev/null 2>&1 &disown
+            rtux_x11vnc_listening_ips_info
         fi
     else
         echo "Skipping changing X11VNC password"
+        rtux_x11vnc_listening_ips_info
     fi
 else
     rtux_terminate_x11vnc_server
