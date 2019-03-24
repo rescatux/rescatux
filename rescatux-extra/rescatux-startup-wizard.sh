@@ -25,23 +25,23 @@ ZENITY_COMMON_OPTIONS="--width=${RESCAPP_WIDTH} \
 CHANGE_MONITOR_SETTINGS_QUESTION_TITLE="Rescatux-Startup-Wizard"
 CHANGE_MONITOR_SETTINGS_QUESTION_STR="Do you want to change your monitor settings?"
 
-KEEP_X11VNC_QUESTION_TITLE="Rescatux-Startup-Wizard (2)"
+KEEP_X11VNC_QUESTION_TITLE="Rescatux-Startup-Wizard (3)"
 KEEP_X11VNC_QUESTION_STR="Do you want to keep running VNC server (recommended answer: NO)?"
 
-CHANGE_X11VNC_PASSWORD_QUESTION_TITLE="Rescatux-Startup-Wizard (3b)"
+CHANGE_X11VNC_PASSWORD_QUESTION_TITLE="Rescatux-Startup-Wizard (4b)"
 CHANGE_X11VNC_PASSWORD_QUESTION_STR="Do you want to change default VNC server password (rescatux) (recommended answer: YES)?"
 
-NEWPASS_X11VNC_QUESTION_TITLE="Rescatux-Startup-Wizard (4b)"
+NEWPASS_X11VNC_QUESTION_TITLE="Rescatux-Startup-Wizard (5b)"
 NEWPASS_X11VNC_QUESTION_STR="Please write the VNC Server new password"
 NEWPASS_X11VNC_QUESTION_ENTRY="New password here"
 
-RESTART_X11VNC_INFO_TITLE="Rescatux-Startup-Wizard (5b)"
+RESTART_X11VNC_INFO_TITLE="Rescatux-Startup-Wizard (6b)"
 RESTART_X11VNC_INFO_STR="VNC Server will be restarted with new password. Press OK button."
 
-NOPASSWORD_X11VNC_ERROR_TITLE="Rescatux-Startup-Wizard (5c)"
+NOPASSWORD_X11VNC_ERROR_TITLE="Rescatux-Startup-Wizard (6c)"
 NOPASSWORD_X11VNC_ERROR_STR="We refuse to run X11VNC without a password or default password. It has been terminated."
 
-START_RESCAPP_INFO_TITLE="Rescatux-Startup-Wizard (3/6b/6c)"
+START_RESCAPP_INFO_TITLE="Rescatux-Startup-Wizard (4/7b/7c)"
 START_RESCAPP_INFO_STR="Rescatux startup wizard has been completed. Please press OK to start rescapp. Enjoy your recovery!"
 
 
