@@ -88,7 +88,7 @@ function rtux_change_monitor_settings_question() {
 	  --question  \
 	  --text "${CHANGE_MONITOR_SETTINGS_QUESTION_STR}"
 
-} # rtux_change_monitor_settings()
+} # rtux_change_monitor_settings_question()
 
 
 function rtux_keep_x11vnc_server_question() {
@@ -139,7 +139,7 @@ function rtux_nopassword_x11vnc_error() {
 	  --error  \
 	  --text "${NOPASSWORD_X11VNC_ERROR_STR}"
 
-} # rtux_restart_x11vnc_info()
+} # rtux_nopassword_x11vnc_error()
 
 
 function rtux_start_rescapp_info() {
@@ -149,7 +149,7 @@ function rtux_start_rescapp_info() {
 	  --info  \
 	  --text "${START_RESCAPP_INFO_STR}"
 
-} # rtux_restart_x11vnc_info()
+} # rtux_start_rescapp_info()
 
 
 function rtux_change_keyboard_layout_question() {
