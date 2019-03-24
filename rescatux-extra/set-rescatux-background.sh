@@ -49,3 +49,7 @@ wmctrl -e 0,${LXQT_CONFIG_MONITOR_NEW_X_OFFSET},-1,-1,-1 -r "${MONITOR_SETTINGS_
 wmctrl -a "${MONITOR_SETTINGS_WINDOW_TITLE}"
 
 # Set monitor settings position - END
+
+# Start TightVNC Server - BEGIN
+/usr/bin/start-rescatux-tightvnc-server.sh > /dev/null 2>&1 &disown
+# Start TightVNC Server - END

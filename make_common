@@ -102,6 +102,7 @@ cp ${RESCAPP_EXTRA_FOLDER}/show-rescapp-logs.desktop $TEMP_FOLDER/${SKEL_FOLDER}
 cp ${RESCAPP_EXTRA_FOLDER}/rescapp.autostart.desktop $TEMP_FOLDER/${SKEL_FOLDER}/.config/autostart/
 cp -r ${RESCATUX_LOGOS} $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cp ${RESCATUX_EXTRA_FOLDER}/set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
+cp ${RESCATUX_EXTRA_FOLDER}/start-rescatux-tightvnc-server.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
   sed -i "s/@RESCATUX_VERSION@/${VERSION}/g" \
     ${TEMP_FOLDER}/config/bootloaders/${n_splash_dir}/splash.svg
