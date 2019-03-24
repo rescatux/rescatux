@@ -15,6 +15,34 @@
 # You should have received a copy of the GNU General Public License
 # along with Rescatux.  If not, see <http://www.gnu.org/licenses/>.
 
+function rtux_run_and_center_rescatux_startup_wizard() {
+
+    # Set Rescatux startup wizard position - BEGIN
+    RESCATUX_STARTUP_WIZARD_WINDOW_TITLE="Rescatux-Startup-Wizard"
+    /usr/bin/rescatux-startup-wizard.sh > /dev/null 2>&1 &disown
+    sleep 1s
+
+    MONITOR1_WIDTH=$(xrandr --listactivemonitors | tail -n +2 | head -n 1 | awk '{print $3}' | awk -F '/' '{print $1}')
+    MONITOR1_HALF_WIDTH="$(( ${MONITOR1_WIDTH} / 2 ))"
+    MONITOR_COUNT=$(xrandr --listactivemonitors | tail -n +2 | wc -l)
+
+    RESCATUX_STARTUP_WIZARD_WIDTH="$(wmctrl -l -G | grep "${RESCATUX_STARTUP_WIZARD_WINDOW_TITLE}" | awk '{print $5}')"
+    RESCATUX_STARTUP_WIZARD_HALF_WIDTH="$(( ${RESCATUX_STARTUP_WIZARD_WIDTH} / 2 ))"
+
+    if [ ${MONITOR_COUNT} -gt 1 ] ; then
+        # More than one monitor means we need to put the program between those two monitors
+        RESCATUX_STARTUP_WIZARD_NEW_X_OFFSET=$(( ${MONITOR1_WIDTH} - ${RESCATUX_STARTUP_WIZARD_HALF_WIDTH} ))
+    else
+        # Only one monitor: Just center in the middle of the screen
+        RESCATUX_STARTUP_WIZARD_NEW_X_OFFSET=$(( ${MONITOR1_HALF_WIDTH} - ${RESCATUX_STARTUP_WIZARD_HALF_WIDTH} ))
+    fi
+
+    wmctrl -e 0,${RESCATUX_STARTUP_WIZARD_NEW_X_OFFSET},-1,-1,-1 -r "${RESCATUX_STARTUP_WIZARD_WINDOW_TITLE}"
+    wmctrl -a "${RESCATUX_STARTUP_WIZARD_WINDOW_TITLE}"
+    # Set Rescatux startup wizard position - END
+}
+
+
 LIVE_HOME="/home/user"
 MAGIC_BACKGROUND_PATH="/run/live/medium/isolinux/splash.png"
 
@@ -28,5 +56,5 @@ cmst --wait-time 5 --minimized &disown
 # Start TightVNC Server - END
 
 # Start Rescatux startup wizard - BEGIN
-/usr/bin/rescatux-startup-wizard.sh > /dev/null 2>&1 &disown
+rtux_run_and_center_rescatux_startup_wizard
 # Start Rescatux startup wizard - END
