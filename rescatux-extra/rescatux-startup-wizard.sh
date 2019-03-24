@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Rescatux.  If not, see <http://www.gnu.org/licenses/>.
 
+LIVE_HOME="/home/user"
 
 RESCAPP_WIDTH="800"
 RESCAPP_HEIGHT="400"
@@ -24,6 +25,21 @@ ZENITY_COMMON_OPTIONS="--width=${RESCAPP_WIDTH} \
 CHANGE_MONITOR_SETTINGS_QUESTION_TITLE="Rescatux-Startup-Wizard"
 CHANGE_MONITOR_SETTINGS_QUESTION_STR="Do you want to change your monitor settings?"
 
+KEEP_X11VNC_QUESTION_TITLE="Rescatux-Startup-Wizard (2)"
+KEEP_X11VNC_QUESTION_STR="Do you want to keep running VNC server (recommended answer: NO)?"
+
+CHANGE_X11VNC_PASSWORD_QUESTION_TITLE="Rescatux-Startup-Wizard (3b)"
+CHANGE_X11VNC_PASSWORD_QUESTION_STR="Do you want to change VNC server password (recommended answer: YES)?"
+
+NEWPASS_X11VNC_QUESTION_TITLE="Rescatux-Startup-Wizard (4b)"
+NEWPASS_X11VNC_QUESTION_STR="Please write the VNC Server new password"
+NEWPASS_X11VNC_QUESTION_ENTRY="New password here"
+
+RESTART_X11VNC_INFO_TITLE="Rescatux-Startup-Wizard (5b)"
+RESTART_X11VNC_INFO_STR="VNC Server will be restarted with new password. Press OK button."
+
+NOPASSWORD_X11VNC_ERROR_TITLE="Rescatux-Startup-Wizard (5c)"
+NOPASSWORD_X11VNC_ERROR_STR="We refuse to run X11VNC without a password or default password. It has been terminated."
 
 function rtux_run_and_center_monitor_settings() {
 
@@ -52,6 +68,10 @@ function rtux_run_and_center_monitor_settings() {
 # Set monitor settings position - END
 }
 
+function rtux_terminate_x11vnc_server() {
+    killall -TERM x11vnc
+}
+
 
 function rtux_change_monitor_settings_question() {
 
@@ -63,6 +83,57 @@ function rtux_change_monitor_settings_question() {
 } # rtux_change_monitor_settings()
 
 
+function rtux_keep_x11vnc_server_question() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${KEEP_X11VNC_QUESTION_TITLE}"\
+	  --question  \
+	  --text "${KEEP_X11VNC_QUESTION_STR}"
+
+} # rtux_keep_x11vnc_server_question()
+
+
+function rtux_change_x11vnc_password_question() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${CHANGE_X11VNC_PASSWORD_QUESTION_TITLE}"\
+	  --question  \
+	  --text "${CHANGE_X11VNC_PASSWORD_QUESTION_STR}"
+
+} # rtux_change_x11vnc_password_question()
+
+
+function rtux_newpass_x11vnc_question() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${NEWPASS_X11VNC_QUESTION_TITLE}"\
+	  --entry  \
+	  --text "${NEWPASS_X11VNC_QUESTION_STR}" \
+	  --entry-text "${NEWPASS_X11VNC_QUESTION_ENTRY}"
+
+} # rtux_newpass_x11vnc_question()
+
+
+function rtux_restart_x11vnc_info() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${RESTART_X11VNC_INFO_TITLE}"\
+	  --info  \
+	  --text "${RESTART_X11VNC_INFO_STR}"
+
+} # rtux_restart_x11vnc_info()
+
+
+function rtux_nopassword_x11vnc_error() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${NOPASSWORD_X11VNC_ERROR_TITLE}"\
+	  --error  \
+	  --text "${NOPASSWORD_X11VNC_ERROR_STR}"
+
+} # rtux_restart_x11vnc_info()
+
+
 if rtux_change_monitor_settings_question ; then
     rtux_run_and_center_monitor_settings
 else
@@ -71,4 +142,24 @@ fi
 
 
 
+if rtux_keep_x11vnc_server_question ; then
+    if rtux_change_x11vnc_password_question ; then
+        NEWPASS="$(rtux_newpass_x11vnc_question)"
+        if [ -z "${NEWPASS}" ] || [ "${NEWPASS}" == "${NEWPASS_X11VNC_QUESTION_ENTRY}" ] ; then
+            echo "Refusing to set X11VNC Server without a password"
+            rtux_terminate_x11vnc_server
+            rtux_nopassword_x11vnc_error
+        else
+            rtux_restart_x11vnc_info
+            x11vnc -storepasswd "${NEWPASS}" ${LIVE_HOME}/.vnc/passwd
+            rtux_terminate_x11vnc_server
+            echo "Starting TightVNC server"
+            /usr/bin/start-rescatux-tightvnc-server.sh > /dev/null 2>&1 &disown
+        fi
+    else
+        echo "Skipping changing X11VNC password"
+    fi
+else
+    rtux_terminate_x11vnc_server
+fi
 
