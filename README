@@ -42,11 +42,13 @@ I'm trying to push upstream (Debian Live) my improvements on Debian Live:
 in the meanwhile you need to get, build and install Debian Live's live-build package from:
 
 https://github.com/rescatux/live-build/
-(Tag: rescatux-0.40b7)
+(Tag: rescatux-0.71b1-tmp5)
 
 Then make sure you install:
 policycoreutils
 coreutils
+selinux-utils
+selinux-policy-default
 packages so that SElinux support works ok.
 
 === Isolinux based image ===

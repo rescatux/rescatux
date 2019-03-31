@@ -169,6 +169,7 @@ lb config noauto \\
   --iso-volume "${LB_ISO_VOLUME}" \\
   ${RESCATUX_LIVE_CONFIG_SOURCE_OPTIONS} \\
   --bootappend-live "boot=live config quiet splash locales=en_US.UTF-8" \\
+  --selinux permissive \\
         "\${@}"
 EOF
 
