@@ -58,3 +58,11 @@ LIVEBUILD_GIT_COMMIT="rescatux-0.71b1-tmp13"
 LIVEBUILD_GIT_NAME="live-build"
 
 get_Git_Tar_Gz "${LIVEBUILD_GIT_URL}" "${LIVEBUILD_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${LIVEBUILD_GIT_NAME}-${LIVEBUILD_GIT_COMMIT}.tar.gz"
+
+# live-boot
+
+LIVEBOOT_GIT_URL="https://github.com/rescatux/live-boot/"
+LIVEBOOT_GIT_COMMIT="rescatux-0.75b5-tmp1"
+LIVEBOOT_GIT_NAME="live-boot"
+
+get_Git_Tar_Gz "${LIVEBOOT_GIT_URL}" "${LIVEBOOT_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${LIVEBOOT_GIT_NAME}-${LIVEBOOT_GIT_COMMIT}.tar.gz"
