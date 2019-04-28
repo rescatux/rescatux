@@ -51,14 +51,6 @@ BASE_FILENAME="rescatux-`head -n 1 VERSION`"
 RESCATUX_GIT_COMMIT="$(git rev-parse HEAD)"
 git archive HEAD | gzip > "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-main-rescatux-repo-${RESCATUX_GIT_COMMIT}.tar.gz"
 
-# tails-greeter
-
-TAILSGREETER_GIT_URL="https://github.com/rescatux/tails-greeter.git"
-TAILSGREETER_GIT_COMMIT="rescatux_0.40b8"
-TAILSGREETER_GIT_NAME="tails-greeter"
-
-get_Git_Tar_Gz "${TAILSGREETER_GIT_URL}" "${TAILSGREETER_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${TAILSGREETER_GIT_NAME}-${TAILSGREETER_GIT_COMMIT}.tar.gz"
-
 # live-build
 
 LIVEBUILD_GIT_URL="https://github.com/rescatux/live-build/"

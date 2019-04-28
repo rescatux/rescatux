@@ -46,17 +46,6 @@ syslinux-utils # Needed for logo generation
 
 If you want to build also source code you need the git package to be installed.
 
-== About tails-greeter build ==
-
-I am using a tails-greeter fork while I try to get it integrated properly into live-build. Here there is how you need to build it (inside a Buster chroot):
-
-git clone https://github.com/rescatux/tails-greeter.git
-cd greeter
-git checkout rescatux_0.40b8
-dpkg-buildpackage -us -uc
-
-You need to define the deb path at: make_common's RESCATUX_TAILS_GREETER variable.
-
 == Rescatux's live-build ==
 
 I'm trying to push upstream (live-build) my improvements on live-build:
