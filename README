@@ -38,6 +38,7 @@ I'm trying to push upstream (live-build) my improvements on live-build:
 * Arch autodetection in Isolinux bootloader
 * Support for loopback.cfg
 * SElinux
+* Liveid
 
 in the meanwhile you need to get, build and install live-build's live-build package from:
 
