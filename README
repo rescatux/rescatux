@@ -3,6 +3,32 @@ This is Rescatux, a Debian Live (based on live-build) CD aimed at easy rescue.
 Please visit the official web page of Rescatux, for more information.
 The URL is <http://www.supergrubdisk.org/rescatux/>.
 
+== Rescatux live cd unique features ==
+
+These features might be already merged into upstream live-build or they will be asked to be merged there.
+These features is what make different Rescatux than a regular live-cd which has Rescapp package installed.
+
+* Rescapp package included (which includes self-test)
+
+* Rescatux startup wizard:
+** Appears by default centered between two screens (useful when one has a broken screen)
+** Change monitor settings
+** Change language/locale
+** Change keyboard layout
+** Turn off VNC Server or change its password
+
+* Lightweight desktop (lxqt)
+
+* Includes both 686 and amd64 kernels
+* Arch autodetection in Isolinux bootloader
+* Arch autodetection in Grub2 bootloader
+* Microsoft signed Secure Boot
+* Loopback.cfg support
+* SElinux support
+* Liveid
+* VNC Server on by default
+
+
 == OBTAIN SOURCE CODE ==
 
 You can obtain most recent source code from out git repository by issuing:
