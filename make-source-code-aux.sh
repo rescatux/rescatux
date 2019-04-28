@@ -54,7 +54,7 @@ git archive HEAD | gzip > "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-
 # live-build
 
 LIVEBUILD_GIT_URL="https://github.com/rescatux/live-build/"
-LIVEBUILD_GIT_COMMIT="rescatux-0.40b7"
+LIVEBUILD_GIT_COMMIT="rescatux-0.71b1-tmp13"
 LIVEBUILD_GIT_NAME="live-build"
 
 get_Git_Tar_Gz "${LIVEBUILD_GIT_URL}" "${LIVEBUILD_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${LIVEBUILD_GIT_NAME}-${LIVEBUILD_GIT_COMMIT}.tar.gz"
