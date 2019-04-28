@@ -53,7 +53,7 @@ CHANGE_LOCALE_QUESTION_TITLE="Rescatux-Startup-Wizard (1)"
 CHANGE_LOCALE_QUESTION_STR="Do you want to change your language/locale?"
 
 LOCALE_LOGOUT_INFO_TITLE="Rescatux-Startup-Wizard (2f)"
-LOCALE_LOGOUT_INFO_STR="After having changed and saved locale settings. Press OK here and then press YES when they ask you if you are sure that you want to logout. Next time the wizard appears you should not need to change your locale again."
+LOCALE_LOGOUT_INFO_STR="After having changed and saved locale settings. Press OK here to logout. Next time the wizard appears you should not need to change your locale again."
 
 
 function rtux_run_and_center_monitor_settings() {
@@ -202,7 +202,25 @@ function rtux_locale_logout_info() {
 
 } # rtux_locale_logout_info()
 
+function rtux_logout_set_confirmation() {
+
+	if grep 'leave_confirmation=false' "${HOME}/.config/lxqt/session.conf" ; then
+		sed -i 's/leave_confirmation=false/leave_confirmation=true/g' "${HOME}/.config/lxqt/session.conf"
+	fi
+
+} # rtux_logout_set_confirmation()
+
+function rtux_logout_set_no_confirmation() {
+
+	if grep 'leave_confirmation=true' "${HOME}/.config/lxqt/session.conf" ; then
+		sed -i 's/leave_confirmation=true/leave_confirmation=false/g' "${HOME}/.config/lxqt/session.conf"
+	fi
+
+} # rtux_logout_set_no_confirmation()
+
 ###
+
+rtux_logout_set_confirmation
 
 if rtux_change_monitor_settings_question ; then
     rtux_run_and_center_monitor_settings
@@ -213,7 +231,9 @@ fi
 if rtux_change_locale_question ; then
     lxqt-config-locale > /dev/null 2>&1 &disown
     rtux_locale_logout_info
+    rtux_logout_set_no_confirmation
     lxqt-leave --logout
+    exit 0
 else
     echo "Changing locale was skipped"
 fi
@@ -248,5 +268,7 @@ else
 fi
 
 rtux_start_rescapp_info
+
+rtux_logout_set_confirmation
 
 rescapp > /dev/null 2>&1 &disown
