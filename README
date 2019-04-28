@@ -1,4 +1,4 @@
-This is Rescatux, a Debian Live CD aimed at easy rescue.
+This is Rescatux, a Debian Live (based on live-build) CD aimed at easy rescue.
 
 Please visit the official web page of Rescatux, for more information.
 The URL is <http://www.supergrubdisk.org/rescatux/>.
@@ -22,7 +22,7 @@ If you want to build also source code you need the git package to be installed.
 
 == About tails-greeter build ==
 
-I am using a tails-greeter fork while I try to get it integrated properly into Debian Live. Here there is how you need to build it (inside a Buster chroot):
+I am using a tails-greeter fork while I try to get it integrated properly into live-build. Here there is how you need to build it (inside a Buster chroot):
 
 git clone https://github.com/rescatux/tails-greeter.git
 cd greeter
@@ -31,15 +31,15 @@ dpkg-buildpackage -us -uc
 
 You need to define the deb path at: make_common's RESCATUX_TAILS_GREETER variable.
 
-== Rescatux's Debian Live ==
+== Rescatux's live-build ==
 
-I'm trying to push upstream (Debian Live) my improvements on Debian Live:
+I'm trying to push upstream (live-build) my improvements on live-build:
 
 * Arch autodetection in Isolinux bootloader
 * Support for loopback.cfg
 * SElinux
 
-in the meanwhile you need to get, build and install Debian Live's live-build package from:
+in the meanwhile you need to get, build and install live-build's live-build package from:
 
 https://github.com/rescatux/live-build/
 (Tag: rescatux-0.71b1-tmp9)
