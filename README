@@ -78,6 +78,22 @@ selinux-utils
 selinux-policy-default
 packages so that SElinux support works ok.
 
+== Rescatux's live-boot ==
+
+I'm trying to push upstream (live-boot) my improvements on live-boot:
+
+* Liveid
+.
+
+Rescatux live-boot will be fetched from Rescatux repo when building the rescatux disk.
+
+Were you to need to build it manually (and upload to a repo of your own so that it's taken into account) you can have its source code here:
+
+https://github.com/rescatux/live-boot/
+(Tag: rescatux-0.75b5-tmp1)
+
+Note: Make sure you build both the i386 buster and amd64 buster versions.
+
 === Isolinux based image ===
 
 Edit these variables from make_common file if needed:
