@@ -68,4 +68,5 @@ COMMON_PACKAGES="\
  locales \
  ca-certificates \
  wmctrl \
+ xterm \
  " # I add syslinux so that isohybrid command is recognised.
