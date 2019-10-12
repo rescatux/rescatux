@@ -30,9 +30,9 @@ CORE_PACKAGES="live-tools user-setup sudo eject"
 
 RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 
-MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian"
-MIRROR_CHROOT="http://127.0.0.1:9999/debian"
-DEBIAN_MAIN_MIRROR="http://127.0.0.1:9999/debian/"
+MIRROR_BOOTSTRAP="http://deb.debian.org/debian/"
+MIRROR_CHROOT="http://deb.debian.org/debian/"
+DEBIAN_MAIN_MIRROR="http://deb.debian.org/debian/"
 RESCATUX_MIRROR="http://rescatux.sourceforge.net/repo/"
 
 ARCH="i386"
