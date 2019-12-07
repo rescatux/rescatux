@@ -237,63 +237,63 @@ rtux_logout_set_confirmation
 
 if rtux_skip_wizard_question ; then
 
-if rtux_change_monitor_settings_question ; then
-    rtux_run_and_center_monitor_settings
+  if rtux_change_monitor_settings_question ; then
+      rtux_run_and_center_monitor_settings
+  else
+      echo "Starting monitor settings was skipped"
+  fi
+
+  if rtux_change_locale_question ; then
+      lxqt-config-locale > /dev/null 2>&1 &disown
+      rtux_locale_logout_info
+      rtux_logout_set_no_confirmation
+      lxqt-leave --logout
+      exit 0
+  else
+      echo "Changing locale was skipped"
+  fi
+
+  if rtux_change_keyboard_layout_question ; then
+      lxqt-config-input -s 'Keyboard Layout' > /dev/null 2>&1 &disown
+  else
+      echo "Changing keyboard layout was skipped"
+  fi
+
+  if rtux_keep_x11vnc_server_question ; then
+      if rtux_change_x11vnc_password_question ; then
+          NEWPASS="$(rtux_newpass_x11vnc_question)"
+          if [ -z "${NEWPASS}" ] || [ "${NEWPASS}" == "${NEWPASS_X11VNC_QUESTION_ENTRY}" ] ; then
+              echo "Refusing to set X11VNC Server without a password"
+              rtux_terminate_x11vnc_server
+              rtux_nopassword_x11vnc_error
+          else
+              rtux_restart_x11vnc_info
+              x11vnc -storepasswd "${NEWPASS}" ${LIVE_HOME}/.vnc/passwd
+              rtux_terminate_x11vnc_server
+              echo "Starting TightVNC server"
+              /usr/bin/start-rescatux-tightvnc-server.sh > /dev/null 2>&1 &disown
+              rtux_x11vnc_listening_ips_info
+          fi
+      else
+          echo "Skipping changing X11VNC password"
+          rtux_x11vnc_listening_ips_info
+      fi
+  else
+      rtux_terminate_x11vnc_server
+  fi
+
+  rtux_start_rescapp_info
+
+  rtux_logout_set_confirmation
+
+  rescapp > /dev/null 2>&1 &disown
+
 else
-    echo "Starting monitor settings was skipped"
-fi
 
-if rtux_change_locale_question ; then
-    lxqt-config-locale > /dev/null 2>&1 &disown
-    rtux_locale_logout_info
-    rtux_logout_set_no_confirmation
-    lxqt-leave --logout
-    exit 0
-else
-    echo "Changing locale was skipped"
-fi
+  rtux_terminate_x11vnc_server
 
-if rtux_change_keyboard_layout_question ; then
-    lxqt-config-input -s 'Keyboard Layout' > /dev/null 2>&1 &disown
-else
-    echo "Changing keyboard layout was skipped"
-fi
+  rtux_logout_set_confirmation
 
-if rtux_keep_x11vnc_server_question ; then
-    if rtux_change_x11vnc_password_question ; then
-        NEWPASS="$(rtux_newpass_x11vnc_question)"
-        if [ -z "${NEWPASS}" ] || [ "${NEWPASS}" == "${NEWPASS_X11VNC_QUESTION_ENTRY}" ] ; then
-            echo "Refusing to set X11VNC Server without a password"
-            rtux_terminate_x11vnc_server
-            rtux_nopassword_x11vnc_error
-        else
-            rtux_restart_x11vnc_info
-            x11vnc -storepasswd "${NEWPASS}" ${LIVE_HOME}/.vnc/passwd
-            rtux_terminate_x11vnc_server
-            echo "Starting TightVNC server"
-            /usr/bin/start-rescatux-tightvnc-server.sh > /dev/null 2>&1 &disown
-            rtux_x11vnc_listening_ips_info
-        fi
-    else
-        echo "Skipping changing X11VNC password"
-        rtux_x11vnc_listening_ips_info
-    fi
-else
-    rtux_terminate_x11vnc_server
-fi
-
-rtux_start_rescapp_info
-
-rtux_logout_set_confirmation
-
-rescapp > /dev/null 2>&1 &disown
-
-else
-
-rtux_terminate_x11vnc_server
-
-rtux_logout_set_confirmation
-
-rescapp > /dev/null 2>&1 &disown
+  rescapp > /dev/null 2>&1 &disown
 
 fi
