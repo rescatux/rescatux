@@ -22,6 +22,9 @@ RESCAPP_HEIGHT="350"
 ZENITY_COMMON_OPTIONS="--width=${RESCAPP_WIDTH} \
 		       --height=${RESCAPP_HEIGHT}"
 
+SKIP_WIZARD_QUESTION_TITLE="Rescatux-Startup-Wizard"
+SKIP_WIZARD_QUESTION_STR="Default settings (Yes) or full Wizard (No) ?"
+
 CHANGE_MONITOR_SETTINGS_QUESTION_TITLE="Rescatux-Startup-Wizard"
 CHANGE_MONITOR_SETTINGS_QUESTION_STR="Do you want to change your monitor settings?"
 
@@ -96,6 +99,16 @@ function rtux_change_monitor_settings_question() {
 	  --text "${CHANGE_MONITOR_SETTINGS_QUESTION_STR}"
 
 } # rtux_change_monitor_settings_question()
+
+
+function rtux_skip_wizard_question() {
+
+    zenity ${ZENITY_COMMON_OPTIONS} \
+      --title "${SKIP_WIZARD_QUESTION_TITLE}"\
+	  --question  \
+	  --text "${SKIP_WIZARD_QUESTION_STR}"
+
+} # rtux_skip_wizard_question()
 
 
 function rtux_keep_x11vnc_server_question() {
@@ -222,6 +235,8 @@ function rtux_logout_set_no_confirmation() {
 
 rtux_logout_set_confirmation
 
+if rtux_skip_wizard_question ; then
+
 if rtux_change_monitor_settings_question ; then
     rtux_run_and_center_monitor_settings
 else
@@ -272,3 +287,13 @@ rtux_start_rescapp_info
 rtux_logout_set_confirmation
 
 rescapp > /dev/null 2>&1 &disown
+
+else
+
+rtux_terminate_x11vnc_server
+
+rtux_logout_set_confirmation
+
+rescapp > /dev/null 2>&1 &disown
+
+fi
