@@ -235,7 +235,7 @@ function rtux_logout_set_no_confirmation() {
 
 rtux_logout_set_confirmation
 
-if rtux_skip_wizard_question ; then
+if ! rtux_skip_wizard_question ; then
 
   if rtux_change_monitor_settings_question ; then
       rtux_run_and_center_monitor_settings
