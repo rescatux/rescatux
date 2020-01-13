@@ -80,6 +80,9 @@ RESCATUX_LOGOS="logos"
 RESCAPP_EXTRA_FOLDER="rescapp-extra"
 RESCATUX_EXTRA_FOLDER="rescatux-extra"
 
+if [ -e 'make_common.custom' ] ; then
+  source make_common.custom
+fi
 
 mkdir --parents $TEMP_FOLDER/${RLE_FOLDER}
 # Generate logo - Begin

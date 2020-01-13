@@ -1,0 +1,13 @@
+# Please copy make_common.custom.sample as make_common.custom
+# Then edit make_common.custom as you wish
+
+# Make your own system customization here
+# So that the file is sourced from make_common
+# This is an example to tailor to a custom approx repo
+
+
+MIRROR_BOOTSTRAP="http://127.0.0.1:9999/debian/"
+MIRROR_CHROOT="http://127.0.0.1:9999/debian/"
+MIRROR_CHROOT_SECURITY="http://127.0.0.1:9999/debian-security/"
+DEBIAN_MAIN_MIRROR="http://127.0.0.1:9999/debian/"
+RESCATUX_MIRROR="http://127.0.0.1:9999/repo/"

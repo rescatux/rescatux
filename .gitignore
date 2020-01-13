@@ -1,4 +1,5 @@
 # Ignore binary files
 \.directory
 logos/background.png
+make_common.custom
 
