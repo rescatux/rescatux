@@ -32,6 +32,7 @@ RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
 
 MIRROR_BOOTSTRAP="http://deb.debian.org/debian/"
 MIRROR_CHROOT="http://deb.debian.org/debian/"
+MIRROR_CHROOT_SECURITY="http://security.debian.org/debian-security/"
 DEBIAN_MAIN_MIRROR="http://deb.debian.org/debian/"
 RESCATUX_MIRROR="http://rescatux.sourceforge.net/repo/"
 
@@ -164,6 +165,7 @@ lb config noauto \\
   ${BOOT_OPTION} \\
   --mirror-bootstrap "${MIRROR_BOOTSTRAP}" \\
   --mirror-chroot "${MIRROR_CHROOT}" \\
+  --mirror-chroot-security "${MIRROR_CHROOT_SECURITY}" \\
   --apt-options "--force-yes --yes -o Acquire::Check-Valid-Until=false -o Acquire::AllowInsecureRepositories=true -o Acquire::AllowDowngradeToInsecureRepositories=true" \\
   --iso-application "${LB_ISO_APPLICATION}" \\
   --iso-publisher "${LB_ISO_PUBLISHER}" \\
