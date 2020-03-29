@@ -33,7 +33,7 @@ These features is what make different Rescatux than a regular live-cd which has 
 
 You can obtain most recent source code from out git repository by issuing:
 
-  git clone http://git.code.sf.net/p/rescatux/git rescatux-git
+  git clone https://github.com/rescatux/rescatux.git rescatux-git
 
 == BUILD INSTRUCTIONS ==
 
@@ -58,7 +58,7 @@ I'm trying to push upstream (live-build) my improvements on live-build:
 in the meanwhile you need to get, build and install live-build's live-build package from:
 
 https://github.com/rescatux/live-build/
-(Tag: rescatux-0.72b1-tmp1)
+(Tag: rescatux-0.73rc1-tmp1)
 
 Then make sure you install:
 policycoreutils
