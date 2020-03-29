@@ -102,6 +102,9 @@ in rescatux-release directory.
 
 === SG2D based image ===
 
+(Note: At March 2020 this feature won't work properly without being updated.)
+(Note: So this is an unsupported script.)
+
 You need to have installed GNU GRUB2 in your system, at least the grub-mkrescue and grub-mkfont binaries.
 You also need to have Super Grub2 Disk source code.
 
@@ -127,7 +130,7 @@ Just run:
 
 which will generate many source code files at:
 
-rescatux-release/source-code directory.
+rescatux-release/rescatux-VERSION/source-code directory.
 
 === Release ===
 
