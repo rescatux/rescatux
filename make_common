@@ -28,7 +28,7 @@ VERSION=`head -1 VERSION`
 
 CORE_PACKAGES="live-tools user-setup sudo eject"
 
-RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release"
+RESCATUX_RELEASE_DIR="$(pwd)/rescatux-release/rescatux-${VERSION}"
 
 MIRROR_BOOTSTRAP="http://deb.debian.org/debian/"
 MIRROR_CHROOT="http://deb.debian.org/debian/"
@@ -181,6 +181,10 @@ EOF
 
 sudo bash -c "lb config"
 sudo bash -c "lb clean"
+
+if [ ! -d "${RESCATUX_RELEASE_DIR}" ] ; then
+  mkdir --parents "${RESCATUX_RELEASE_DIR}"
+fi
 
 sudo bash -c "lb build 2>&1 | tee ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}_build.log"
 mv live-image-i386${IS_HYBRID}.${FILE_EXTENSION} ${RESCATUX_RELEASE_DIR}/${BASE_FILENAME}.${FILE_EXTENSION}
