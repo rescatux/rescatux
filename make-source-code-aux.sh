@@ -80,7 +80,7 @@ get_Git_Tar_Gz "${LIVEBOOT_GIT_URL}" "${LIVEBOOT_GIT_COMMIT}" "${RESCATUX_RELEAS
 # rescapp
 
 LIVEBOOT_GIT_URL="https://github.com/rescatux/rescapp/"
-LIVEBOOT_GIT_COMMIT="v0.56-debian"
+LIVEBOOT_GIT_COMMIT="v0.57-debian"
 LIVEBOOT_GIT_NAME="rescapp"
 
 get_Git_Tar_Gz "${LIVEBOOT_GIT_URL}" "${LIVEBOOT_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${LIVEBOOT_GIT_NAME}-${LIVEBOOT_GIT_COMMIT}.tar.gz"
