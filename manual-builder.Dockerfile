@@ -26,6 +26,10 @@ RUN apt-get -y update && \
 # TODO: Install our own live-build package if needed.
 RUN apt-get -y install live-build
 
+RUN dpkg --add-architecture amd64
+
+RUN apt-get -y update
+
 #RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
 RUN echo "rbuilder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/rbuilder-sudo
