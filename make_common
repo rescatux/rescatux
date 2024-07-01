@@ -37,7 +37,7 @@ DEBIAN_MAIN_MIRROR="http://deb.debian.org/debian/"
 RESCATUX_MIRROR="http://rescatux.sourceforge.net/repo/"
 
 ARCH="i386"
-DISTRIBUTION="buster" # Todo: Select with a switch
+DISTRIBUTION="bookworm" # Todo: Select with a switch
 DISTRIBUTION_OPTION="-d ${DISTRIBUTION}"
 
 ARCH_OPTION="-a ${ARCH}" # Todo: Select with a switch
@@ -51,14 +51,14 @@ TEMP_FOLDER="$(pwd)/live-build"
 SKEL_FOLDER="config/includes.chroot/etc/skel"
 
 CHROOT_SOURCES_FOLDER="config/archives"
-STRETCH_CHROOT_CONFIG="config/archives/buster.list.chroot"
+STRETCH_CHROOT_CONFIG="config/archives/bookworm.list.chroot"
 RESCATUX_CHROOT_CONFIG="config/archives/rescatux.list.chroot"
 CHROOT_APT_CONFIG_FOLDER1="config/apt/"
 APT_PREFERENCES1="config/apt/preferences"
 CHROOT_APT_CONFIG_FOLDER2="config/archives/"
 CHROOT_APT_CONFIG_FOLDER3="config/archives/"
 CHROOT_APT_CONFIG_FOLDER4="config/archives/"
-APT_PREFERENCES4="config/archives/buster.pref.chroot"
+APT_PREFERENCES4="config/archives/bookworm.pref.chroot"
 PACKAGES_CHROOT_FOLDER="config/packages.chroot"
 
 
@@ -116,9 +116,9 @@ sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_F
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
-echo -e -n "deb ${DEBIAN_MAIN_MIRROR} buster main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
-echo -e -n "deb ${RESCATUX_MIRROR} buster-dev main\n" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
-echo -e -n "deb ${RESCATUX_MIRROR} buster-live-boot-dev main" >> $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
+echo -e -n "deb ${DEBIAN_MAIN_MIRROR} bookworm main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
+echo -e -n "deb ${RESCATUX_MIRROR} bookworm-dev main\n" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
+echo -e -n "deb ${RESCATUX_MIRROR} bookworm-live-boot-dev main" >> $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER2}
