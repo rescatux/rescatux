@@ -18,7 +18,7 @@
 # This script assumes apt-get install live-helper has been done
 # This script assumes that the user has sudo permissions on lh build
 
-RESCAPP_PACKAGES="rescapp"
+RESCAPP_PACKAGES=""
 DESKTOP_METAPACKAGE="task-desktop"
 
 # Remove non needed LXQT packages
