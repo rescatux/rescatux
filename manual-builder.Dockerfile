@@ -6,12 +6,6 @@ ARG RESCATUX_BUILDER_GID
 ENV TZ=Etc/UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN echo '\
-deb-src http://deb.debian.org/debian bookworm main\n\
-deb-src http://security.debian.org/debian-security bookworm-security main\n\
-deb-src http://deb.debian.org/debian bookworm-updates main\n\
-' > /etc/apt/sources.list.d/debian-sources.list
-
 RUN apt-get -y update && \
     apt-get -y install \
                        sudo \
