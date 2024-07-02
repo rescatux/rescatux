@@ -15,7 +15,8 @@ RUN apt-get -qq update -y && \
                        policycoreutils \
                        coreutils \
                        selinux-utils \
-                       selinux-policy-default
+                       selinux-policy-default \
+                       imagemagick
 
 # TODO: Install our own live-build package if needed.
 RUN apt-get -qq install -y live-build
