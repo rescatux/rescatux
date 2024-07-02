@@ -21,8 +21,11 @@ RUN apt-get -qq update -y && \
 RUN apt-get -qq install -y live-build
 
 RUN apt-get -qq install -y locales
-RUN locale-gen en_US.UTF-8
-
+RUN dpkg-reconfigure -f noninteractive tzdata && \
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANG="en_US.UTF-8"'>/etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
 
 RUN dpkg --add-architecture amd64
 
