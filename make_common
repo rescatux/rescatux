@@ -117,8 +117,6 @@ sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_SOURCES_FOLDER}
 echo -e -n "deb ${DEBIAN_MAIN_MIRROR} bookworm main" > $TEMP_FOLDER/${STRETCH_CHROOT_CONFIG}
-echo -e -n "deb ${RESCATUX_MIRROR} bookworm-dev main\n" > $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
-echo -e -n "deb ${RESCATUX_MIRROR} bookworm-live-boot-dev main" >> $TEMP_FOLDER/${RESCATUX_CHROOT_CONFIG}
 
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER1}
 mkdir --parents $TEMP_FOLDER/${CHROOT_APT_CONFIG_FOLDER2}
