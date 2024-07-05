@@ -42,6 +42,7 @@ xfwm4 \
 
 LXQT_ADDITIONAL_PACKAGES="\
  cmst \
+ oxygen-icon-theme \
 "
 SYNAPTIC_PACKAGES="synaptic"
 
