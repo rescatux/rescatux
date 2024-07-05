@@ -42,7 +42,6 @@ xfwm4 \
 
 LXQT_ADDITIONAL_PACKAGES="\
  cmst \
- faenza-icon-theme
 "
 SYNAPTIC_PACKAGES="synaptic"
 
