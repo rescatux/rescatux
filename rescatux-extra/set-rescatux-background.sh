@@ -44,11 +44,9 @@ function rtux_run_and_center_rescatux_startup_wizard() {
 
 
 LIVE_HOME="/home/user"
-MAGIC_BACKGROUND_PATH="/run/live/medium/isolinux/splash.png"
 
 sleep 2s # Wait for the systray / desktop to come up
-pcmanfm-qt --set-wallpaper "${MAGIC_BACKGROUND_PATH}"
-pcmanfm-qt --desktop &disown
+
 cmst --wait-time 5 --minimized &disown
 
 # Start TightVNC Server - BEGIN
