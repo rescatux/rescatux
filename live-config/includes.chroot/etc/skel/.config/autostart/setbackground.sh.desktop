@@ -1,0 +1,26 @@
+# Rescapp Desktop entry
+# Copyright (C) 2012 Adrian Gibanel Lopez
+#
+# Rescapp is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Rescapp is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Rescapp.  If not, see <http://www.gnu.org/licenses/>.
+
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Version=1.0
+Name=No Name
+Name[en_US]=Rescapp
+Comment[en_US]=Rescapp - Rescue Tool
+Comment=Rescapp - Rescue Tool
+Exec=/usr/bin/set-rescatux-background.sh
+X-GNOME-Autostart-enabled=true
