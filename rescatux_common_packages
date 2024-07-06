@@ -66,6 +66,11 @@ XORG_EXTRA_PACKAGES="\
  xserver-xorg-video-qxl \
 "
 
+RESCATUX_DESKTOP_INIT_PACKAGES="\
+ wmctrl \
+ zenity \
+"
+
 COMMON_PACKAGES="\
  ${SYNAPTIC_PACKAGES} \
  ${GDDRESCUE_PACKAGES} \
@@ -78,13 +83,12 @@ COMMON_PACKAGES="\
  ${TIGHTVNCSERVER_PACKAGES} \
  ${OPTIONAL_RESCAPP_DEPENDENCIES} \
  ${XORG_EXTRA_PACKAGES} \
+ ${RESCATUX_DESKTOP_INIT_PACKAGES} \
  firefox-esr \
  syslinux \
  gawk\
  extundelete\
  locales \
  ca-certificates \
- wmctrl \
- zenity \
  xterm \
  " # I add syslinux so that isohybrid command is recognised.
