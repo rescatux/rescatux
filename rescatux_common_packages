@@ -38,6 +38,7 @@ qterminal \
 qttranslations5-l10n \
 xarchiver \
 xfwm4 \
+gvfs \
 "
 
 LXQT_ADDITIONAL_PACKAGES="\
