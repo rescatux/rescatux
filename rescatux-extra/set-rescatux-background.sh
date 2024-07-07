@@ -15,31 +15,33 @@
 # You should have received a copy of the GNU General Public License
 # along with Rescatux.  If not, see <http://www.gnu.org/licenses/>.
 
-function rtux_run_and_center_rescatux_startup_wizard() {
+function deal_with_two_monitors() {
 
-    # Set Rescatux startup wizard position - BEGIN
-    RESCATUX_STARTUP_WIZARD_WINDOW_TITLE="Rescatux-Startup-Wizard"
-    /usr/bin/rescatux-startup-wizard.sh > /dev/null 2>&1 &disown
-    sleep 1s
-
-    MONITOR1_WIDTH=$(xrandr --listactivemonitors | tail -n +2 | head -n 1 | awk '{print $3}' | awk -F '/' '{print $1}')
-    MONITOR1_HALF_WIDTH="$(( ${MONITOR1_WIDTH} / 2 ))"
     MONITOR_COUNT=$(xrandr --listactivemonitors | tail -n +2 | wc -l)
 
-    RESCATUX_STARTUP_WIZARD_WIDTH="$(wmctrl -l -G | grep "${RESCATUX_STARTUP_WIZARD_WINDOW_TITLE}" | awk '{print $5}')"
-    RESCATUX_STARTUP_WIZARD_HALF_WIDTH="$(( ${RESCATUX_STARTUP_WIZARD_WIDTH} / 2 ))"
-
     if [ ${MONITOR_COUNT} -gt 1 ] ; then
-        # More than one monitor means we need to put the program between those two monitors
-        RESCATUX_STARTUP_WIZARD_NEW_X_OFFSET=$(( ${MONITOR1_WIDTH} - ${RESCATUX_STARTUP_WIZARD_HALF_WIDTH} ))
+      thetime="30"
+      unit="s"
+      increasefactor=$(echo "${thetime}"/100|bc -l)
+      (
+        counter=0
+        while [ "$counter" -le 100 ]; do
+          echo $counter; sleep "${increasefactor}""${unit}"
+          counter=$(( $counter + 1 ))
+        done
+      ) |
+      zenity --progress --title="Detected 2 or more screens." --text="Unless you press Cancel the detected screens will be auto-cloned with 1024x768 resolution in 30 seconds." --percentage=0 --auto-close
+      if [ "$?" == 1 ]; then
+        return 0
+      else
+        # Timed out: Let's clone the two monitors
+        xrandr --listmonitors | sed -n '1!p' | sed -e 's/\s[0-9].*\s\([a-zA-Z0-9\-]*\)$/\1/g' | xargs -n 1 -- bash -xc 'xrandr --output $0 --mode '1024x768' --pos 0x0 --rotate normal'
+      fi
     else
-        # Only one monitor: Just center in the middle of the screen
-        RESCATUX_STARTUP_WIZARD_NEW_X_OFFSET=$(( ${MONITOR1_HALF_WIDTH} - ${RESCATUX_STARTUP_WIZARD_HALF_WIDTH} ))
+        # Only one monitor: Just return
+        return 0
     fi
 
-    wmctrl -e 0,${RESCATUX_STARTUP_WIZARD_NEW_X_OFFSET},-1,-1,-1 -r "${RESCATUX_STARTUP_WIZARD_WINDOW_TITLE}"
-    wmctrl -a "${RESCATUX_STARTUP_WIZARD_WINDOW_TITLE}"
-    # Set Rescatux startup wizard position - END
 }
 
 
@@ -54,5 +56,6 @@ cmst --wait-time 5 --minimized &disown
 # Start TightVNC Server - END
 
 # Start Rescatux startup wizard - BEGIN
-rtux_run_and_center_rescatux_startup_wizard
+deal_with_two_monitors
+/usr/bin/rescatux-startup-wizard.sh > /dev/null 2>&1 &disown
 # Start Rescatux startup wizard - END
