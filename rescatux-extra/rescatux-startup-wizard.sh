@@ -58,38 +58,9 @@ CHANGE_LOCALE_QUESTION_STR="Do you want to change your language/locale?"
 LOCALE_LOGOUT_INFO_TITLE="Rescatux-Startup-Wizard (2f)"
 LOCALE_LOGOUT_INFO_STR="After having changed and saved locale settings. Press OK here to logout. Next time the wizard appears you should not need to change your locale again."
 
-
-function rtux_run_and_center_monitor_settings() {
-
-    # Set monitor settings position - BEGIN
-    MONITOR_SETTINGS_WINDOW_TITLE="Monitor Settings"
-    lxqt-config-monitor > /dev/null 2>&1 &disown
-    sleep 3s
-
-    MONITOR1_WIDTH=$(xrandr --listactivemonitors | tail -n +2 | head -n 1 | awk '{print $3}' | awk -F '/' '{print $1}')
-    MONITOR1_HALF_WIDTH="$(( ${MONITOR1_WIDTH} / 2 ))"
-    MONITOR_COUNT=$(xrandr --listactivemonitors | tail -n +2 | wc -l)
-
-    LXQT_CONFIG_MONITOR_WIDTH="$(wmctrl -l -G | grep "${MONITOR_SETTINGS_WINDOW_TITLE}" | awk '{print $5}')"
-    LXQT_CONFIG_MONITOR_HALF_WIDTH="$(( ${LXQT_CONFIG_MONITOR_WIDTH} / 2 ))"
-
-    if [ ${MONITOR_COUNT} -gt 1 ] ; then
-        # More than one monitor means we need to put the program between those two monitors
-        LXQT_CONFIG_MONITOR_NEW_X_OFFSET=$(( ${MONITOR1_WIDTH} - ${LXQT_CONFIG_MONITOR_HALF_WIDTH} ))
-    else
-        # Only one monitor: Just center in the middle of the screen
-        LXQT_CONFIG_MONITOR_NEW_X_OFFSET=$(( ${MONITOR1_HALF_WIDTH} - ${LXQT_CONFIG_MONITOR_HALF_WIDTH} ))
-    fi
-
-    wmctrl -e 0,${LXQT_CONFIG_MONITOR_NEW_X_OFFSET},-1,-1,-1 -r "${MONITOR_SETTINGS_WINDOW_TITLE}"
-    wmctrl -a "${MONITOR_SETTINGS_WINDOW_TITLE}"
-# Set monitor settings position - END
-}
-
 function rtux_terminate_x11vnc_server() {
     killall -TERM x11vnc
 }
-
 
 function rtux_change_monitor_settings_question() {
 
@@ -238,7 +209,7 @@ rtux_logout_set_confirmation
 if ! rtux_skip_wizard_question ; then
 
   if rtux_change_monitor_settings_question ; then
-      rtux_run_and_center_monitor_settings
+      lxqt-config-monitor > /dev/null 2>&1 &disown
   else
       echo "Starting monitor settings was skipped"
   fi
