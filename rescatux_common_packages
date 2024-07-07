@@ -39,6 +39,7 @@ qttranslations5-l10n \
 xarchiver \
 xfwm4 \
 gvfs \
+gvfs-backends \
 "
 
 LXQT_ADDITIONAL_PACKAGES="\
