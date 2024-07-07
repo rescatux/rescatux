@@ -104,9 +104,9 @@ mkdir --parents $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp ${RESCAPP_EXTRA_FOLDER}/rescapp.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/rescapp.desktop
 cp ${RESCAPP_EXTRA_FOLDER}/show-rescapp-logs.desktop $TEMP_FOLDER/${SKEL_FOLDER}/Desktop/
 cp -r ${RESCATUX_LOGOS} $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
-cp ${RESCATUX_EXTRA_FOLDER}/set-rescatux-background.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
-cp ${RESCATUX_EXTRA_FOLDER}/start-rescatux-tightvnc-server.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
+cp ${RESCATUX_EXTRA_FOLDER}/rescatux-desktop-init.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 cp ${RESCATUX_EXTRA_FOLDER}/rescatux-startup-wizard.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
+cp ${RESCATUX_EXTRA_FOLDER}/rescatux-start-vnc-server.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
   sed -i "s/@RESCATUX_VERSION@/${VERSION}/g" \
     ${TEMP_FOLDER}/config/bootloaders/${n_splash_dir}/splash.svg
