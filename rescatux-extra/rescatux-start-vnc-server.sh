@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rescatux Sart TightVNC server script
+# Rescatux Sart VNC server script
 # Copyright (C) 2019 Adrian Gibanel Lopez
 #
 # Rescatux is free software: you can redistribute it and/or modify
@@ -15,10 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Rescatux.  If not, see <http://www.gnu.org/licenses/>.
 
-LIVE_HOME="/home/user"
-
 # Remove any other running servers
 killall -TERM x11vnc
 # Start TightVNC Server - BEGIN
-x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth ${LIVE_HOME}/.vnc/passwd -rfbport 5900 -shared
+x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth ${HOME}/.vnc/passwd -rfbport 5900 -shared
 # Start TightVNC Server - END

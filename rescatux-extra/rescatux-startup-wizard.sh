@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Rescatux.  If not, see <http://www.gnu.org/licenses/>.
 
-LIVE_HOME="/home/user"
-
 RESCAPP_WIDTH="580"
 RESCAPP_HEIGHT="350"
 ZENITY_COMMON_OPTIONS="--width=${RESCAPP_WIDTH} \
@@ -239,10 +237,10 @@ if ! rtux_skip_wizard_question ; then
               rtux_nopassword_x11vnc_error
           else
               rtux_restart_x11vnc_info
-              x11vnc -storepasswd "${NEWPASS}" ${LIVE_HOME}/.vnc/passwd
+              x11vnc -storepasswd "${NEWPASS}" ${HOME}/.vnc/passwd
               rtux_terminate_x11vnc_server
               echo "Starting TightVNC server"
-              /usr/bin/start-rescatux-tightvnc-server.sh > /dev/null 2>&1 &disown
+              /usr/local/bin/rescatux-start-vnc-server.sh > /dev/null 2>&1 &disown
               rtux_x11vnc_listening_ips_info
           fi
       else

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rescatux LXQT Set Background script
+# Rescatux LXQT Init Script
 # Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
 #
 # Rescatux is free software: you can redistribute it and/or modify
@@ -44,18 +44,15 @@ function deal_with_two_monitors() {
 
 }
 
-
-LIVE_HOME="/home/user"
-
 sleep 2s # Wait for the systray / desktop to come up
 
 cmst --wait-time 5 --minimized &disown
 
 # Start TightVNC Server - BEGIN
-/usr/bin/start-rescatux-tightvnc-server.sh > /dev/null 2>&1 &disown
+/usr/local/bin/rescatux-start-vnc-server.sh > /dev/null 2>&1 &disown
 # Start TightVNC Server - END
 
 # Start Rescatux startup wizard - BEGIN
 deal_with_two_monitors
-/usr/bin/rescatux-startup-wizard.sh > /dev/null 2>&1 &disown
+/usr/local/bin/rescatux-startup-wizard.sh > /dev/null 2>&1 &disown
 # Start Rescatux startup wizard - END
