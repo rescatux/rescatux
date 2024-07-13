@@ -101,6 +101,13 @@ docker run \
 - Delete binaries to be updated at `secureboot-binaries/` (This step is probably optional.)
 - Update download scripts at: `secureboot.d/x64/`, `secureboot.d/ia32/` and so on.
 
+## Actual build
+
+```
+sudo apt -qq install -y --allow-downgrades /live-build-packages/*deb
+./make-rescatux.sh
+```
+
 ## Usual git stuff inside Docker image
 
 Use a local-only branch for docker development minimal changes
