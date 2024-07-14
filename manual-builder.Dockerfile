@@ -15,6 +15,19 @@ RUN apt-get -qq update -y && \
 # TODO: Install our own live-build package if needed.
 RUN apt-get -qq install -y live-build
 
+# Extra packages that we might need so that live-build works properly
+RUN apt-get -qq install -y \
+                       debootstrap \
+                       fdisk \
+                       mount \
+                       apt-utils \
+                       wget
+
+# Needed for live-build SELinux support
+RUN apt-get -qq install -y \
+                       policycoreutils \
+                       selinux-policy-default
+
 RUN apt-get -qq install -y locales
 RUN dpkg-reconfigure -f noninteractive tzdata && \
     sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
