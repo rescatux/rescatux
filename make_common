@@ -107,10 +107,8 @@ cp -r ${RESCATUX_LOGOS} $TEMP_FOLDER/${RESCATUX_DATA_FOLDER}
 cp ${RESCATUX_EXTRA_FOLDER}/rescatux-desktop-init.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 cp ${RESCATUX_EXTRA_FOLDER}/rescatux-startup-wizard.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
 cp ${RESCATUX_EXTRA_FOLDER}/rescatux-start-vnc-server.sh $TEMP_FOLDER/${RESCATUX_BIN_FOLDER}
-for n_splash_dir in extlinux isolinux pxelinux syslinux ; do
-  sed -i "s/@RESCATUX_VERSION@/${VERSION}/g" \
-    ${TEMP_FOLDER}/config/bootloaders/${n_splash_dir}/splash.svg
-done
+sed -i "s/@RESCATUX_VERSION@/${VERSION}/g" \
+  ${TEMP_FOLDER}/config/bootloaders/splash.svg
 cd $TEMP_FOLDER
 sudo bash -c "echo \"${CORE_PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/recommends.list.chroot"
 sudo bash -c "echo \"${PACKAGES}\" > $TEMP_FOLDER/${CUSTOM_PACKAGES_LISTS_FOLDER}/${RESCATUX_MEDIA_STR}.list.chroot"
