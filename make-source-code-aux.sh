@@ -69,14 +69,6 @@ LIVEBOOT_GIT_NAME="live-boot"
 
 get_Git_Tar_Gz "${LIVEBOOT_GIT_URL}" "${LIVEBOOT_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${LIVEBOOT_GIT_NAME}-${LIVEBOOT_GIT_COMMIT}.tar.gz"
 
-# chntpw
-
-LIVEBOOT_GIT_URL="https://github.com/rescatux/chntpw/"
-LIVEBOOT_GIT_COMMIT="debian-ng-1.02"
-LIVEBOOT_GIT_NAME="chntpw"
-
-get_Git_Tar_Gz "${LIVEBOOT_GIT_URL}" "${LIVEBOOT_GIT_COMMIT}" "${RESCATUX_RELEASE_DIR}/source-code/${BASE_FILENAME}-${LIVEBOOT_GIT_NAME}-${LIVEBOOT_GIT_COMMIT}.tar.gz"
-
 # rescapp
 
 LIVEBOOT_GIT_URL="https://github.com/rescatux/rescapp/"
