@@ -87,10 +87,8 @@ docker run \
   --env RESCATUX_BUILDER_GID=$(id -g) \
   -v /dev:/dev \
   -v $(pwd):/rescatux-repo:ro \
-  -v $(pwd)/releases:/rescatux-build/releases:rw \
-  -v $(pwd)/news-releases:/rescatux-build/news-releases:rw \
-  -v $(pwd)/secureboot-binaries:/rescatux-build/secureboot-binaries:rw \
-  -v $(pwd)/secureboot.d/sha256sums:/rescatux-build/secureboot.d/sha256sums:rw \
+  -v $(pwd)/live-build-packages:/live-build-packages:ro \
+  -v $(pwd)/rescatux-release:/rescatux-build/rescatux-release:rw \
   rescatux-manual-builder:latest
 ```
 
