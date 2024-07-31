@@ -103,7 +103,7 @@ docker run \
 ## Actual build
 
 ```
-sudo apt-get remove live-build && sudo apt -qq install -y --allow-downgrades /live-build-packages/*deb
+sudo apt-get remove -y live-build && sudo apt -qq install -y --allow-downgrades /live-build-packages/*deb
 ./make-rescatux.sh
 ```
 
