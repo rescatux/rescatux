@@ -48,6 +48,7 @@ docker run \
   --env RESCATUX_BUILDER_GID=$(id -g) \
   -v /dev:/dev \
   -v $(pwd):/rescatux-repo:ro \
+  -v $(pwd)/live-boot-packages:/live-boot-packages:ro \
   -v $(pwd)/live-build-packages:/live-build-packages:ro \
   -v $(pwd)/rescatux-release:/rescatux-build/rescatux-release:rw \
   rescatux-manual-builder:latest
@@ -87,6 +88,7 @@ docker run \
   --env RESCATUX_BUILDER_GID=$(id -g) \
   -v /dev:/dev \
   -v $(pwd):/rescatux-repo:ro \
+  -v $(pwd)/live-boot-packages:/live-boot-packages:ro \
   -v $(pwd)/live-build-packages:/live-build-packages:ro \
   -v $(pwd)/rescatux-release:/rescatux-build/rescatux-release:rw \
   rescatux-manual-builder:latest
@@ -104,6 +106,7 @@ docker run \
 
 ```
 sudo apt-get remove -y live-build && sudo apt -qq install -y --allow-downgrades /live-build-packages/*deb
+sudo apt-get remove -y live-boot && sudo apt -qq install -y --allow-downgrades /live-boot-packages/*deb
 ./make-rescatux.sh
 ```
 
