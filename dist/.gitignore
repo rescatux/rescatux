@@ -1,0 +1,5 @@
+# Ignore release artifacts
+*
+
+# Keep this file
+!.gitignore

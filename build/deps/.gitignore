@@ -1,0 +1,9 @@
+# Ignore everything inside build
+*
+
+# But keep this file
+!.gitignore
+
+# Allow subdirectories to exist
+!live-build/
+!live-boot/
