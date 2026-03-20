@@ -2,3 +2,7 @@
 	path = external/live-build
 	url = https://github.com/rescatux/live-build.git
 	branch = 2026-master
+[submodule "external/live-boot"]
+	path = external/live-boot
+	url = https://github.com/rescatux/live-boot.git
+	branch = 2026-master
