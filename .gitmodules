@@ -1,0 +1,4 @@
+[submodule "external/live-build"]
+	path = external/live-build
+	url = https://github.com/rescatux/live-build.git
+	branch = 2026-master
