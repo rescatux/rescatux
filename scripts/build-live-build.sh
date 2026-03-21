@@ -2,13 +2,19 @@
 set -e
 
 ROOT=$(git rev-parse --show-toplevel)
-OUT="$ROOT/build/deps"
+OUT="$ROOT/build/deps/live-build"
+PLATFORM="linux/amd64"
+PLATFORM_RUN_ARGS="--platform ${PLATFORM}"
+PLATFORM_BUILD_ARGS="${PLATFORM_RUN_ARGS} --build-arg TARGETPLATFORM=${PLATFORM}"
 
 mkdir -p "$OUT"
 
-cd "$ROOT/external/live-build"
+cd "$ROOT"
+# Build image
+docker build ${PLATFORM_BUILD_ARGS} -t rescatux-live-build -f builder/live-build/Dockerfile .
 
-dpkg-buildpackage -us -uc
-
-mv ../live-build_*.deb "$OUT/"
-
+# Extract .deb artifacts
+docker run --rm \
+  ${PLATFORM_RUN_ARGS} \
+  -v "$OUT:/out" \
+  rescatux-live-build
