@@ -1,0 +1,42 @@
+# builder/Dockerfile.i386
+
+FROM debian:bookworm
+
+# Base tools
+RUN apt-get update && apt-get install -y \
+    dpkg-dev \
+    apt-utils \
+    ca-certificates \
+    gnupg \
+    xorriso \
+    squashfs-tools \
+    dosfstools \
+    mtools \
+    git \
+    make
+
+# --- Inject local packages ---
+COPY build/deps /opt/rescatux-deps
+
+# Merge into single repo
+RUN mkdir -p /opt/rescatux-repo && \
+    cp /opt/rescatux-deps/live-build/*.deb /opt/rescatux-repo/ && \
+    cp /opt/rescatux-deps/live-boot/*.deb /opt/rescatux-repo/
+
+# Generate Packages index
+RUN cd /opt/rescatux-repo && \
+    dpkg-scanpackages . /dev/null > Packages && \
+    gzip -9c Packages > Packages.gz && \
+    xz -9c Packages > Packages.xz
+
+# Add local repo
+RUN echo "deb [trusted=yes] file:/opt/rescatux-repo ./" > /etc/apt/sources.list.d/rescatux.list
+
+# Pinning (CRITICAL)
+RUN printf "Package: *\nPin: origin \"\"\nPin-Priority: 1001\n" > /etc/apt/preferences.d/rescatux
+
+# Update and install custom packages FIRST
+RUN apt-get update && \
+    apt-get install -y live-build
+
+WORKDIR /workspace
