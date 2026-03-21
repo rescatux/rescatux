@@ -5,7 +5,7 @@ ROOT=$(git rev-parse --show-toplevel)
 OUT="$ROOT/build/deps/live-boot"
 PLATFORM="linux/amd64"
 PLATFORM_RUN_ARGS="--platform ${PLATFORM}"
-PLATFORM_BUILD_ARGS="${PLATFORM_RUN_ARGS} --build-arg TARGETPLATFORM=${PLATFORM}"
+PLATFORM_BUILD_ARGS="${PLATFORM_RUN_ARGS}"
 
 mkdir -p "$OUT"
 
