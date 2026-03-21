@@ -2,13 +2,14 @@
 set -e
 
 ROOT=$(git rev-parse --show-toplevel)
-OUT="$ROOT/build/deps"
+OUT="$ROOT/build/deps/live-boot"
 
 mkdir -p "$OUT"
 
-cd "$ROOT/external/live-boot"
+# Build image
+docker build -t rescatux-live-boot builder/live-boot
 
-dpkg-buildpackage -us -uc
-
-mv ../live-boot_*.deb "$OUT/"
-
+# Extract .deb artifacts
+docker run --rm \
+  -v "$OUT:/out" \
+  rescatux-live-boot
