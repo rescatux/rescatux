@@ -11,7 +11,7 @@ mkdir -p "$OUT"
 
 cd "$ROOT"
 # Build image
-docker buildx build ${PLATFORM_BUILD_ARGS} -t rescatux-live-build -f builder/live-build/Dockerfile .
+docker buildx build --load ${PLATFORM_BUILD_ARGS} -t rescatux-live-build -f builder/live-build/Dockerfile .
 
 # Extract .deb artifacts
 docker run --rm \
