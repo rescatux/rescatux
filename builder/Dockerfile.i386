@@ -1,7 +1,6 @@
 # builder/Dockerfile.i386
 
-ARG TARGETPLATFORM
-FROM --platform=$TARGETPLATFORM debian:bookworm
+FROM debian:bookworm
 
 # Base tools
 RUN apt-get update && apt-get install -y \
