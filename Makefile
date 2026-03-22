@@ -2,10 +2,12 @@
 # Rescatux Build System
 # =========================
 
+include distro.conf
+export
+
 PLATFORMS := amd64-iso amd64-usb i386-iso i386-usb
 ARCHS := amd64 i386
 
-VERSION := $(shell cat VERSION)
 ROOT := $(shell pwd)
 
 BUILDX_BUILDER := rescatux-buildx-builder
