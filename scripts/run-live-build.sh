@@ -15,6 +15,7 @@ docker run --rm \
   --privileged \
   -e HOST_UID=$HOST_UID \
   -e HOST_GID=$HOST_GID \
+  -e PLATFORM=$PLATFORM \
   -v "$ROOT:/workspace" \
   -w "/workspace/build/work/$PLATFORM" \
   $IMAGE /workspace/scripts/run-live-build-in-container.sh
