@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
     dosfstools \
     mtools \
     git \
-    make
+    make \
+    fdisk
 
 # --- Inject local packages ---
 COPY build/deps /opt/rescatux-deps
