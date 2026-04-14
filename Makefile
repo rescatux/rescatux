@@ -12,6 +12,31 @@ ROOT := $(shell pwd)
 
 BUILDX_BUILDER := rescatux-buildx-builder
 
+PLATFORM_amd64 := linux/amd64
+PLATFORM_i386  := linux/386
+
+define BUILDER_template
+
+builder-$(1): .builder-$(1).stamp
+
+.builder-$(1).stamp: builder/Dockerfile.$(1)
+	@echo ">> Checking $(1) builder image..."
+	@HASH=$$(sha256sum builder/Dockerfile.$(1) | cut -d' ' -f1); \
+	if [ ! -f $$@ ] || ! grep -q $$HASH $$@ || ! docker image inspect rescatux-builder-$(1) >/dev/null 2>&1; then \
+		echo ">> Rebuilding $(1) image (missing or changed)"; \
+		docker buildx build \
+			--load \
+			--platform $(PLATFORM_$(1)) \
+			-t rescatux-builder-$(1) \
+			-f builder/Dockerfile.$(1) \
+			.; \
+		echo $$HASH > $$@; \
+	else \
+		echo ">> $(1) image up-to-date"; \
+	fi
+
+endef
+
 # =========================
 # Stage 0 — Bootstrap
 # =========================
@@ -57,21 +82,11 @@ deps:
 
 builder: bootstrap builder-amd64 builder-i386
 
-builder-amd64:
-	docker buildx build \
-		--load \
-		--platform linux/amd64 \
-		-t rescatux-builder-amd64 \
-		-f builder/Dockerfile.amd64 \
-		.
+# builder-amd64
+$(eval $(call BUILDER_template,amd64))
 
-builder-i386:
-	docker buildx build \
-		--load \
-		--platform linux/386 \
-		-t rescatux-builder-i386 \
-		-f builder/Dockerfile.i386 \
-		.
+# builder-i386
+$(eval $(call BUILDER_template,i386))
 
 # =========================
 # Stage 3 — Config
