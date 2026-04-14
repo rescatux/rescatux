@@ -176,5 +176,8 @@ check-i386:
 .PHONY: clean
 
 clean:
-	rm -rf build/work/*
-	rm -rf dist/*
+	@echo ">> Cleaning build artifacts (via Docker)"
+	docker run --rm \
+		-v $(ROOT):/workspace \
+		rescatux-builder-amd64 \
+		bash -c "rm -rf /workspace/build/work/* /workspace/dist/*"
