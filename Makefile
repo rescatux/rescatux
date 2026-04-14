@@ -58,20 +58,30 @@ deps:
 builder: bootstrap builder-amd64 builder-i386
 
 builder-amd64:
-	docker buildx build \
-		--load \
-		--platform linux/amd64 \
-		-t rescatux-builder-amd64 \
-		-f builder/Dockerfile.amd64 \
-		.
+	@if ! docker image inspect rescatux-builder-amd64 >/dev/null 2>&1; then \
+		echo ">> Building amd64 builder image..."; \
+		docker buildx build \
+			--load \
+			--platform linux/amd64 \
+			-t rescatux-builder-amd64 \
+			-f builder/Dockerfile.amd64 \
+			.; \
+	else \
+		echo ">> amd64 builder already exists"; \
+	fi
 
 builder-i386:
-	docker buildx build \
-		--load \
-		--platform linux/386 \
-		-t rescatux-builder-i386 \
-		-f builder/Dockerfile.i386 \
-		.
+	@if ! docker image inspect rescatux-builder-i386 >/dev/null 2>&1; then \
+		echo ">> Building i386 builder image..."; \
+		docker buildx build \
+			--load \
+			--platform linux/386 \
+			-t rescatux-builder-i386 \
+			-f builder/Dockerfile.i386 \
+			.; \
+	else \
+		echo ">> i386 builder already exists"; \
+	fi
 
 # =========================
 # Stage 3 — Config
