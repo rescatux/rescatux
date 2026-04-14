@@ -175,7 +175,7 @@ check-i386:
 
 .PHONY: clean
 
-clean:
+clean: builder-amd64
 	@echo ">> Cleaning build artifacts (via Docker)"
 	docker run --rm \
 		-v $(ROOT):/workspace \
