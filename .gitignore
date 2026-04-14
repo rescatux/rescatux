@@ -1,0 +1,2 @@
+# Ignore hidden Makefile stamp files
+.*.stamp
