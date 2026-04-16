@@ -1,0 +1,2 @@
+deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20240801T000000Z buster main contrib non-free
+deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20240801T000000Z buster/updates main contrib non-free
