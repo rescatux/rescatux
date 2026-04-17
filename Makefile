@@ -110,7 +110,7 @@ endif
 .PHONY: prepare
 
 prepare:
-	scripts/prepare-config.sh $(PLATFORM)
+	scripts/run-prepare-config.sh $(PLATFORM)
 
 # =========================
 # Stage 4 — Build (live-build)
