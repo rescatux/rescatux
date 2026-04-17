@@ -1,0 +1,29 @@
+#!/bin/sh
+set -e
+
+fix_file() {
+    file="$1"
+
+    [ -f "$file" ] || return 0
+
+    # Skip empty files
+    [ -s "$file" ] || return 0
+
+    # Only touch real deb lines (ignore comments)
+    sed -i -E \
+        's|^deb (\[.*\] )?(http.*snapshot\.debian\.org.*)|deb [check-valid-until=no] \2|' \
+        "$file"
+}
+
+# Fix main sources.list
+fix_file /etc/apt/sources.list
+
+# Fix any additional list files
+if [ -d /etc/apt/sources.list.d ]; then
+    for f in /etc/apt/sources.list.d/*.list; do
+        fix_file "$f"
+    done
+fi
+
+# Extra safety: global apt config
+echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99snapshot
