@@ -109,6 +109,7 @@ endif
 
 .PHONY: prepare
 
+# Prepares build workspace without deleting cached data
 prepare:
 	scripts/run-prepare-config.sh $(PLATFORM)
 

@@ -6,9 +6,9 @@ ROOT=/workspace
 
 WORK="$ROOT/build/work/$PLATFORM"
 
-# Clean
-rm -rf "$WORK"
+# Clean config
 mkdir -p "$WORK"
+rm -rf "$WORK/config"
 
 # Copy config
 cp -r "$ROOT/config/common" "$WORK/config"
