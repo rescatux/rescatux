@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+fix_file() {
+    file="$1"
+    [ -f "$file" ] || return 0
+    [ -s "$file" ] || return 0
+
+    sed -i -E \
+        's|^deb (\[.*\] )?(http.*snapshot\.debian\.org.*)|deb [check-valid-until=no] \2|' \
+        "$file"
+}
+
+fix_file /etc/apt/sources.list
+
+if [ -d /etc/apt/sources.list.d ]; then
+    for f in /etc/apt/sources.list.d/*.list; do
+        fix_file "$f"
+    done
+fi
+
+echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99snapshot
