@@ -5,9 +5,6 @@ echo "== Loading LB config =="
 echo "== PLATFORM: $PLATFORM =="
 echo "== Running inside container =="
 
-ROOT=/workspace
-WORK="$ROOT/build/work/$PLATFORM"
-
 COMMON_DIR=/workspace/config/common/lb-config-switches.d
 PLATFORM_DIR=/workspace/config/platform/$PLATFORM/lb-config-switches.d
 
@@ -32,11 +29,3 @@ env | grep ^LB_ || true
 
 lb config noauto
 lb build
-
-if [ -d "$WORK" ]; then
-  chown -R "$HOST_UID:$HOST_GID" "$WORK"
-fi
-
-if [ -d "$ROOT/dist" ]; then
-  chown -R "$HOST_UID:$HOST_GID" "$ROOT/dist"
-fi
