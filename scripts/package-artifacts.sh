@@ -3,7 +3,7 @@ set -e
 
 ROOT=$(git rev-parse --show-toplevel)
 
-VERSION=$(cat $ROOT/VERSION)
+. "$ROOT/distro.conf"
 
 for dir in $ROOT/build/work/*; do
 
