@@ -2,6 +2,12 @@
 set -e
 
 ROOT=$(pwd)
+PLATFORM=${1:-}
+
+if [ -z "$PLATFORM" ]; then
+  echo "Usage: $0 <platform>" >&2
+  exit 1
+fi
 
 . "$ROOT/distro.conf"
 
@@ -37,7 +43,14 @@ chown_created_files() {
   done
 }
 
-for dir in $ROOT/build/work/*; do
+dir="$ROOT/build/work/$PLATFORM"
+
+if [ ! -d "$dir" ]; then
+  echo "Error: missing build workspace for platform $PLATFORM" >&2
+  exit 1
+fi
+
+for dir in "$dir"; do
 
   PLATFORM=$(basename $dir)
   ARCH=$(echo $PLATFORM | cut -d- -f1)

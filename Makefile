@@ -130,7 +130,10 @@ build:
 .PHONY: package
 
 package:
-	scripts/package-artifacts.sh
+	@for p in $(if $(strip $(PLATFORM)),$(PLATFORM),$(PLATFORMS)); do \
+		echo ">> Packaging $$p"; \
+		scripts/package-artifacts.sh $$p; \
+	done
 
 # =========================
 # Stage 6 — Release
