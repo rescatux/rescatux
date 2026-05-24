@@ -7,6 +7,7 @@ export
 
 PLATFORMS := amd64-iso amd64-usb i386-iso i386-usb
 ARCHS := amd64 i386
+CLEAN_PLATFORMS := $(if $(strip $(PLATFORM)),$(PLATFORM),$(PLATFORMS))
 
 ROOT := $(shell pwd)
 
@@ -196,4 +197,25 @@ clean: builder-amd64
 	docker run --rm \
 		-v $(ROOT):/workspace \
 		rescatux-builder-amd64 \
-		bash -c "rm -rf /workspace/build/work/* /workspace/dist/*"
+		bash -ec '\
+			set -eu; \
+			for p in $(CLEAN_PLATFORMS); do \
+				case "$$p" in \
+					amd64-iso) \
+						rm -rf "/workspace/build/work/$$p"; \
+						rm -f "/workspace/dist/rescatux-$(VERSION)-amd64.iso"; \
+						;; \
+					amd64-usb) \
+						rm -rf "/workspace/build/work/$$p"; \
+						rm -f "/workspace/dist/rescatux-$(VERSION)-amd64-usb.img" "/workspace/dist/rescatux-$(VERSION)-amd64-usb.img.zip"; \
+						;; \
+					i386-iso) \
+						rm -rf "/workspace/build/work/$$p"; \
+						rm -f "/workspace/dist/rescatux-$(VERSION)-i386.iso"; \
+						;; \
+					i386-usb) \
+						rm -rf "/workspace/build/work/$$p"; \
+						rm -f "/workspace/dist/rescatux-$(VERSION)-i386-usb.img" "/workspace/dist/rescatux-$(VERSION)-i386-usb.img.zip"; \
+						;; \
+				esac; \
+			done'
