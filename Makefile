@@ -125,6 +125,7 @@ qemu-system-$(1) \
 	$(RUN_KVM) \
 	-m $(RUN_MEMORY) \
 	-smp $(RUN_CPUS) \
+	-vga virtio \
 	$(RUN_DISPLAY)
 endef
 
