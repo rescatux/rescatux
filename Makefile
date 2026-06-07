@@ -50,13 +50,13 @@ ifndef OVMF_VARS_FD
 OVMF_VARS_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_VARS_4M.ms.fd)
 endif
 ifndef OVMF32_CODE_FD
-OVMF32_CODE_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF32_CODE_4M.fd)
+OVMF32_CODE_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF32_CODE_4M.secboot.fd)
 endif
 ifndef OVMF32_CODE_SECB_FD
 OVMF32_CODE_SECB_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF32_CODE_4M.secboot.fd)
 endif
 ifndef OVMF32_VARS_FD
-OVMF32_VARS_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF32_VARS.fd)
+OVMF32_VARS_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF32_VARS_4M.fd)
 endif
 
 # =========================
