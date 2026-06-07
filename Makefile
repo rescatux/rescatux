@@ -41,7 +41,7 @@ $(firstword $(wildcard $(foreach path,$(1),$(path)$(2))))
 endef
 
 ifndef OVMF_CODE_FD
-OVMF_CODE_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_CODE_4M.ms.fd)
+OVMF_CODE_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_CODE_4M.fd)
 endif
 ifndef OVMF_CODE_SECB_FD
 OVMF_CODE_SECB_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_CODE_4M.ms.fd)
