@@ -37,7 +37,7 @@ OVMF_PATHS := \
 	/usr/share/edk2/ia32/
 
 define find_ovmf
-$(firstword $(wildcard $(addprefix $(1),$(2))))
+$(firstword $(wildcard $(foreach path,$(1),$(path)$(2))))
 endef
 
 ifndef OVMF_CODE_FD
