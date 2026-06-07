@@ -131,26 +131,32 @@ endef
 
 define qemu_uefi_amd64
 $(call qemu_base,x86_64) \
+	-machine q35,smm=on \
 	-drive if=pflash,format=raw,readonly=on,file=$(OVMF_CODE_FD) \
-	-drive if=pflash,format=raw,file=$(OVMF_VARS_FD)
+	-drive if=pflash,format=raw,file=$(1)
 endef
 
 define qemu_uefi_sb_amd64
 $(call qemu_base,x86_64) \
+	-machine q35,smm=on \
+	-global driver=cfi.pflash01,property=secure,value=on \
 	-drive if=pflash,format=raw,readonly=on,file=$(OVMF_CODE_SECB_FD) \
-	-drive if=pflash,format=raw,file=$(OVMF_VARS_FD)
+	-drive if=pflash,format=raw,file=$(1)
 endef
 
 define qemu_uefi_i386
 $(call qemu_base,i386) \
+	-machine q35,smm=on \
 	-drive if=pflash,format=raw,readonly=on,file=$(OVMF32_CODE_FD) \
-	-drive if=pflash,format=raw,file=$(OVMF32_VARS_FD)
+	-drive if=pflash,format=raw,file=$(1)
 endef
 
 define qemu_uefi_sb_i386
 $(call qemu_base,i386) \
+	-machine q35,smm=on \
+	-global driver=cfi.pflash01,property=secure,value=on \
 	-drive if=pflash,format=raw,readonly=on,file=$(OVMF32_CODE_SECB_FD) \
-	-drive if=pflash,format=raw,file=$(OVMF32_VARS_FD)
+	-drive if=pflash,format=raw,file=$(1)
 endef
 
 define qemu_bios_amd64
@@ -438,38 +444,26 @@ run-amd64-uefi-sb-iso:
 	$(call check_ovmf,$(OVMF_CODE_SECB_FD),OVMF_CODE.secboot.fd)
 	$(call check_ovmf,$(OVMF_VARS_FD),OVMF_VARS.fd)
 	$(eval RUN_VARS_FD := $(shell $(call copy_vars_fd,$(OVMF_VARS_FD),rescatux-amd64-uefi-sb-iso_VARS.fd)))
-	$(call qemu_base,x86_64) \
-		-drive if=pflash,format=raw,readonly=on,file=$(OVMF_CODE_SECB_FD) \
-		-drive if=pflash,format=raw,file=$(RUN_VARS_FD) \
-		-drive file=$(RUN_ISO_amd64),format=raw,if=virtio,readonly=on,media=cdrom
+	$(call qemu_uefi_sb_amd64,$(RUN_VARS_FD)) -drive file=$(RUN_ISO_amd64),format=raw,if=virtio,readonly=on,media=cdrom
 
 run-amd64-uefi-sb-usb:
 	$(call check_ovmf,$(OVMF_CODE_SECB_FD),OVMF_CODE.secboot.fd)
 	$(call check_ovmf,$(OVMF_VARS_FD),OVMF_VARS.fd)
 	$(eval RUN_VARS_FD := $(shell $(call copy_vars_fd,$(OVMF_VARS_FD),rescatux-amd64-uefi-sb-usb_VARS.fd)))
-	$(call qemu_base,x86_64) \
-		-drive if=pflash,format=raw,readonly=on,file=$(OVMF_CODE_SECB_FD) \
-		-drive if=pflash,format=raw,file=$(RUN_VARS_FD) \
-		-drive file=$(RUN_IMG_amd64),format=raw,if=virtio,readonly=on
+	$(call qemu_uefi_sb_amd64,$(RUN_VARS_FD)) -drive file=$(RUN_IMG_amd64),format=raw,if=virtio,readonly=on
 
 # AMD64 UEFI (no SecureBoot)
 run-amd64-uefi-iso:
 	$(call check_ovmf,$(OVMF_CODE_FD),OVMF_CODE.fd)
 	$(call check_ovmf,$(OVMF_VARS_FD),OVMF_VARS.fd)
 	$(eval RUN_VARS_FD := $(shell $(call copy_vars_fd,$(OVMF_VARS_FD),rescatux-amd64-uefi-iso_VARS.fd)))
-	$(call qemu_base,x86_64) \
-		-drive if=pflash,format=raw,readonly=on,file=$(OVMF_CODE_FD) \
-		-drive if=pflash,format=raw,file=$(RUN_VARS_FD) \
-		-drive file=$(RUN_ISO_amd64),format=raw,if=virtio,readonly=on,media=cdrom
+	$(call qemu_uefi_amd64,$(RUN_VARS_FD)) -drive file=$(RUN_ISO_amd64),format=raw,if=virtio,readonly=on,media=cdrom
 
 run-amd64-uefi-usb:
 	$(call check_ovmf,$(OVMF_CODE_FD),OVMF_CODE.fd)
 	$(call check_ovmf,$(OVMF_VARS_FD),OVMF_VARS.fd)
 	$(eval RUN_VARS_FD := $(shell $(call copy_vars_fd,$(OVMF_VARS_FD),rescatux-amd64-uefi-usb_VARS.fd)))
-	$(call qemu_base,x86_64) \
-		-drive if=pflash,format=raw,readonly=on,file=$(OVMF_CODE_FD) \
-		-drive if=pflash,format=raw,file=$(RUN_VARS_FD) \
-		-drive file=$(RUN_IMG_amd64),format=raw,if=virtio,readonly=on
+	$(call qemu_uefi_amd64,$(RUN_VARS_FD)) -drive file=$(RUN_IMG_amd64),format=raw,if=virtio,readonly=on
 
 # AMD64 BIOS
 run-amd64-bios-iso:
@@ -483,38 +477,26 @@ run-i386-uefi-sb-iso:
 	$(call check_ovmf,$(OVMF32_CODE_SECB_FD),OVMF32_CODE_4M.secboot.fd)
 	$(call check_ovmf,$(OVMF32_VARS_FD),OVMF32_VARS.fd)
 	$(eval RUN_VARS_FD := $(shell $(call copy_vars_fd,$(OVMF32_VARS_FD),rescatux-i386-uefi-sb-iso_VARS.fd)))
-	$(call qemu_base,i386) \
-		-drive if=pflash,format=raw,readonly=on,file=$(OVMF32_CODE_SECB_FD) \
-		-drive if=pflash,format=raw,file=$(RUN_VARS_FD) \
-		-drive file=$(RUN_ISO_i386),format=raw,if=virtio,readonly=on,media=cdrom
+	$(call qemu_uefi_sb_i386,$(RUN_VARS_FD)) -drive file=$(RUN_ISO_i386),format=raw,if=virtio,readonly=on,media=cdrom
 
 run-i386-uefi-sb-usb:
 	$(call check_ovmf,$(OVMF32_CODE_SECB_FD),OVMF32_CODE_4M.secboot.fd)
 	$(call check_ovmf,$(OVMF32_VARS_FD),OVMF32_VARS.fd)
 	$(eval RUN_VARS_FD := $(shell $(call copy_vars_fd,$(OVMF32_VARS_FD),rescatux-i386-uefi-sb-usb_VARS.fd)))
-	$(call qemu_base,i386) \
-		-drive if=pflash,format=raw,readonly=on,file=$(OVMF32_CODE_SECB_FD) \
-		-drive if=pflash,format=raw,file=$(RUN_VARS_FD) \
-		-drive file=$(RUN_IMG_i386),format=raw,if=virtio,readonly=on
+	$(call qemu_uefi_sb_i386,$(RUN_VARS_FD)) -drive file=$(RUN_IMG_i386),format=raw,if=virtio,readonly=on
 
 # I386 UEFI (no SecureBoot)
 run-i386-uefi-iso:
 	$(call check_ovmf,$(OVMF32_CODE_FD),OVMF32_CODE_4M.fd)
 	$(call check_ovmf,$(OVMF32_VARS_FD),OVMF32_VARS.fd)
 	$(eval RUN_VARS_FD := $(shell $(call copy_vars_fd,$(OVMF32_VARS_FD),rescatux-i386-uefi-iso_VARS.fd)))
-	$(call qemu_base,i386) \
-		-drive if=pflash,format=raw,readonly=on,file=$(OVMF32_CODE_FD) \
-		-drive if=pflash,format=raw,file=$(RUN_VARS_FD) \
-		-drive file=$(RUN_ISO_i386),format=raw,if=virtio,readonly=on,media=cdrom
+	$(call qemu_uefi_i386,$(RUN_VARS_FD)) -drive file=$(RUN_ISO_i386),format=raw,if=virtio,readonly=on,media=cdrom
 
 run-i386-uefi-usb:
 	$(call check_ovmf,$(OVMF32_CODE_FD),OVMF32_CODE_4M.fd)
 	$(call check_ovmf,$(OVMF32_VARS_FD),OVMF32_VARS.fd)
 	$(eval RUN_VARS_FD := $(shell $(call copy_vars_fd,$(OVMF32_VARS_FD),rescatux-i386-uefi-usb_VARS.fd)))
-	$(call qemu_base,i386) \
-		-drive if=pflash,format=raw,readonly=on,file=$(OVMF32_CODE_FD) \
-		-drive if=pflash,format=raw,file=$(RUN_VARS_FD) \
-		-drive file=$(RUN_IMG_i386),format=raw,if=virtio,readonly=on
+	$(call qemu_uefi_i386,$(RUN_VARS_FD)) -drive file=$(RUN_IMG_i386),format=raw,if=virtio,readonly=on
 
 # I386 BIOS
 run-i386-bios-iso:
