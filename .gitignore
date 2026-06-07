@@ -1,2 +1,5 @@
 # Ignore hidden Makefile stamp files
 .*.stamp
+
+# User configuration
+config.mk
