@@ -41,13 +41,13 @@ $(firstword $(wildcard $(foreach path,$(1),$(path)$(2))))
 endef
 
 ifndef OVMF_CODE_FD
-OVMF_CODE_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_CODE.fd)
+OVMF_CODE_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_CODE_4M.ms.fd)
 endif
 ifndef OVMF_CODE_SECB_FD
-OVMF_CODE_SECB_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_CODE.secboot.fd)
+OVMF_CODE_SECB_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_CODE_4M.ms.fd)
 endif
 ifndef OVMF_VARS_FD
-OVMF_VARS_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_VARS.fd)
+OVMF_VARS_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF_VARS_4M.ms.fd)
 endif
 ifndef OVMF32_CODE_FD
 OVMF32_CODE_FD := $(call find_ovmf,$(OVMF_PATHS),OVMF32_CODE_4M.fd)
