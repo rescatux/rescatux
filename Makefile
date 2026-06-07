@@ -301,6 +301,14 @@ package:
 		scripts/package-artifacts.sh $$p; \
 	done
 
+.PHONY: unpackage
+
+unpackage:
+	@for p in $(if $(strip $(PLATFORM)),$(PLATFORM),$(PLATFORMS)); do \
+		echo ">> Unpackaging $$p"; \
+		scripts/unpackage-artifacts.sh $$p; \
+	done
+
 # =========================
 # Stage 6 — Release
 # =========================
